@@ -1,26 +1,152 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ──────────────────────────────────────────────────────────────────────────
+   @font-face — self-hosted commercial fonts.
+   Files live in /public/fonts/. See public/fonts/README.md for filenames.
+   Until files exist, fallback stacks render generic sans.
+   ────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("/fonts/PPNeueMontreal-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("/fonts/PPNeueMontreal-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aeonik";
+  src: url("/fonts/Aeonik-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aeonik";
+  src: url("/fonts/Aeonik-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aeonik";
+  src: url("/fonts/Aeonik-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* ──────────────────────────────────────────────────────────────────────────
+   Design tokens — single source of truth.
+   Every component reads from here via Tailwind utilities. No hardcoded values.
+
+   Tailwind v4 namespace map (token-prefix → utility):
+     --color-X      → bg-X / text-X / border-X / outline-X / ring-X
+     --font-X       → font-X (font-family)
+     --text-X       → text-X (font-size + paired --text-X--line-height / --text-X--letter-spacing)
+     --spacing-X    → p-X / px-X / py-X / m-X / mx-X / my-X / gap-X / w-X / h-X / size-X / top-X / left-X / right-X / bottom-X / inset-X
+     --radius-X     → rounded-X
+     --shadow-X     → shadow-X
+     --ease-X       → ease-X
+   ────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* ─── Colors ─── */
+  --color-prim: #090e3a;
+  --color-fg: #000000;
+  --color-fg-inverse: #ffffff;
+  --color-page: #ffffff;
+  --color-surface: #f5f5f7;
+  --color-accent: #3255e6;
+  --color-accent-fg: #ffffff;
+  --color-danger: #c80404;
+  --color-danger-fg: #f5f5f7;
+  --color-pill: rgba(217, 217, 217, 0.2);
+  --color-dot-inactive: rgba(9, 14, 58, 0.1);
+  --color-divider: rgba(9, 14, 58, 0.1);
+
+  /* ─── Font families ─── */
+  --font-display: "PP Neue Montreal", "Helvetica Neue", system-ui, sans-serif;
+  --font-body: "Aeonik", "Helvetica Neue", system-ui, sans-serif;
+
+  /* ─── Type scale ─── */
+  --text-display: 70px;
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-h1: 70px;
+  --text-h1--line-height: 0.9;
+  --text-h1--letter-spacing: -0.02em;
+
+  --text-stat: 60px;
+  --text-stat--line-height: 1;
+
+  --text-h2: 32px;
+  --text-h2--line-height: 1;
+
+  --text-card-title: 32px;
+  --text-card-title--line-height: 1;
+
+  --text-price: 24px;
+  --text-price--line-height: 1;
+
+  --text-cta: 20px;
+  --text-cta--line-height: 1.6;
+
+  --text-body: 18px;
+  --text-body--line-height: 1.5;
+
+  --text-meta: 16px;
+  --text-meta--line-height: 1.5;
+
+  --text-meta-sm: 15px;
+  --text-meta-sm--line-height: 1.5;
+
+  --text-badge: 16px;
+  --text-badge--line-height: 1.5;
+
+  /* ─── Spacing (number = px) ─── */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-1280: 1280px;
+  --spacing-1440: 1440px;
+
+  /* ─── Radii ─── */
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  /* ─── Shadows ─── */
+  --shadow-elevated: 0 24px 64px -16px rgba(9, 14, 58, 0.18), 0 2px 8px rgba(9, 14, 58, 0.06);
+
+  /* ─── Motion ─── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ──────────────────────────────────────────────────────────────────────────
+   Base — uses tokens only.
+   ────────────────────────────────────────────────────────────────────────── */
+html {
+  background: var(--color-page);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-page);
+  color: var(--color-fg);
 }
