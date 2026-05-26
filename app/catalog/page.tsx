@@ -11,7 +11,7 @@ import {
   Text,
   type IconName,
 } from "@/app/components/atoms";
-import { Button, NavigationDots } from "@/app/components/molecules";
+import { Button, IconButton, NavigationDots } from "@/app/components/molecules";
 
 type Level =
   | "colors"
@@ -37,6 +37,9 @@ const iconNames: IconName[] = [
   "brackets-curly",
   "caret-left",
   "caret-right",
+  "chevron-left",
+  "chevron-right",
+  "menu",
 ];
 
 const colorTokens: { name: string; utility: string; hex: string }[] = [
@@ -56,18 +59,21 @@ const colorTokens: { name: string; utility: string; hex: string }[] = [
 
 // Spacing + sizing = same Tailwind v4 namespace (--spacing-*). One tab, sorted by value.
 const spacingTokens: { name: string; valuePx: number }[] = [
-  { name: "4", valuePx: 4 },
-  { name: "8", valuePx: 8 },
-  { name: "12", valuePx: 12 },
-  { name: "16", valuePx: 16 },
-  { name: "20", valuePx: 20 },
-  { name: "24", valuePx: 24 },
-  { name: "32", valuePx: 32 },
-  { name: "48", valuePx: 48 },
-  { name: "64", valuePx: 64 },
-  { name: "80", valuePx: 80 },
-  { name: "1280", valuePx: 1280 },
-  { name: "1440", valuePx: 1440 },
+  { name: "s1", valuePx: 2 },
+  { name: "s2", valuePx: 3 },
+  { name: "s3", valuePx: 5 },
+  { name: "s4", valuePx: 8 },
+  { name: "s5", valuePx: 13 },
+  { name: "s6", valuePx: 21 },
+  { name: "s7", valuePx: 34 },
+  { name: "s8", valuePx: 55 },
+  { name: "s9", valuePx: 89 },
+  { name: "s10", valuePx: 144 },
+  { name: "s11", valuePx: 233 },
+  { name: "s12", valuePx: 377 },
+  { name: "s13", valuePx: 610 },
+  { name: "s14", valuePx: 1280 },
+  { name: "s15", valuePx: 1440 },
 ];
 
 const VISUAL_CAP = 240;
@@ -76,8 +82,8 @@ function SpacingBar({ valuePx }: { valuePx: number }) {
   const capped = Math.min(valuePx, VISUAL_CAP);
   return (
     <div className="flex items-center">
-      <div className="bg-prim h-8 rounded-sm" style={{ width: `${capped}px` }} />
-      <Text variant="meta-sm" as="span" className="opacity-60">
+      <div className="bg-prim h-s4 rounded-sm" style={{ width: `${capped}px` }} />
+      <Text variant="l3" as="span" className="opacity-60">
         {valuePx}px
       </Text>
     </div>
@@ -90,107 +96,69 @@ const entries: Entry[] = [
     level: "colors",
     label: `${c.name} · ${c.hex}`,
     copy: c.utility,
-    preview: <div className={`size-24 rounded-md border border-divider ${c.utility}`} />,
+    preview: <div className={`size-s6 rounded-md border border-divider ${c.utility}`} />,
   })),
 
-  // ─── Text (Heading + Text) ───
+  // ─── Text (Heading + Text) — 1:1 Figma tokens ───
   {
     level: "text",
-    label: "Heading · display",
-    copy: '<Heading variant="display">Display heading</Heading>',
-    preview: <Heading variant="display">Display heading</Heading>,
+    label: "Heading · h2 · 70px",
+    copy: '<Heading variant="h2">Nadpis</Heading>',
+    preview: <Heading variant="h2">Nadpis</Heading>,
   },
   {
     level: "text",
-    label: "Heading · h1",
-    copy: '<Heading variant="h1">Section title</Heading>',
-    preview: <Heading variant="h1">Section title</Heading>,
+    label: "Heading · h3 · 32px",
+    copy: '<Heading variant="h3">Podnadpis</Heading>',
+    preview: <Heading variant="h3">Podnadpis</Heading>,
   },
   {
     level: "text",
-    label: "Heading · h2",
-    copy: '<Heading variant="h2">Subheading</Heading>',
-    preview: <Heading variant="h2">Subheading</Heading>,
+    label: "Heading · numb1 · 60px",
+    copy: '<Heading variant="numb1">2 weeks</Heading>',
+    preview: <Heading variant="numb1">2 weeks</Heading>,
   },
   {
     level: "text",
-    label: "Heading · card",
-    copy: '<Heading variant="card">Card title</Heading>',
-    preview: <Heading variant="card">Card title</Heading>,
+    label: "Text · h5 · 24px",
+    copy: '<Text variant="h5">Heading five</Text>',
+    preview: <Text variant="h5">Heading five</Text>,
   },
   {
     level: "text",
-    label: "Heading · stat",
-    copy: '<Heading variant="stat">Stat number</Heading>',
-    preview: <Heading variant="stat">Stat number</Heading>,
+    label: "Text · p1 · 24px",
+    copy: '<Text variant="p1">Paragraph one</Text>',
+    preview: <Text variant="p1">Paragraph one</Text>,
   },
   {
     level: "text",
-    label: "Text · body",
-    copy: '<Text variant="body">Body text</Text>',
-    preview: (
-      <Text variant="body">
-        Body text paragraph that wraps over multiple lines naturally inside its container.
-      </Text>
-    ),
+    label: "Text · p2 · 20px",
+    copy: '<Text variant="p2">Paragraph two</Text>',
+    preview: <Text variant="p2">Paragraph two</Text>,
   },
   {
     level: "text",
-    label: "Text · eyebrow",
-    copy: '<Text variant="eyebrow">Eyebrow</Text>',
-    preview: <Text variant="eyebrow">Eyebrow</Text>,
+    label: "Text · p3 · 18px",
+    copy: '<Text variant="p3">Paragraph three</Text>',
+    preview: <Text variant="p3">Paragraph three</Text>,
   },
   {
     level: "text",
-    label: "Text · bullet-label",
-    copy: '<Text variant="bullet-label">Bullet label</Text>',
-    preview: <Text variant="bullet-label">Bullet label</Text>,
+    label: "Text · l1 · 18px medium",
+    copy: '<Text variant="l1">Label one</Text>',
+    preview: <Text variant="l1">Label one</Text>,
   },
   {
     level: "text",
-    label: "Text · bullet-desc",
-    copy: '<Text variant="bullet-desc">Bullet description</Text>',
-    preview: <Text variant="bullet-desc">Bullet description</Text>,
+    label: "Text · l2 · 16px medium",
+    copy: '<Text variant="l2">Label two</Text>',
+    preview: <Text variant="l2">Label two</Text>,
   },
   {
     level: "text",
-    label: "Text · meta",
-    copy: '<Text variant="meta">Meta name</Text>',
-    preview: <Text variant="meta">Meta name</Text>,
-  },
-  {
-    level: "text",
-    label: "Text · meta-sm",
-    copy: '<Text variant="meta-sm">Meta sub</Text>',
-    preview: <Text variant="meta-sm">Meta sub</Text>,
-  },
-  {
-    level: "text",
-    label: "Text · price",
-    copy: '<Text variant="price">Price</Text>',
-    preview: <Text variant="price">Price</Text>,
-  },
-  {
-    level: "text",
-    label: "Text · price-regular",
-    copy: '<Text variant="price-regular">Duration</Text>',
-    preview: <Text variant="price-regular">Duration</Text>,
-  },
-  {
-    level: "text",
-    label: "Text · cta",
-    copy: '<Text variant="cta">CTA label</Text>',
-    preview: <Text variant="cta">CTA label</Text>,
-  },
-  {
-    level: "text",
-    label: "Text · badge",
-    copy: '<Text variant="badge" as="span">Badge</Text>',
-    preview: (
-      <Text variant="badge" as="span">
-        Badge
-      </Text>
-    ),
+    label: "Text · l3 · 15px",
+    copy: '<Text variant="l3">Label three</Text>',
+    preview: <Text variant="l3">Label three</Text>,
   },
 
   // ─── Spacing (includes sizing — same Tailwind v4 namespace) ───
@@ -286,6 +254,12 @@ const entries: Entry[] = [
     copy: "<NavigationDots count={5} />",
     preview: <NavigationDots count={5} />,
   },
+  {
+    level: "molecules",
+    label: "IconButton",
+    copy: '<IconButton icon="chevron-right" label="Akcia" />',
+    preview: <IconButton icon="chevron-right" label="Akcia" />,
+  },
 ];
 
 const tabs: { id: Level; label: string }[] = [
@@ -334,9 +308,9 @@ function HoverCopy({ label, copy }: { label: string; copy: string }) {
       type="button"
       onClick={handle}
       title={copied ? "Copied!" : `Copy "${copy}"`}
-      className="absolute -top-2 left-0 -translate-y-full inline-flex items-center gap-8 px-12 py-8 rounded-pill bg-prim text-fg-inverse opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto z-10 shadow-elevated whitespace-nowrap cursor-pointer"
+      className="absolute -top-2 left-0 -translate-y-full inline-flex items-center gap-s4 px-s5 py-s4 rounded-pill bg-prim text-fg-inverse opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto z-10 shadow-elevated whitespace-nowrap cursor-pointer"
     >
-      <span className="font-body text-meta-sm">{label}</span>
+      <span className="font-body text-l3">{label}</span>
       <Icon name={copied ? "check" : "copy"} size="sm" />
     </button>
   );
@@ -357,18 +331,18 @@ export default function CatalogPage() {
   const layout = levelLayout[active];
 
   return (
-    <main className="mx-auto w-full max-w-1280 px-80 py-64 flex flex-col gap-64">
-      <header className="flex flex-col gap-16">
-        <Heading variant="display" as="h1">
+    <main className="mx-auto w-full max-w-s14 px-s9 py-s8 flex flex-col gap-s8">
+      <header className="flex flex-col gap-s5">
+        <Heading variant="h2" as="h1">
           Component catalog
         </Heading>
-        <Text variant="eyebrow">
+        <Text variant="p3">
           Every element is a component. Every value is a token. Nothing is custom.
         </Text>
       </header>
 
       {/* Horizontal tabs */}
-      <nav aria-label="Catalog sections" className="flex flex-wrap gap-8">
+      <nav aria-label="Catalog sections" className="flex flex-wrap gap-s4">
         {tabs.map((t) => {
           const isActive = active === t.id;
           const count = entries.filter((e) => e.level === t.id).length;
@@ -378,27 +352,27 @@ export default function CatalogPage() {
               type="button"
               onClick={() => setActive(t.id)}
               aria-current={isActive ? "page" : undefined}
-              className={`px-24 py-12 rounded-pill font-body text-cta transition-colors duration-300 ease-out cursor-pointer ${
+              className={`px-s6 py-s5 rounded-pill font-body text-p2 transition-colors duration-300 ease-out cursor-pointer ${
                 isActive ? "bg-prim text-fg-inverse" : "bg-surface text-fg hover:bg-pill"
               }`}
             >
               {t.label}
-              <span className="ml-2 text-meta-sm opacity-60">{count}</span>
+              <span className="ml-2 text-l3 opacity-60">{count}</span>
             </button>
           );
         })}
       </nav>
 
       {/* Section title for active tab */}
-      <section className="flex flex-col gap-32">
-        <Heading variant="h2">{tabs.find((t) => t.id === active)?.label}</Heading>
+      <section className="flex flex-col gap-s7">
+        <Heading variant="h3">{tabs.find((t) => t.id === active)?.label}</Heading>
 
         {items.length === 0 ? (
-          <Text variant="body" className="opacity-60">
+          <Text variant="p3" className="opacity-60">
             {emptyMessage[active]}
           </Text>
         ) : layout === "row" ? (
-          <ul className="flex flex-wrap gap-32">
+          <ul className="flex flex-wrap gap-s7">
             {items.map((e, i) => (
               <li key={`${e.level}-${e.label}-${i}`}>
                 <EntryItem entry={e} />
@@ -406,7 +380,7 @@ export default function CatalogPage() {
             ))}
           </ul>
         ) : layout === "grid" ? (
-          <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-32">
+          <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-s7">
             {items.map((e, i) => (
               <li key={`${e.level}-${e.label}-${i}`}>
                 <EntryItem entry={e} />
@@ -414,7 +388,7 @@ export default function CatalogPage() {
             ))}
           </ul>
         ) : (
-          <ul className="flex flex-col gap-32">
+          <ul className="flex flex-col gap-s7">
             {items.map((e, i) => (
               <li key={`${e.level}-${e.label}-${i}`}>
                 <EntryItem entry={e} />

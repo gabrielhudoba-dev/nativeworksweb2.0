@@ -5,11 +5,11 @@ type ButtonVariant = "primary" | "secondary" | "pill";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
-    "h-64 px-32 gap-32 bg-accent text-accent-fg rounded-pill",
+    "h-s8 px-s7 gap-s7 bg-accent text-accent-fg rounded-pill",
   secondary:
-    "h-48 px-24 gap-24 bg-prim text-fg-inverse rounded-pill",
+    "h-s8 px-s6 gap-s6 bg-prim text-fg-inverse rounded-pill",
   pill:
-    "h-64 pl-16 pr-24 gap-16 bg-pill text-prim rounded-pill",
+    "h-s8 pl-s5 pr-s6 gap-s5 bg-pill text-prim rounded-pill",
 };
 
 type CommonProps = {
@@ -26,7 +26,7 @@ type Props = ButtonAsButton | ButtonAsLink;
 
 export function Button(props: Props) {
   const { variant = "primary", children, rightIcon, leftIcon, className = "", ...rest } = props;
-  const cls = `inline-flex items-center justify-between font-body text-cta transition-transform duration-300 ease-out hover:scale-[0.99] active:scale-[0.98] ${variantClass[variant]} ${className}`.trim();
+  const cls = `inline-flex items-center justify-between font-body text-l1 transition-transform duration-300 ease-out hover:scale-[0.99] active:scale-[0.98] ${variantClass[variant]} ${className}`.trim();
 
   const inner = (
     <>

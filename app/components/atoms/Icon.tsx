@@ -1,4 +1,4 @@
-import type { ComponentType } from "react";
+import type { ComponentType, SVGProps } from "react";
 import type { IconProps as PhosphorIconProps, IconWeight } from "@phosphor-icons/react";
 import {
   ArrowRight,
@@ -11,13 +11,43 @@ import {
   PersonSimpleRun,
 } from "@phosphor-icons/react/ssr";
 
-const registry: Record<string, ComponentType<PhosphorIconProps>> = {
+type SvgProps = SVGProps<SVGSVGElement>;
+
+function ChevronLeft({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
+      <path d="M13.8 18L7.8 12L13.8 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChevronRight({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
+      <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Menu({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
+      <path d="M4 7H20" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 17H20" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
   "arrow-right": ArrowRight,
   "brackets-curly": BracketsCurly,
   "caret-left": CaretLeft,
   "caret-right": CaretRight,
   check: Check,
   copy: Copy,
+  "chevron-left": ChevronLeft,
+  "chevron-right": ChevronRight,
+  menu: Menu,
   microscope: Microscope,
   "person-simple-run": PersonSimpleRun,
 };
@@ -27,9 +57,9 @@ export type IconName = keyof typeof registry;
 type IconSize = "sm" | "md" | "lg";
 
 const sizeClass: Record<IconSize, string> = {
-  sm: "size-16",
-  md: "size-24",
-  lg: "size-32",
+  sm: "size-s5",
+  md: "size-s6",
+  lg: "size-s7",
 };
 
 type Props = {

@@ -16,7 +16,7 @@ type Props = {
 export function Badge({ variant = "ai", children, className = "" }: Props) {
   return (
     <span
-      className={`inline-flex items-center justify-center px-4 py-4 rounded-sm ${variantClass[variant]} ${className}`.trim()}
+      className={`inline-flex items-center justify-center px-s3 py-s3 rounded-sm ${variantClass[variant]} ${className}`.trim()}
     >
       <Text variant="badge" as="span">
         {children}

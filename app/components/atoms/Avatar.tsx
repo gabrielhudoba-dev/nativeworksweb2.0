@@ -3,10 +3,10 @@ import Image from "next/image";
 type AvatarSize = 32 | 48 | 64 | 80;
 
 const sizeClass: Record<AvatarSize, string> = {
-  32: "size-32",
-  48: "size-48",
-  64: "size-64",
-  80: "size-80",
+  32: "size-s7",
+  48: "size-s8",
+  64: "size-s8",
+  80: "size-s9",
 };
 
 type Props = {
