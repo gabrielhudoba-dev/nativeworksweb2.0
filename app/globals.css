@@ -72,55 +72,54 @@
   --font-display: "PP Neue Montreal", "Helvetica Neue", system-ui, sans-serif;
   --font-body: "Aeonik", "Helvetica Neue", system-ui, sans-serif;
 
-  /* ─── Type scale ─── */
-  --text-display: 70px;
-  --text-display--line-height: 0.9;
-  --text-display--letter-spacing: -0.02em;
+  /* ─── Type scale (1:1 Figma tokens) ─── */
+  --text-h2: 70px;
+  --text-h2--line-height: 0.9;
+  --text-h2--letter-spacing: -0.02em;
 
-  --text-h1: 70px;
-  --text-h1--line-height: 0.9;
-  --text-h1--letter-spacing: -0.02em;
+  --text-h3: 32px;
+  --text-h3--line-height: 1;
 
-  --text-stat: 60px;
-  --text-stat--line-height: 1;
+  --text-numb1: 60px;
+  --text-numb1--line-height: auto;
 
-  --text-h2: 32px;
-  --text-h2--line-height: 1;
+  --text-h5: 24px;
+  --text-h5--line-height: 1.5;
 
-  --text-card-title: 32px;
-  --text-card-title--line-height: 1;
+  --text-p1: 24px;
+  --text-p1--line-height: 1.5;
 
-  --text-price: 24px;
-  --text-price--line-height: 1;
+  --text-p2: 20px;
+  --text-p2--line-height: 1.5;
 
-  --text-cta: 20px;
-  --text-cta--line-height: 1.6;
+  --text-p3: 18px;
+  --text-p3--line-height: 1.5;
 
-  --text-body: 18px;
-  --text-body--line-height: 1.5;
+  --text-l1: 18px;
+  --text-l1--line-height: 1.5;
 
-  --text-meta: 16px;
-  --text-meta--line-height: 1.5;
+  --text-l2: 16px;
+  --text-l2--line-height: 1.5;
 
-  --text-meta-sm: 15px;
-  --text-meta-sm--line-height: 1.5;
+  --text-l3: 15px;
+  --text-l3--line-height: 1.5;
 
-  --text-badge: 16px;
-  --text-badge--line-height: 1.5;
-
-  /* ─── Spacing (number = px) ─── */
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-32: 32px;
-  --spacing-48: 48px;
-  --spacing-64: 64px;
-  --spacing-80: 80px;
-  --spacing-1280: 1280px;
-  --spacing-1440: 1440px;
+  /* ─── Spacing — Fibonacci scale ─── */
+  --spacing-s1: 2px;
+  --spacing-s2: 3px;
+  --spacing-s3: 5px;
+  --spacing-s4: 8px;
+  --spacing-s5: 13px;
+  --spacing-s6: 21px;
+  --spacing-s7: 34px;
+  --spacing-s8: 55px;
+  --spacing-s9: 89px;
+  --spacing-s10: 144px;
+  --spacing-s11: 233px;
+  --spacing-s12: 377px;
+  --spacing-s13: 610px;
+  --spacing-s14: 1280px;
+  --spacing-s15: 1440px;
 
   /* ─── Radii ─── */
   --radius-sm: 4px;
@@ -140,7 +139,7 @@
    ────────────────────────────────────────────────────────────────────────── */
 html {
   background: var(--color-page);
-  color: var(--color-fg);
+  color: var(--color-prim);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -148,5 +147,13 @@ html {
 
 body {
   background: var(--color-page);
-  color: var(--color-fg);
+  color: var(--color-prim);
+}
+
+button, [role="button"], a {
+  cursor: pointer;
+}
+
+.glass {
+  box-shadow: none !important;
 }

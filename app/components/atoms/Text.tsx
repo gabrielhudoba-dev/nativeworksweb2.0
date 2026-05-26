@@ -1,28 +1,16 @@
 import { createElement, HTMLAttributes } from "react";
 
-type TextVariant =
-  | "body"
-  | "eyebrow"
-  | "bullet-label"
-  | "bullet-desc"
-  | "meta"
-  | "meta-sm"
-  | "price"
-  | "price-regular"
-  | "cta"
-  | "badge";
+type TextVariant = "h5" | "p1" | "p2" | "p3" | "l1" | "l2" | "l3" | "badge";
 
 const variantClass: Record<TextVariant, string> = {
-  body: "font-body font-normal text-body text-fg",
-  eyebrow: "font-body font-normal text-body text-fg",
-  "bullet-label": "font-body font-medium text-body text-fg",
-  "bullet-desc": "font-body font-normal text-body text-fg",
-  meta: "font-body font-medium text-meta text-fg",
-  "meta-sm": "font-body font-normal text-meta-sm text-fg",
-  price: "font-display font-medium text-price text-fg",
-  "price-regular": "font-display font-normal text-price text-fg",
-  cta: "font-body font-normal text-cta",
-  badge: "font-body font-bold text-badge",
+  h5:    "font-body font-normal text-h5 text-prim",
+  p1:    "font-body font-normal text-p1 text-prim",
+  p2:    "font-body font-normal text-p2 text-prim",
+  p3:    "font-body font-normal text-p3 text-prim",
+  l1:    "font-body font-medium text-l1 text-prim",
+  l2:    "font-body font-medium text-l2 text-prim",
+  l3:    "font-body font-normal text-l3 text-prim",
+  badge: "font-body font-medium text-l3 text-prim",
 };
 
 type Props = HTMLAttributes<HTMLElement> & {
