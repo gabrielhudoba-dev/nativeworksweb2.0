@@ -10,7 +10,7 @@ import {
   Text,
   type IconName,
 } from "@/app/components/atoms";
-import { Button, GalleryNav, NavPill, Refer } from "@/app/components/molecules";
+import { Button, GalleryNav, NavPrimPill, Refer } from "@/app/components/molecules";
 import {
   Footer,
   HeroSection,
@@ -21,9 +21,9 @@ import {
   StatsSection,
 } from "@/app/components/organisms";
 
-function NavPillPreview() {
+function NavPrimPillPreview() {
   const [open, setOpen] = useState(false);
-  return <NavPill static open={open} onToggle={() => setOpen(o => !o)} />;
+  return <NavPrimPill static open={open} onToggle={() => setOpen(o => !o)} />;
 }
 
 function GalleryNavPreview() {
@@ -251,9 +251,9 @@ const entries: Entry[] = [
   },
   {
     level: "molecules",
-    label: "NavPill",
-    copy: "<NavPill open={open} onToggle={() => setOpen(o => !o)} />",
-    preview: <NavPillPreview />,
+    label: "NavPrimPill",
+    copy: "<NavPrimPill open={open} onToggle={() => setOpen(o => !o)} />",
+    preview: <NavPrimPillPreview />,
   },
   // ─── Organisms ───
   {

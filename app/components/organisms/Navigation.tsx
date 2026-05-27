@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NavPill } from "@/app/components/molecules";
+import { NavPrimPill } from "@/app/components/molecules";
 import { Text } from "@/app/components/atoms";
 import { useNavContext } from "./NavigationProvider";
 
@@ -28,7 +28,7 @@ export function Navigation() {
 
   return (
     <>
-      <NavPill
+      <NavPrimPill
         open={open}
         onToggle={() => setOpen((o) => !o)}
         onLogoClick={() => setOpen(false)}
