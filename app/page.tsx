@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Heading, Text } from "@/app/components/atoms";
 import { IconButton } from "@/app/components/molecules";
 import { GlassCard } from "@developer-hub/liquid-glass";
+import { useNavOpen } from "@/app/components/organisms";
 
 function Attribution({ name, role, avatar, className }: { name: string; role: string; avatar?: string; className?: string }) {
   return (
@@ -38,6 +38,7 @@ export default function Home() {
   const [slide, setSlide] = useState(0);
   const [controlVisible, setControlVisible] = useState(false);
   const [paused, setPaused] = useState(false);
+  const navOpen = useNavOpen();
   const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,52 +64,34 @@ export default function Home() {
   }, [paused]);
 
   return (
-    <main className="bg-page overflow-hidden">
+    <main className="bg-white overflow-hidden">
       {/* ─── Hero ─── */}
       <section className="px-s9 max-w-s15 mx-auto">
 
-        {/* Navigation — fixed */}
-        <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center gap-[2px] py-s5" aria-label="Site navigation">
-          <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
-            <div className="flex items-center justify-between pl-s5 pr-s6 py-s5 w-[300px] bg-pill">
-              <Link
-                href="/"
-                aria-label="Native Works – späť na úvod"
-                onClick={(e) => {
-                  if (window.location.pathname === "/") {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
-                }}
-              >
-                <Image src="/images/nativeWorksLogoFull.svg" alt="Native Works" width={95} height={36} priority unoptimized />
-              </Link>
-              <IconButton icon="menu" label="Otvoriť menu" />
-            </div>
-          </GlassCard>
-
-          <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${controlVisible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"}`}>
-          <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
-            <div className="flex items-center justify-between px-s6 h-s8 w-[300px] bg-pill">
-              <IconButton icon="chevron-left" label="Predchádzajúci" onClick={() => setSlide(s => (s - 1 + SLIDES) % SLIDES)} />
-              <div className="flex items-center justify-center gap-s4 flex-1 mx-s4 h-s4">
-                {Array.from({ length: SLIDES }).map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    aria-label={`Go to slide ${i + 1}`}
-                    onClick={() => setSlide(i)}
-                    className={`h-s4 rounded-pill transition-[width,background-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer shrink-0 ${
-                      slide === i ? "bg-prim w-s9" : "bg-prim/20 w-s4"
-                    }`}
-                  />
-                ))}
+        {/* Gallery slide controls — fixed below the nav pill */}
+        <div className="fixed top-[80px] left-0 right-0 z-50 flex justify-center">
+          <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${controlVisible && !navOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"}`}>
+            <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
+              <div className="flex items-center justify-between px-s6 h-s8 w-[300px] bg-[#D9D9D9]/20">
+                <IconButton icon="chevron-left" label="Predchádzajúci" onClick={() => setSlide(s => (s - 1 + SLIDES) % SLIDES)} />
+                <div className="flex items-center justify-center gap-s4 flex-1 mx-s4 h-s4">
+                  {Array.from({ length: SLIDES }).map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      aria-label={`Go to slide ${i + 1}`}
+                      onClick={() => setSlide(i)}
+                      className={`h-s4 rounded-pill transition-[width,background-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer shrink-0 ${
+                        slide === i ? "bg-prim w-s9" : "bg-prim/20 w-s4"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <IconButton icon="chevron-right" label="Nasledujúci" onClick={() => setSlide(s => (s + 1) % SLIDES)} />
               </div>
-              <IconButton icon="chevron-right" label="Nasledujúci" onClick={() => setSlide(s => (s + 1) % SLIDES)} />
-            </div>
-          </GlassCard>
+            </GlassCard>
           </div>
-        </nav>
+        </div>
 
         {/* Hero — headline 84vh, galéria 640px začína na 84vh (väčšina pod foldom) */}
 

@@ -3,5 +3,5 @@ type Props = {
 };
 
 export function Divider({ className = "" }: Props) {
-  return <hr className={`h-px w-full border-0 bg-divider ${className}`.trim()} />;
+  return <hr className={`h-px w-full border-0 bg-prim/10 ${className}`.trim()} />;
 }

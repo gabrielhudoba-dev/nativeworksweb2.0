@@ -24,7 +24,7 @@ export function NavigationDots({
     <div
       role="tablist"
       aria-label="Page navigation"
-      className={`bg-pill rounded-pill px-s6 py-s5 inline-flex items-center gap-s4 min-w-[180px] ${className}`.trim()}
+      className={`bg-white/20 rounded-pill px-s6 py-s5 inline-flex items-center gap-s4 min-w-[180px] ${className}`.trim()}
     >
       {Array.from({ length: count }).map((_, i) => {
         const isActive = active === i;
@@ -37,7 +37,7 @@ export function NavigationDots({
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => handle(i)}
             className={`h-s4 px-s4 rounded-pill transition-all duration-300 ease-out cursor-pointer ${
-              isActive ? "bg-prim flex-1" : "bg-dot-inactive hover:bg-prim/40"
+              isActive ? "bg-prim flex-1" : "bg-prim/10 hover:bg-prim/40"
             }`}
           />
         );

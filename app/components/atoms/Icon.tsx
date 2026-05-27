@@ -9,6 +9,7 @@ import {
   Copy,
   Microscope,
   PersonSimpleRun,
+  X,
 } from "@phosphor-icons/react/ssr";
 
 type SvgProps = SVGProps<SVGSVGElement>;
@@ -44,6 +45,7 @@ const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
   "caret-left": CaretLeft,
   "caret-right": CaretRight,
   check: Check,
+  close: X,
   copy: Copy,
   "chevron-left": ChevronLeft,
   "chevron-right": ChevronRight,

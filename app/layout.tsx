@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Navigation, NavigationProvider } from "@/app/components/organisms";
 
 export const metadata: Metadata = {
   title: "Native Works",
@@ -13,7 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col font-body">{children}</body>
+      <body className="min-h-full flex flex-col font-body">
+        <NavigationProvider>
+          <Navigation />
+          {children}
+        </NavigationProvider>
+      </body>
     </html>
   );
 }

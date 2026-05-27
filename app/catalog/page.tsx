@@ -44,17 +44,9 @@ const iconNames: IconName[] = [
 
 const colorTokens: { name: string; utility: string; hex: string }[] = [
   { name: "prim", utility: "bg-prim", hex: "#090E3A" },
-  { name: "fg", utility: "bg-fg", hex: "#000000" },
-  { name: "fg-inverse", utility: "bg-fg-inverse", hex: "#FFFFFF" },
-  { name: "page", utility: "bg-page", hex: "#FFFFFF" },
   { name: "surface", utility: "bg-surface", hex: "#F5F5F7" },
-  { name: "accent", utility: "bg-accent", hex: "#3255E6" },
-  { name: "accent-fg", utility: "bg-accent-fg", hex: "#FFFFFF" },
-  { name: "danger", utility: "bg-danger", hex: "#C80404" },
-  { name: "danger-fg", utility: "bg-danger-fg", hex: "#F5F5F7" },
-  { name: "pill", utility: "bg-pill", hex: "rgba(217,217,217,0.2)" },
-  { name: "dot-inactive", utility: "bg-dot-inactive", hex: "rgba(9,14,58,0.1)" },
-  { name: "divider", utility: "bg-divider", hex: "rgba(9,14,58,0.1)" },
+  { name: "brand", utility: "bg-brand", hex: "#3255E6" },
+  { name: "white", utility: "bg-white", hex: "#FFFFFF" },
 ];
 
 // Spacing + sizing = same Tailwind v4 namespace (--spacing-*). One tab, sorted by value.
@@ -96,7 +88,7 @@ const entries: Entry[] = [
     level: "colors",
     label: `${c.name} · ${c.hex}`,
     copy: c.utility,
-    preview: <div className={`size-s6 rounded-md border border-divider ${c.utility}`} />,
+    preview: <div className={`size-s9 rounded-xl border border-divider ${c.utility}`} />,
   })),
 
   // ─── Text (Heading + Text) — 1:1 Figma tokens ───
@@ -292,11 +284,12 @@ const emptyMessage: Record<Level, string> = {
   organisms: "Zatiaľ tu nič nie je. Organisms pribudnú v ďalšej iterácii.",
 };
 
-function HoverCopy({ label, copy }: { label: string; copy: string }) {
+function EntryItem({ entry }: { entry: Entry }) {
+  const [hovered, setHovered] = useState(false);
   const [copied, setCopied] = useState(false);
   const handle = async () => {
     try {
-      await navigator.clipboard.writeText(copy);
+      await navigator.clipboard.writeText(entry.copy);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
@@ -304,22 +297,20 @@ function HoverCopy({ label, copy }: { label: string; copy: string }) {
     }
   };
   return (
-    <button
-      type="button"
-      onClick={handle}
-      title={copied ? "Copied!" : `Copy "${copy}"`}
-      className="absolute -top-2 left-0 -translate-y-full inline-flex items-center gap-s4 px-s5 py-s4 rounded-pill bg-prim text-fg-inverse opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto z-10 shadow-elevated whitespace-nowrap cursor-pointer"
+    <article
+      className="relative inline-flex flex-col pt-s7"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      <span className="font-body text-l3">{label}</span>
-      <Icon name={copied ? "check" : "copy"} size="sm" />
-    </button>
-  );
-}
-
-function EntryItem({ entry }: { entry: Entry }) {
-  return (
-    <article className="relative group inline-flex">
-      <HoverCopy label={entry.label} copy={entry.copy} />
+      <button
+        type="button"
+        onClick={handle}
+        title={copied ? "Copied!" : `Copy "${entry.copy}"`}
+        className={`absolute top-0 left-0 inline-flex items-center gap-s4 px-s5 py-s4 rounded-pill bg-prim text-white transition-opacity duration-200 z-10 shadow-elevated whitespace-nowrap cursor-pointer ${hovered ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+      >
+        <span className="font-body text-l3">{entry.label}</span>
+        <Icon name={copied ? "check" : "copy"} size="sm" />
+      </button>
       <div>{entry.preview}</div>
     </article>
   );
@@ -353,7 +344,7 @@ export default function CatalogPage() {
               onClick={() => setActive(t.id)}
               aria-current={isActive ? "page" : undefined}
               className={`px-s6 py-s5 rounded-pill font-body text-p2 transition-colors duration-300 ease-out cursor-pointer ${
-                isActive ? "bg-prim text-fg-inverse" : "bg-surface text-fg hover:bg-pill"
+                isActive ? "bg-prim text-white" : "bg-surface text-prim hover:bg-white/20"
               }`}
             >
               {t.label}

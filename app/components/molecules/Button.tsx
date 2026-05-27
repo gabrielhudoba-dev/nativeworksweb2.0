@@ -5,11 +5,11 @@ type ButtonVariant = "primary" | "secondary" | "pill";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
-    "h-s8 px-s7 gap-s7 bg-accent text-accent-fg rounded-pill",
+    "h-s8 px-s7 gap-s7 bg-brand text-white rounded-pill",
   secondary:
-    "h-s8 px-s6 gap-s6 bg-prim text-fg-inverse rounded-pill",
+    "h-s8 px-s6 gap-s6 bg-prim text-white rounded-pill",
   pill:
-    "h-s8 pl-s5 pr-s6 gap-s5 bg-pill text-prim rounded-pill",
+    "h-s8 pl-s5 pr-s6 gap-s5 bg-white/20 text-prim rounded-pill",
 };
 
 type CommonProps = {
