@@ -53,12 +53,12 @@ const SOCIAL = [
 
 export function Footer() {
   return (
-    <footer className="bg-prim text-white">
-      <div className="px-s9 pt-s9 pb-s5 max-w-s15 mx-auto">
+    <footer className="bg-prim text-white mx-s5 mb-s5 rounded-lg overflow-hidden">
+      <div className="px-s8 pt-s8 pb-s5">
 
-        {/* Top row */}
-        <div className="flex items-start justify-between mb-s6">
-          <div className="flex flex-col gap-s5 max-w-[320px]">
+        {/* Top row — logo + social */}
+        <div className="flex items-start justify-between mb-s8">
+          <div className="flex flex-col gap-s5">
             <Link href="/" aria-label="Native Works">
               <Image
                 src="/images/nativeWorksLogoFull.svg"
@@ -73,8 +73,6 @@ export function Footer() {
               New era of digital product design.
             </p>
           </div>
-
-          {/* Social icons */}
           <div className="flex items-center gap-s5">
             {SOCIAL.map(({ label, href, icon }) => (
               <a
@@ -89,26 +87,6 @@ export function Footer() {
               </a>
             ))}
           </div>
-        </div>
-
-        {/* Nav columns */}
-        <div className="flex gap-s11 mb-s8">
-          {NAV_COLS.map(({ heading, links }) => (
-            <div key={heading} className="flex flex-col gap-s6">
-              <Text variant="l3" className="opacity-40 uppercase tracking-widest">{heading}</Text>
-              <div className="flex flex-col gap-s5">
-                {links.map(({ label, href }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="font-body font-normal text-p3 text-white/70 hover:text-white transition-colors"
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
         </div>
 
         {/* Bottom row */}
