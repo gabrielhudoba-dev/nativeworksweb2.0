@@ -77,20 +77,22 @@ export function ServicesSection() {
       <Text variant="p2" className="mb-s8 max-w-[800px]">
         We work closely in to your product focusing on specific problem.
       </Text>
-      <div className="grid grid-cols-3 gap-[19px] items-start">
-        {CARDS.map((card, i) => (
-          <ServiceCard
-            key={card.title}
-            title={card.title}
-            desc={card.desc}
-            price={card.price}
-            duration={card.duration}
-            active={activeCard === i}
-            onClick={() => setActiveCard(i)}
-            onLetStart={(e) => handleLetStart(e, card.email)}
-            expandedContent={i === 0 ? SPRINT_FEATURES : undefined}
-          />
-        ))}
+      <div className="overflow-x-auto -mx-s9 py-[3px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="grid grid-flow-col auto-cols-[320px] lg:grid-flow-row lg:grid-cols-3 lg:auto-cols-auto gap-s4 px-s9 snap-x snap-mandatory lg:snap-none">
+          {CARDS.map((card, i) => (
+            <ServiceCard
+              key={card.title}
+              title={card.title}
+              desc={card.desc}
+              price={card.price}
+              duration={card.duration}
+              active={activeCard === i}
+              onClick={() => setActiveCard(i)}
+              onLetStart={(e) => handleLetStart(e, card.email)}
+              expandedContent={i === 0 ? SPRINT_FEATURES : undefined}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

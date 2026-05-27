@@ -1,15 +1,13 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import { Icon, type IconName } from "@/app/components/atoms";
 
-type ButtonVariant = "primary" | "cta" | "cta-active";
+type ButtonVariant = "primary" | "secondary";
+
+const BASE = "h-s8 px-s6 gap-s7 rounded-pill";
 
 const variantClass: Record<ButtonVariant, string> = {
-  primary:
-    "h-s8 px-s7 gap-s7 bg-brand text-white rounded-pill",
-  cta:
-    "h-s8 px-s7 gap-s7 bg-cta/20 text-prim rounded-pill",
-  "cta-active":
-    "h-s8 px-s7 gap-s7 bg-brand text-white rounded-pill",
+  primary:   `${BASE} bg-brand text-white`,
+  secondary: `${BASE} bg-cta/20 text-prim`,
 };
 
 type CommonProps = {

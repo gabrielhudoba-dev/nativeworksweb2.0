@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Heading, Text } from "@/app/components/atoms";
 import { GalleryNav, Refer } from "@/app/components/molecules";
 import { useNavOpen } from "./NavigationProvider";
+import { useSquircle } from "@/app/hooks/useSquircle";
 
 const SLIDES = 4;
 const GALLERY_IMAGES = [
@@ -21,6 +22,7 @@ export function HeroSection() {
   const [paused, setPaused] = useState(false);
   const navOpen = useNavOpen();
   const galleryRef = useRef<HTMLDivElement>(null);
+  const { ref: gallerySquircleRef, style: gallerySquircleStyle } = useSquircle(21, 0.6);
 
   useEffect(() => {
     const el = galleryRef.current;
@@ -83,10 +85,10 @@ export function HeroSection() {
       </div>
 
       {/* Gallery — 640px */}
+      <div ref={gallerySquircleRef} style={{ ...gallerySquircleStyle, height: "640px" }} className="w-full">
       <div
         ref={galleryRef}
-        className="w-full rounded-lg overflow-hidden bg-surface relative"
-        style={{ height: "640px" }}
+        className="w-full h-full overflow-hidden bg-surface relative"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onFocus={() => setPaused(true)}
@@ -106,6 +108,7 @@ export function HeroSection() {
             <Image src={img.src} alt={img.alt} fill className="object-cover" priority={i === 0} />
           </div>
         ))}
+      </div>
       </div>
     </section>
   );

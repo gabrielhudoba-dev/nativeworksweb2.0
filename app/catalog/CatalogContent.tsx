@@ -233,15 +233,11 @@ const entries: Entry[] = [
     variants: [
       {
         label: "primary",
-        preview: <Button variant="primary" rightIcon="arrow-right" className="w-[260px]">Button label</Button>,
+        preview: <Button variant="primary" rightIcon="arrow-right" className="w-[260px]">{"Let's Start"}</Button>,
       },
       {
-        label: "cta-active",
-        preview: <Button variant="cta-active" rightIcon="arrow-right" className="w-[260px]">{"Let's Start"}</Button>,
-      },
-      {
-        label: "cta",
-        preview: <Button variant="cta" rightIcon="arrow-right" className="w-[260px]">{"Let's Start"}</Button>,
+        label: "secondary",
+        preview: <Button variant="secondary" rightIcon="arrow-right" className="w-[260px]">{"Let's Start"}</Button>,
       },
     ],
   },

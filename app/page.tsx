@@ -12,10 +12,10 @@ export default function Home() {
   return (
     <main className="bg-white">
       <HeroSection />
-      <StatsSection />
-      <InterveningSection />
-      <ServicesSection />
-      <PageLinksSection />
+      <div className="scroll-reveal"><StatsSection /></div>
+      <div className="scroll-reveal"><InterveningSection /></div>
+      <div className="scroll-reveal"><ServicesSection /></div>
+      <div className="scroll-reveal"><PageLinksSection /></div>
     </main>
   );
 }

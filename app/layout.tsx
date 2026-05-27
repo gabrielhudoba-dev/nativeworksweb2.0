@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Link from "next/link";
 import { Navigation, NavigationProvider } from "@/app/components/organisms";
 import { ConditionalFooter } from "@/app/components/ConditionalFooter";
 
@@ -20,6 +21,12 @@ export default function RootLayout({
           <Navigation />
           {children}
           <ConditionalFooter />
+          <Link
+            href="/catalog?debug"
+            className="fixed bottom-s6 right-s6 z-50 font-body text-[11px] font-medium bg-prim/10 hover:bg-prim/20 text-prim/50 rounded-full px-s4 py-s2 transition-colors"
+          >
+            catalog
+          </Link>
         </NavigationProvider>
       </body>
     </html>

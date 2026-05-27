@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Logo, Text } from "@/app/components/atoms";
 import { SocialLink } from "@/app/components/molecules/SocialLink";
+import { useSquircle } from "@/app/hooks/useSquircle";
 
 const SOCIAL: { platform: Parameters<typeof SocialLink>[0]["platform"]; href: string }[] = [
   { platform: "linkedin", href: "https://linkedin.com" },
@@ -9,8 +12,10 @@ const SOCIAL: { platform: Parameters<typeof SocialLink>[0]["platform"]; href: st
 ];
 
 export function Footer() {
+  const { ref, style } = useSquircle(21, 0.6);
+
   return (
-    <footer className="bg-brand/10 text-prim mx-s5 mb-s5 rounded-lg overflow-hidden">
+    <footer ref={ref} style={style} className="grain bg-brand/10 text-prim mx-s5 mb-s5">
       <div className="px-s8 pt-s8 pb-s5 opacity-100">
 
         {/* Top row — logo + social */}
