@@ -1,4 +1,4 @@
-export { Attribution } from "./Attribution";
 export { Button } from "./Button";
-export { IconButton } from "./IconButton";
-export { NavigationDots } from "./NavigationDots";
+export { GalleryNav } from "./GalleryNav";
+export { NavPill } from "./NavPill";
+export { Refer } from "./Refer";

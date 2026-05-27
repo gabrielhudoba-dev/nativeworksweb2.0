@@ -3,8 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Heading, Text } from "@/app/components/atoms";
-import { Attribution, IconButton } from "@/app/components/molecules";
-import { GlassCard } from "@developer-hub/liquid-glass";
+import { GalleryNav, Refer } from "@/app/components/molecules";
 import { useNavOpen } from "./NavigationProvider";
 
 const SLIDES = 4;
@@ -50,25 +49,13 @@ export function HeroSection() {
       {/* Gallery slide controls — fixed below the nav pill */}
       <div className="fixed top-[80px] left-0 right-0 z-50 flex justify-center">
         <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${controlVisible && !navOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"}`}>
-          <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
-            <div className="flex items-center justify-between px-s6 h-s8 w-[300px] bg-[#D9D9D9]/20">
-              <IconButton icon="chevron-left" label="Predchádzajúci" onClick={() => setSlide(s => (s - 1 + SLIDES) % SLIDES)} />
-              <div className="flex items-center justify-center gap-s4 flex-1 mx-s4 h-s4">
-                {Array.from({ length: SLIDES }).map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    aria-label={`Go to slide ${i + 1}`}
-                    onClick={() => setSlide(i)}
-                    className={`h-s4 rounded-pill transition-[width,background-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer shrink-0 ${
-                      slide === i ? "bg-prim w-s9" : "bg-prim/20 w-s4"
-                    }`}
-                  />
-                ))}
-              </div>
-              <IconButton icon="chevron-right" label="Nasledujúci" onClick={() => setSlide(s => (s + 1) % SLIDES)} />
-            </div>
-          </GlassCard>
+          <GalleryNav
+            count={SLIDES}
+            active={slide}
+            onPrev={() => setSlide(s => (s - 1 + SLIDES) % SLIDES)}
+            onNext={() => setSlide(s => (s + 1) % SLIDES)}
+            onDotClick={setSlide}
+          />
         </div>
       </div>
 
@@ -90,7 +77,7 @@ export function HeroSection() {
             <Text variant="p1" className="max-w-[339px] text-prim">
               Product creation is changing. Shorter cycles. Faster Outcome.
             </Text>
-            <Attribution name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" className="pr-s4" />
+            <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" className="pr-s4" />
           </div>
         </div>
       </div>

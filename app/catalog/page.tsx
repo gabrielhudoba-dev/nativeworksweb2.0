@@ -4,14 +4,13 @@ import { useState, type ReactNode } from "react";
 import {
   Avatar,
   Badge,
-  Divider,
   Heading,
   Icon,
-  Link,
+  IconButton,
   Text,
   type IconName,
 } from "@/app/components/atoms";
-import { Attribution, Button, IconButton, NavigationDots } from "@/app/components/molecules";
+import { Button, GalleryNav, NavPill, Refer } from "@/app/components/molecules";
 import {
   Footer,
   HeroSection,
@@ -21,6 +20,25 @@ import {
   ServicesSection,
   StatsSection,
 } from "@/app/components/organisms";
+
+function NavPillPreview() {
+  const [open, setOpen] = useState(false);
+  return <NavPill static open={open} onToggle={() => setOpen(o => !o)} />;
+}
+
+function GalleryNavPreview() {
+  const COUNT = 4;
+  const [active, setActive] = useState(0);
+  return (
+    <GalleryNav
+      count={COUNT}
+      active={active}
+      onPrev={() => setActive(i => (i - 1 + COUNT) % COUNT)}
+      onNext={() => setActive(i => (i + 1) % COUNT)}
+      onDotClick={setActive}
+    />
+  );
+}
 
 type Level =
   | "colors"
@@ -185,6 +203,12 @@ const entries: Entry[] = [
   // ─── Atoms (the rest) ───
   {
     level: "atoms",
+    label: "IconButton",
+    copy: '<IconButton icon="chevron-right" label="Akcia" />',
+    preview: <IconButton icon="chevron-right" label="Akcia" />,
+  },
+  {
+    level: "atoms",
     label: "Avatar · 32×32",
     copy: '<Avatar src="..." alt="..." size={32} />',
     preview: (
@@ -193,22 +217,6 @@ const entries: Entry[] = [
         alt="Sample"
         size={32}
       />
-    ),
-  },
-  {
-    level: "atoms",
-    label: "Link",
-    copy: '<Link href="/">Read more</Link>',
-    preview: <Link href="/catalog">Read more</Link>,
-  },
-  {
-    level: "atoms",
-    label: "Divider",
-    copy: "<Divider />",
-    preview: (
-      <div className="w-[480px] max-w-full">
-        <Divider />
-      </div>
     ),
   },
   {
@@ -231,41 +239,21 @@ const entries: Entry[] = [
   },
   {
     level: "molecules",
-    label: "Button · secondary",
-    copy: '<Button variant="secondary">Button label</Button>',
-    preview: (
-      <Button variant="secondary" className="w-[180px]">
-        Button label
-      </Button>
-    ),
+    label: "GalleryNav",
+    copy: "<GalleryNav count={4} active={active} onPrev={...} onNext={...} onDotClick={...} />",
+    preview: <GalleryNavPreview />,
   },
   {
     level: "molecules",
-    label: "Button · pill",
-    copy: '<Button variant="pill" rightIcon="arrow-right">Button label</Button>',
-    preview: (
-      <Button variant="pill" rightIcon="arrow-right" className="w-[240px]">
-        Button label
-      </Button>
-    ),
+    label: "Refer",
+    copy: '<Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />',
+    preview: <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />,
   },
   {
     level: "molecules",
-    label: "NavigationDots",
-    copy: "<NavigationDots count={5} />",
-    preview: <NavigationDots count={5} />,
-  },
-  {
-    level: "molecules",
-    label: "IconButton",
-    copy: '<IconButton icon="chevron-right" label="Akcia" />',
-    preview: <IconButton icon="chevron-right" label="Akcia" />,
-  },
-  {
-    level: "molecules",
-    label: "Attribution",
-    copy: '<Attribution name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />',
-    preview: <Attribution name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />,
+    label: "NavPill",
+    copy: "<NavPill open={open} onToggle={() => setOpen(o => !o)} />",
+    preview: <NavPillPreview />,
   },
   // ─── Organisms ───
   {

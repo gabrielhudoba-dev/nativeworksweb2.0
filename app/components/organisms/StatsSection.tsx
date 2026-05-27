@@ -1,5 +1,5 @@
 import { Heading, Text } from "@/app/components/atoms";
-import { Attribution } from "@/app/components/molecules";
+import { Refer } from "@/app/components/molecules";
 
 const DOT_BG = {
   backgroundImage: "radial-gradient(circle, rgba(9,14,58,0.08) 1.5px, transparent 1.5px)",
@@ -27,7 +27,7 @@ export function StatsSection() {
             <Heading variant="numb1">33%</Heading>
             <Text variant="p3" className="max-w-[300px]">Increase in weekly active user retention in Kontentino by</Text>
             <div className="mt-s5">
-              <Attribution name="Milan Tibansky" role="Growth Lead" avatar="/images/milan.png" />
+              <Refer name="Milan Tibansky" role="Growth Lead" avatar="/images/milan.png" />
             </div>
           </div>
           <div className="flex flex-col gap-s4">

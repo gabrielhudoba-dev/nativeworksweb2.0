@@ -8,7 +8,7 @@ type Props = {
   className?: string;
 };
 
-export function Attribution({ name, role, avatar, className }: Props) {
+export function Refer({ name, role, avatar, className }: Props) {
   return (
     <div className={`flex items-center gap-s5${className ? ` ${className}` : ""}`}>
       {avatar ? (

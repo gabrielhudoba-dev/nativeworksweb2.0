@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GlassCard } from "@developer-hub/liquid-glass";
-import { IconButton } from "@/app/components/molecules";
+import { NavPill } from "@/app/components/molecules";
 import { Text } from "@/app/components/atoms";
 import { useNavContext } from "./NavigationProvider";
 
@@ -30,32 +28,11 @@ export function Navigation() {
 
   return (
     <>
-      {/* Pill */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-s5">
-        <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
-          <div className="flex items-center justify-between pl-s5 pr-s6 h-[64px] w-[300px] bg-[#D9D9D9]/20">
-            <Link
-              href="/"
-              aria-label="Native Works – späť na úvod"
-              onClick={() => setOpen(false)}
-            >
-              <Image
-                src="/images/nativeWorksLogoFull.svg"
-                alt="Native Works"
-                width={95}
-                height={36}
-                priority
-                unoptimized
-              />
-            </Link>
-            <IconButton
-              icon={open ? "close" : "menu"}
-              label={open ? "Zatvoriť menu" : "Otvoriť menu"}
-              onClick={() => setOpen((o) => !o)}
-            />
-          </div>
-        </GlassCard>
-      </div>
+      <NavPill
+        open={open}
+        onToggle={() => setOpen((o) => !o)}
+        onLogoClick={() => setOpen(false)}
+      />
 
       {/* Drawer */}
       <div
