@@ -56,8 +56,6 @@ const iconNames: IconName[] = [
   "brackets-curly",
   "caret-left",
   "caret-right",
-  "chevron-left",
-  "chevron-right",
   "menu",
 ];
 
