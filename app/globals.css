@@ -58,6 +58,7 @@
   --color-prim: #090e3a;
   --color-surface: #f5f5f7;
   --color-brand: #3255e6;
+  --color-cta: #D9D9D9;
   --color-white: #ffffff;
 
   /* ─── Font families ─── */
@@ -116,7 +117,7 @@
   /* ─── Radii ─── */
   --radius-sm: 4px;
   --radius-md: 12px;
-  --radius-lg: 24px;
+  --radius-lg: 21px;
   --radius-pill: 9999px;
 
   /* ─── Shadows ─── */

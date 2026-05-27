@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Navigation, NavigationProvider } from "@/app/components/organisms";
+import { Footer, Navigation, NavigationProvider } from "@/app/components/organisms";
 
 export const metadata: Metadata = {
   title: "Native Works",
@@ -18,6 +18,7 @@ export default function RootLayout({
         <NavigationProvider>
           <Navigation />
           {children}
+          <Footer />
         </NavigationProvider>
       </body>
     </html>
