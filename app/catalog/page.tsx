@@ -11,6 +11,7 @@ import {
   type IconName,
 } from "@/app/components/atoms";
 import { Button, GalleryNav, NavPrimPill, Refer } from "@/app/components/molecules";
+import { Footer } from "@/app/components/organisms";
 
 function NavPrimPillPreview() {
   const [open, setOpen] = useState(false);
@@ -37,7 +38,8 @@ type Level =
   | "spacing"
   | "icons"
   | "atoms"
-  | "molecules";
+  | "molecules"
+  | "organisms";
 
 type Entry = {
   level: Level;
@@ -245,6 +247,14 @@ const entries: Entry[] = [
     copy: '<Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />',
     preview: <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />,
   },
+
+  // ─── Organisms ───
+  {
+    level: "organisms",
+    label: "Footer",
+    copy: "<Footer />",
+    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><Footer /></div>,
+  },
 ];
 
 const tabs: { id: Level; label: string }[] = [
@@ -254,6 +264,7 @@ const tabs: { id: Level; label: string }[] = [
   { id: "icons", label: "Icons" },
   { id: "atoms", label: "Atoms" },
   { id: "molecules", label: "Molecules" },
+  { id: "organisms", label: "Organisms" },
 ];
 
 const levelLayout: Record<Level, "row" | "grid" | "stack"> = {
@@ -263,6 +274,7 @@ const levelLayout: Record<Level, "row" | "grid" | "stack"> = {
   icons: "grid",
   atoms: "stack",
   molecules: "stack",
+  organisms: "stack",
 };
 
 const emptyMessage: Record<Level, string> = {
@@ -272,6 +284,7 @@ const emptyMessage: Record<Level, string> = {
   icons: "",
   atoms: "",
   molecules: "",
+  organisms: "",
 };
 
 function EntryItem({ entry }: { entry: Entry }) {
