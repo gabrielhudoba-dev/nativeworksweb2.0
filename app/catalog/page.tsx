@@ -11,15 +11,6 @@ import {
   type IconName,
 } from "@/app/components/atoms";
 import { Button, GalleryNav, NavPrimPill, Refer } from "@/app/components/molecules";
-import {
-  Footer,
-  HeroSection,
-  InterveningSection,
-  Navigation,
-  PageLinksSection,
-  ServicesSection,
-  StatsSection,
-} from "@/app/components/organisms";
 
 function NavPrimPillPreview() {
   const [open, setOpen] = useState(false);
@@ -46,8 +37,7 @@ type Level =
   | "spacing"
   | "icons"
   | "atoms"
-  | "molecules"
-  | "organisms";
+  | "molecules";
 
 type Entry = {
   level: Level;
@@ -255,49 +245,6 @@ const entries: Entry[] = [
     copy: "<NavPrimPill open={open} onToggle={() => setOpen(o => !o)} />",
     preview: <NavPrimPillPreview />,
   },
-  // ─── Organisms ───
-  {
-    level: "organisms",
-    label: "Navigation",
-    copy: "<Navigation />",
-    preview: <div className="pointer-events-none"><Navigation /></div>,
-  },
-  {
-    level: "organisms",
-    label: "HeroSection",
-    copy: "<HeroSection />",
-    preview: <div className="w-full scale-[0.4] origin-top-left pointer-events-none"><HeroSection /></div>,
-  },
-  {
-    level: "organisms",
-    label: "StatsSection",
-    copy: "<StatsSection />",
-    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><StatsSection /></div>,
-  },
-  {
-    level: "organisms",
-    label: "InterveningSection",
-    copy: "<InterveningSection />",
-    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><InterveningSection /></div>,
-  },
-  {
-    level: "organisms",
-    label: "ServicesSection",
-    copy: "<ServicesSection />",
-    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><ServicesSection /></div>,
-  },
-  {
-    level: "organisms",
-    label: "PageLinksSection",
-    copy: "<PageLinksSection />",
-    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><PageLinksSection /></div>,
-  },
-  {
-    level: "organisms",
-    label: "Footer",
-    copy: "<Footer />",
-    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><Footer /></div>,
-  },
 ];
 
 const tabs: { id: Level; label: string }[] = [
@@ -307,7 +254,6 @@ const tabs: { id: Level; label: string }[] = [
   { id: "icons", label: "Icons" },
   { id: "atoms", label: "Atoms" },
   { id: "molecules", label: "Molecules" },
-  { id: "organisms", label: "Organisms" },
 ];
 
 const levelLayout: Record<Level, "row" | "grid" | "stack"> = {
@@ -317,7 +263,6 @@ const levelLayout: Record<Level, "row" | "grid" | "stack"> = {
   icons: "grid",
   atoms: "stack",
   molecules: "stack",
-  organisms: "stack",
 };
 
 const emptyMessage: Record<Level, string> = {
@@ -327,7 +272,6 @@ const emptyMessage: Record<Level, string> = {
   icons: "",
   atoms: "",
   molecules: "",
-  organisms: "",
 };
 
 function EntryItem({ entry }: { entry: Entry }) {
