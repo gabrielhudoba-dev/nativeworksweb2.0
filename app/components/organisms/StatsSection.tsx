@@ -1,5 +1,5 @@
 import { Heading, Text } from "@/app/components/atoms";
-import { Refer } from "@/app/components/molecules";
+import { StatColumn } from "@/app/components/molecules";
 
 const DOT_BG = {
   backgroundImage: "radial-gradient(circle, rgba(9,14,58,0.08) 1.5px, transparent 1.5px)",
@@ -19,21 +19,13 @@ export function StatsSection() {
           Fewer steps. Higher quality. AI-accelerated.
         </Text>
         <div className="grid grid-cols-3">
-          <div className="flex flex-col gap-s4">
-            <Heading variant="numb1">2 weeks</Heading>
-            <Text variant="p3" className="max-w-[260px]">Avg. time to first value</Text>
-          </div>
-          <div className="flex flex-col gap-s4">
-            <Heading variant="numb1">33%</Heading>
-            <Text variant="p3" className="max-w-[300px]">Increase in weekly active user retention in Kontentino by</Text>
-            <div className="mt-s5">
-              <Refer name="Milan Tibansky" role="Growth Lead" avatar="/images/milan.png" />
-            </div>
-          </div>
-          <div className="flex flex-col gap-s4">
-            <Heading variant="numb1">8/10</Heading>
-            <Text variant="p3" className="max-w-[260px]">Clients continuing after first sprint</Text>
-          </div>
+          <StatColumn value="2 weeks" label="Avg. time to first value" />
+          <StatColumn
+            value="33%"
+            label="Increase in weekly active user retention in Kontentino by"
+            refer={{ name: "Milan Tibansky", role: "Growth Lead", avatar: "/images/milan.png" }}
+          />
+          <StatColumn value="8/10" label="Clients continuing after first sprint" />
         </div>
       </div>
     </section>

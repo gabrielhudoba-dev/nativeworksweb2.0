@@ -6,3 +6,4 @@ export { NavigationProvider, useNavOpen } from "./NavigationProvider";
 export { PageLinksSection } from "./PageLinksSection";
 export { ServicesSection } from "./ServicesSection";
 export { StatsSection } from "./StatsSection";
+export { StageSlider } from "./StageSlider";

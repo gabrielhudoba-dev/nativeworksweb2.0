@@ -2,3 +2,8 @@ export { Button } from "./Button";
 export { GalleryNav } from "./GalleryNav";
 export { NavPrimPill } from "./NavPrimPill";
 export { Refer } from "./Refer";
+export { StageCard } from "./StageCard";
+export { ServiceCard } from "./ServiceCard";
+export { SocialLink, SOCIAL_ICONS } from "./SocialLink";
+export type { SocialPlatform } from "./SocialLink";
+export { StatColumn } from "./StatColumn";

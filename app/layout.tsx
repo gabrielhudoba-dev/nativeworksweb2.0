@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Footer, Navigation, NavigationProvider } from "@/app/components/organisms";
+import { Navigation, NavigationProvider } from "@/app/components/organisms";
+import { ConditionalFooter } from "@/app/components/ConditionalFooter";
 
 export const metadata: Metadata = {
   title: "Native Works",
@@ -18,7 +19,7 @@ export default function RootLayout({
         <NavigationProvider>
           <Navigation />
           {children}
-          <Footer />
+          <ConditionalFooter />
         </NavigationProvider>
       </body>
     </html>

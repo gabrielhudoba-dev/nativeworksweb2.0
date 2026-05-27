@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { GlassCard } from "@developer-hub/liquid-glass";
-import { IconButton } from "@/app/components/atoms/IconButton";
+import { IconButton, Logo } from "@/app/components/atoms";
 
 type Props = {
   open: boolean;
@@ -23,14 +22,7 @@ export function NavPrimPill({ open, onToggle, onLogoClick, static: isStatic }: P
             aria-label="Native Works – späť na úvod"
             onClick={onLogoClick}
           >
-            <Image
-              src="/images/nativeWorksLogoFull.svg"
-              alt="Native Works"
-              width={95}
-              height={36}
-              priority
-              unoptimized
-            />
+            <Logo size="sm" priority />
           </Link>
           <IconButton
             icon={open ? "close" : "menu"}
