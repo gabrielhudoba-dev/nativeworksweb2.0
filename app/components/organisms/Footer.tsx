@@ -2,25 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Text } from "@/app/components/atoms";
 
-const NAV_COLS = [
-  {
-    heading: "Work",
-    links: [
-      { label: "Case Studies", href: "/case-studies" },
-      { label: "Capabilities", href: "/capabilities" },
-      { label: "Collective", href: "/collective" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "Process & Insights", href: "/process-insights" },
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-];
-
 const SOCIAL = [
   {
     label: "LinkedIn",
@@ -53,8 +34,8 @@ const SOCIAL = [
 
 export function Footer() {
   return (
-    <footer className="bg-prim text-white mx-s5 mb-s5 rounded-lg overflow-hidden">
-      <div className="px-s8 pt-s8 pb-s5">
+    <footer className="bg-brand/10 text-prim mx-s5 mb-s5 rounded-lg overflow-hidden">
+      <div className="px-s8 pt-s8 pb-s5 opacity-100">
 
         {/* Top row — logo + social */}
         <div className="flex items-start justify-between mb-s8">
@@ -66,10 +47,10 @@ export function Footer() {
                 width={145}
                 height={55}
                 unoptimized
-                className="h-s8 w-auto brightness-0 invert"
+                className="h-s8 w-auto opacity-60"
               />
             </Link>
-            <p className="font-body font-normal text-p3 text-white/50">
+            <p className="font-body font-normal text-p3 text-prim/50">
               New era of digital product design.
             </p>
           </div>
@@ -81,7 +62,7 @@ export function Footer() {
                 aria-label={label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="size-s8 flex items-center justify-center rounded-pill border border-white/20 text-white/60 hover:text-white hover:border-white/40 transition-colors"
+                className="size-s8 flex items-center justify-center rounded-pill border border-prim/20 text-prim/60 hover:text-prim hover:border-prim/40 transition-colors"
               >
                 {icon}
               </a>
@@ -90,16 +71,16 @@ export function Footer() {
         </div>
 
         {/* Bottom row */}
-        <div className="border-t border-white/10 pt-s5 flex items-center justify-between">
+        <div className="border-t border-prim/10 pt-s5 flex items-center justify-between">
           <div className="flex items-center gap-s7">
-            <Link href="/terms" className="font-body font-normal text-l3 text-white/40 hover:text-white/70 transition-colors">
+            <Link href="/terms" className="font-body font-normal text-l3 text-prim/40 hover:text-prim/70 transition-colors">
               Terms of service
             </Link>
-            <Link href="/privacy" className="font-body font-normal text-l3 text-white/40 hover:text-white/70 transition-colors">
+            <Link href="/privacy" className="font-body font-normal text-l3 text-prim/40 hover:text-prim/70 transition-colors">
               Privacy policy
             </Link>
           </div>
-          <Text variant="l3" className="text-white opacity-40">
+          <Text variant="l3" className="text-prim/40">
             © 2025–{new Date().getFullYear()} Native Works
           </Text>
         </div>

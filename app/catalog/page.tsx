@@ -11,7 +11,16 @@ import {
   Text,
   type IconName,
 } from "@/app/components/atoms";
-import { Button, IconButton, NavigationDots } from "@/app/components/molecules";
+import { Attribution, Button, IconButton, NavigationDots } from "@/app/components/molecules";
+import {
+  Footer,
+  HeroSection,
+  InterveningSection,
+  Navigation,
+  PageLinksSection,
+  ServicesSection,
+  StatsSection,
+} from "@/app/components/organisms";
 
 type Level =
   | "colors"
@@ -252,6 +261,55 @@ const entries: Entry[] = [
     copy: '<IconButton icon="chevron-right" label="Akcia" />',
     preview: <IconButton icon="chevron-right" label="Akcia" />,
   },
+  {
+    level: "molecules",
+    label: "Attribution",
+    copy: '<Attribution name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />',
+    preview: <Attribution name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />,
+  },
+  // ─── Organisms ───
+  {
+    level: "organisms",
+    label: "Navigation",
+    copy: "<Navigation />",
+    preview: <div className="pointer-events-none"><Navigation /></div>,
+  },
+  {
+    level: "organisms",
+    label: "HeroSection",
+    copy: "<HeroSection />",
+    preview: <div className="w-full scale-[0.4] origin-top-left pointer-events-none"><HeroSection /></div>,
+  },
+  {
+    level: "organisms",
+    label: "StatsSection",
+    copy: "<StatsSection />",
+    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><StatsSection /></div>,
+  },
+  {
+    level: "organisms",
+    label: "InterveningSection",
+    copy: "<InterveningSection />",
+    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><InterveningSection /></div>,
+  },
+  {
+    level: "organisms",
+    label: "ServicesSection",
+    copy: "<ServicesSection />",
+    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><ServicesSection /></div>,
+  },
+  {
+    level: "organisms",
+    label: "PageLinksSection",
+    copy: "<PageLinksSection />",
+    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><PageLinksSection /></div>,
+  },
+  {
+    level: "organisms",
+    label: "Footer",
+    copy: "<Footer />",
+    preview: <div className="w-full scale-[0.5] origin-top-left pointer-events-none"><Footer /></div>,
+  },
 ];
 
 const tabs: { id: Level; label: string }[] = [
@@ -281,7 +339,7 @@ const emptyMessage: Record<Level, string> = {
   icons: "",
   atoms: "",
   molecules: "",
-  organisms: "Zatiaľ tu nič nie je. Organisms pribudnú v ďalšej iterácii.",
+  organisms: "",
 };
 
 function EntryItem({ entry }: { entry: Entry }) {
@@ -322,9 +380,9 @@ export default function CatalogPage() {
   const layout = levelLayout[active];
 
   return (
-    <main className="mx-auto w-full max-w-s14 px-s9 py-s8 flex flex-col gap-s8">
+    <main className="mx-auto w-full max-w-s14 px-s9 pt-s10 pb-s8 flex flex-col gap-s8">
       <header className="flex flex-col gap-s5">
-        <Heading variant="h2" as="h1">
+        <Heading variant="h3" as="h1">
           Component catalog
         </Heading>
         <Text variant="p3">
