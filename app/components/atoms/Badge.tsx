@@ -4,7 +4,7 @@ import { Text } from "./Text";
 type BadgeVariant = "ai";
 
 const variantClass: Record<BadgeVariant, string> = {
-  ai: "bg-brand text-white",
+  ai: "bg-brand/20 text-brand py-[2px]",
 };
 
 type Props = {
