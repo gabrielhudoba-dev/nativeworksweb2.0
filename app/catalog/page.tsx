@@ -229,6 +229,12 @@ const entries: Entry[] = [
   },
   {
     level: "molecules",
+    label: "NavPrimPill",
+    copy: "<NavPrimPill open={open} onToggle={() => setOpen(o => !o)} />",
+    preview: <NavPrimPillPreview />,
+  },
+  {
+    level: "molecules",
     label: "GalleryNav",
     copy: "<GalleryNav count={4} active={active} onPrev={...} onNext={...} onDotClick={...} />",
     preview: <GalleryNavPreview />,
@@ -238,12 +244,6 @@ const entries: Entry[] = [
     label: "Refer",
     copy: '<Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />',
     preview: <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />,
-  },
-  {
-    level: "molecules",
-    label: "NavPrimPill",
-    copy: "<NavPrimPill open={open} onToggle={() => setOpen(o => !o)} />",
-    preview: <NavPrimPillPreview />,
   },
 ];
 
