@@ -59,9 +59,9 @@ export type IconName = keyof typeof registry;
 type IconSize = "sm" | "md" | "lg";
 
 const sizeClass: Record<IconSize, string> = {
-  sm: "size-s5",
-  md: "size-s6",
-  lg: "size-s7",
+  sm: "size-s2",
+  md: "size-s3",
+  lg: "size-s4",
 };
 
 type Props = {

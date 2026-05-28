@@ -9,11 +9,11 @@ type Props = {
 
 export function StatColumn({ value, label, refer }: Props) {
   return (
-    <div className="flex flex-col gap-s4">
+    <div className="flex flex-col">
       <Heading variant="numb1">{value}</Heading>
-      <Text variant="p3" className="max-w-[300px]">{label}</Text>
+      <Text variant="p2" className="max-w-pill">{label}</Text>
       {refer && (
-        <div className="mt-s5">
+        <div className="mt-s3">
           <Refer name={refer.name} role={refer.role} avatar={refer.avatar} />
         </div>
       )}

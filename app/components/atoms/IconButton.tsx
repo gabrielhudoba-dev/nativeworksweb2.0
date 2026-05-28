@@ -11,7 +11,7 @@ export function IconButton({ icon, label, className = "", ...rest }: Props) {
     <button
       type="button"
       aria-label={label}
-      className={`size-s6 flex items-center justify-center shrink-0 text-prim ${className}`.trim()}
+      className={`size-s3 flex items-center justify-center shrink-0 text-prim ${className}`.trim()}
       {...rest}
     >
       <Icon name={icon} size="md" />

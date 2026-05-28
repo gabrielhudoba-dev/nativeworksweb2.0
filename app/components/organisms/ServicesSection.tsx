@@ -39,16 +39,16 @@ function handleLetStart(e: React.MouseEvent, card: { name: string; detail: strin
 
 const SPRINT_FEATURES = (
   <>
-    <div className="flex gap-s5 items-start">
+    <div className="flex gap-s2 items-start">
       <Icon name="microscope" size="md" className="shrink-0 mt-[3px]" />
-      <div className="flex flex-col gap-s3">
+      <div className="flex flex-col gap-s1">
         <Text variant="l2" as="span">Senior-led execution</Text>
         <Text variant="l2" as="span" className="font-normal">15+ year experienced industry leaders and authorities</Text>
       </div>
     </div>
-    <div className="flex gap-s5 items-start">
+    <div className="flex gap-s2 items-start">
       <Icon name="person-simple-run" size="md" className="shrink-0 mt-[3px]" />
-      <div className="flex flex-col gap-s3">
+      <div className="flex flex-col gap-s1">
         <Text variant="l2" as="span">Fast delivery cycle</Text>
         <div className="flex items-center gap-[6px]">
           <Badge variant="ai">AI</Badge>
@@ -56,9 +56,9 @@ const SPRINT_FEATURES = (
         </div>
       </div>
     </div>
-    <div className="flex gap-s5 items-start">
+    <div className="flex gap-s2 items-start">
       <Icon name="brackets-curly" size="md" className="shrink-0 mt-[3px]" />
-      <div className="flex flex-col gap-s3">
+      <div className="flex flex-col gap-s1">
         <Text variant="l2" as="span">Designed in code</Text>
         <Text variant="l2" as="span" className="font-normal">Production ready solutions</Text>
       </div>
@@ -70,15 +70,15 @@ export function ServicesSection() {
   const [activeCard, setActiveCard] = useState(0);
 
   return (
-    <section className="py-s9 px-s9 max-w-s15 mx-auto">
-      <Heading variant="h2" className="mb-s6">
+    <section className="pt-s9 pb-s12 px-s11 max-w-page mx-auto">
+      <Heading variant="h2" className="mb-s3">
         Inside the team.<br />Inside the product.
       </Heading>
-      <Text variant="p2" className="mb-s8 max-w-[800px]">
+      <Text variant="p2" className="mb-s12 max-w-[800px]">
         We work closely in to your product focusing on specific problem.
       </Text>
-      <div className="overflow-x-auto -mx-s9 py-[3px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="grid grid-flow-col auto-cols-[320px] lg:grid-flow-row lg:grid-cols-3 lg:auto-cols-auto gap-s4 px-s9 snap-x snap-mandatory lg:snap-none">
+      <div className="overflow-x-auto -mx-s11 py-s3 -my-s3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="grid grid-flow-col auto-cols-[320px] lg:grid-flow-row lg:grid-cols-3 lg:auto-cols-auto gap-s1 px-s11 snap-x snap-mandatory lg:snap-none">
           {CARDS.map((card, i) => (
             <ServiceCard
               key={card.title}

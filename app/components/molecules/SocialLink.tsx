@@ -35,7 +35,7 @@ export function SocialLink({ platform, href }: Props) {
       aria-label={label}
       target="_blank"
       rel="noopener noreferrer"
-      className="size-s8 flex items-center justify-center rounded-pill border border-prim/20 text-prim/60 hover:text-prim hover:border-prim/40 transition-colors"
+      className="size-s7 flex items-center justify-center rounded-pill border border-prim/20 text-prim/60 hover:text-prim hover:border-prim/40 transition-colors"
     >
       {ICONS[platform]}
     </a>

@@ -9,8 +9,8 @@ const CARDS = [
 
 export function StageSlider() {
   return (
-    <div className="overflow-x-auto -mx-s9 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <div className="grid grid-flow-col auto-cols-[300px] gap-s4 px-s9 snap-x snap-mandatory">
+    <div className="overflow-x-auto -mx-s11 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="grid grid-flow-col auto-cols-[var(--spacing-pill)] gap-s1 px-s11 snap-x snap-mandatory">
         {CARDS.map(({ title, desc }) => (
           <StageCard key={title} title={title} desc={desc} />
         ))}

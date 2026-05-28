@@ -15,20 +15,20 @@ export function Footer() {
   const { ref, style } = useSquircle(21, 0.6);
 
   return (
-    <footer ref={ref} style={style} className="grain bg-brand/10 text-prim mx-s5 mb-s5">
-      <div className="px-s8 pt-s8 pb-s5 opacity-100">
+    <footer ref={ref} style={style} className="grain bg-brand/10 text-prim mx-s2 mb-s2">
+      <div className="px-s7 pt-s6 pb-s6">
 
         {/* Top row — logo + social */}
-        <div className="flex items-start justify-between mb-s8">
-          <div className="flex flex-col gap-s5">
+        <div className="flex items-start justify-between mb-s6">
+          <div className="flex flex-col gap-s3">
             <Link href="/" aria-label="Native Works">
-              <Logo size="md" className="h-s8 w-auto opacity-60" />
+              <Logo size="md" className="h-s6 w-auto" />
             </Link>
-            <p className="font-body font-normal text-p3 text-prim/50">
+            <Text variant="p3">
               New era of digital product design.
-            </p>
+            </Text>
           </div>
-          <div className="flex items-center gap-s5">
+          <div className="flex items-center gap-s2">
             {SOCIAL.map(({ platform, href }) => (
               <SocialLink key={platform} platform={platform} href={href} />
             ))}
@@ -36,16 +36,16 @@ export function Footer() {
         </div>
 
         {/* Bottom row */}
-        <div className="border-t border-prim/10 pt-s5 flex items-center justify-between">
-          <div className="flex items-center gap-s7">
-            <Link href="/terms" className="font-body font-normal text-l3 text-prim/40 hover:text-prim/70 transition-colors">
+        <div className="shadow-[inset_0_1px_0_0_rgba(9,14,58,0.1)] pt-s6 flex items-center justify-between">
+          <div className="flex items-center gap-s4">
+            <Link href="/terms" className="font-body font-normal text-l3 text-prim hover:text-prim/60 transition-colors">
               Terms of service
             </Link>
-            <Link href="/privacy" className="font-body font-normal text-l3 text-prim/40 hover:text-prim/70 transition-colors">
+            <Link href="/privacy" className="font-body font-normal text-l3 text-prim hover:text-prim/60 transition-colors">
               Privacy policy
             </Link>
           </div>
-          <Text variant="l3" className="text-prim/40">
+          <Text variant="l3">
             © 2025–{new Date().getFullYear()} Native Works
           </Text>
         </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Heading } from "@/app/components/atoms";
 
 const LINKS = [
   { label: "Collective", href: "/collective" },
@@ -9,14 +10,11 @@ const LINKS = [
 
 export function PageLinksSection() {
   return (
-    <section className="px-s9 py-s9 max-w-s15 mx-auto">
+    <section className="px-s11 py-s12 max-w-page mx-auto">
       {LINKS.map(({ label, href }) => (
         <div key={href}>
-          <Link
-            href={href}
-            className="block font-display font-medium text-h2 leading-[0.9] tracking-[-0.02em] text-prim py-s7"
-          >
-            {label}
+          <Link href={href} className="block py-s3">
+            <Heading variant="h2" as="span">{label}</Heading>
           </Link>
         </div>
       ))}

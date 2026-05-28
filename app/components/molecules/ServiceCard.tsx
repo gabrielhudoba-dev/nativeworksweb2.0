@@ -27,6 +27,7 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
       style={{
         ...outerStyle,
         padding: "2px",
+        margin: "-2px 0", /* cancel the 2px ring from vertical flow so inner content stays on the 24px grid */
         background: active ? "var(--color-prim)" : "transparent",
         transition: "background 350ms cubic-bezier(0.16, 1, 0.3, 1)",
       }}
@@ -36,14 +37,14 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
       <div
         ref={innerRef}
         style={innerStyle}
-        className="grain bg-surface flex flex-col justify-between pt-s8 pb-s7 px-s7 min-h-[503px]"
+        className="grain bg-surface flex flex-col justify-between pt-s6 pb-s6 px-s4 min-h-[528px]"
       >
-        <div className="flex flex-col gap-s5">
+        <div className="flex flex-col gap-s3">
           <Heading variant="h3">{title}</Heading>
-          <Text variant="p3">{desc}</Text>
+          <Text variant="p3" className="-mt-s3">{desc}</Text>
           <button
             type="button"
-            className={`border-b border-prim inline-block self-start ${expandedContent ? "cursor-pointer" : "cursor-default"}`}
+            className={`border-b border-prim inline-block self-start pb-s1 ${expandedContent ? "cursor-pointer" : "cursor-default"}`}
             onClick={(e) => { if (expandedContent) { e.stopPropagation(); setExpanded(v => !v); } }}
           >
             <Text variant="p3" as="span">{expanded && expandedContent ? "Read less" : "Read more"}</Text>
@@ -51,13 +52,13 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
         </div>
 
         {expanded && expandedContent && (
-          <div className="flex flex-col gap-s6 py-s7 border-t border-prim/10 opacity-60">
+          <div className="flex flex-col gap-s3 py-s6 border-t border-prim/10 opacity-60">
             {expandedContent}
           </div>
         )}
 
-        <div className="flex flex-col gap-s6">
-          <div className="flex items-center justify-between px-s1">
+        <div className="flex flex-col gap-s3">
+          <div className="flex items-center justify-between px-[2px]">
             <Text variant="h5" as="span">{price}</Text>
             <Text variant="h5" as="span">{duration}</Text>
           </div>

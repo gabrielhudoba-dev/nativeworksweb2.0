@@ -1,21 +1,17 @@
 import { Heading, Text } from "@/app/components/atoms";
 import { StatColumn } from "@/app/components/molecules";
-
-const DOT_BG = {
-  backgroundImage: "radial-gradient(circle, rgba(9,14,58,0.08) 1.5px, transparent 1.5px)",
-  backgroundSize: "25px 25px",
-} as const;
+import { DOT_BG } from "@/app/styles/patterns";
 
 export function StatsSection() {
   return (
     <section style={DOT_BG}>
-      <div className="py-s9 px-s9 max-w-s15 mx-auto">
-        <Heading variant="h2" className="max-w-[481px] mb-s6">
+      <div className="pt-s9 pb-s12 px-s11 max-w-page mx-auto">
+        <Heading variant="h2" className="max-w-[672px] mb-s3">
           Better products.
           <br />
           Delivered faster.
         </Heading>
-        <Text variant="p2" className="mb-s9">
+        <Text variant="p2" className="mb-s12">
           Fewer steps. Higher quality. AI-accelerated.
         </Text>
         <div className="grid grid-cols-3">

@@ -62,27 +62,30 @@ const colorTokens: { name: string; utility: string; hex: string }[] = [
 ];
 
 const spacingTokens: { name: string; valuePx: number; widthClass: string }[] = [
-  { name: "s1",  valuePx: 2,    widthClass: "w-s1" },
-  { name: "s2",  valuePx: 3,    widthClass: "w-s2" },
-  { name: "s3",  valuePx: 5,    widthClass: "w-s3" },
-  { name: "s4",  valuePx: 8,    widthClass: "w-s4" },
-  { name: "s5",  valuePx: 13,   widthClass: "w-s5" },
-  { name: "s6",  valuePx: 21,   widthClass: "w-s6" },
-  { name: "s7",  valuePx: 34,   widthClass: "w-s7" },
-  { name: "s8",  valuePx: 55,   widthClass: "w-s8" },
-  { name: "s9",  valuePx: 89,   widthClass: "w-s9" },
-  { name: "s10", valuePx: 144,  widthClass: "w-s10" },
-  { name: "s11", valuePx: 233,  widthClass: "w-s11" },
-  { name: "s12", valuePx: 377,  widthClass: "w-s12" },
-  { name: "s13", valuePx: 610,  widthClass: "w-s13" },
-  { name: "s14", valuePx: 1280, widthClass: "w-s14" },
-  { name: "s15", valuePx: 1440, widthClass: "w-s15" },
+  { name: "s1",  valuePx: 8,   widthClass: "w-s1" },
+  { name: "s2",  valuePx: 16,  widthClass: "w-s2" },
+  { name: "s3",  valuePx: 24,  widthClass: "w-s3" },
+  { name: "s4",  valuePx: 32,  widthClass: "w-s4" },
+  { name: "s5",  valuePx: 40,  widthClass: "w-s5" },
+  { name: "s6",  valuePx: 48,  widthClass: "w-s6" },
+  { name: "s7",  valuePx: 56,  widthClass: "w-s7" },
+  { name: "s8",  valuePx: 64,  widthClass: "w-s8" },
+  { name: "s9",  valuePx: 72,  widthClass: "w-s9" },
+  { name: "s10", valuePx: 80,  widthClass: "w-s10" },
+  { name: "s11", valuePx: 88,  widthClass: "w-s11" },
+  { name: "s12", valuePx: 96,  widthClass: "w-s12" },
+  { name: "s13", valuePx: 104, widthClass: "w-s13" },
+  { name: "s14", valuePx: 112, widthClass: "w-s14" },
+  { name: "s15", valuePx: 120, widthClass: "w-s15" },
+  { name: "s16", valuePx: 128, widthClass: "w-s16" },
+  { name: "s17", valuePx: 136, widthClass: "w-s17" },
+  { name: "s18", valuePx: 144, widthClass: "w-s18" },
 ];
 
 function SpacingBar({ valuePx, widthClass }: { valuePx: number; widthClass: string }) {
   return (
-    <div className="flex items-center gap-s5">
-      <div className={`bg-prim h-s4 rounded-sm ${widthClass}`} />
+    <div className="flex items-center gap-s2">
+      <div className={`bg-prim h-s1 rounded-sm ${widthClass}`} />
       <Text variant="l3" as="span" className="opacity-60">{valuePx}px</Text>
     </div>
   );
@@ -96,7 +99,7 @@ const entries: Entry[] = [
     level: "colors",
     label: c.name,
     copy: c.utility,
-    variants: [{ label: c.hex, preview: <div className={`size-s9 rounded-xl border border-prim/10 ${c.utility}`} /> }],
+    variants: [{ label: c.hex, preview: <div className={`size-s11 rounded-xl border border-prim/10 ${c.utility}`} /> }],
   })),
 
   // ─── Text ───
@@ -338,21 +341,21 @@ function EntryItem({ entry }: { entry: Entry }) {
 
   return (
     <article
-      className="relative inline-flex flex-col pt-s7"
+      className="relative inline-flex flex-col pt-s4"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className={`absolute top-0 left-0 inline-flex items-center gap-s4 px-s5 py-s4 rounded-pill bg-prim text-white transition-opacity duration-200 z-10 shadow-elevated whitespace-nowrap ${hovered ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+      <div className={`absolute top-0 left-0 inline-flex items-center gap-s1 px-s2 py-s1 rounded-pill bg-prim text-white transition-opacity duration-200 z-10 shadow-elevated whitespace-nowrap ${hovered ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
         <span className="font-body text-l3">{entry.label}</span>
 
         {hasVariants && (
-          <div className="flex items-center gap-s3 border-l border-white/20 pl-s4">
+          <div className="flex items-center gap-s1 border-l border-white/20 pl-s1">
             {entry.variants.map((v, i) => (
               <button
                 key={v.label}
                 type="button"
                 onClick={() => setActiveVariant(i)}
-                className={`font-body text-l3 px-s4 py-[3px] rounded-pill cursor-pointer transition-colors ${activeVariant === i ? "bg-white/20" : "text-white/50 hover:text-white"}`}
+                className={`font-body text-l3 px-s1 py-[3px] rounded-pill cursor-pointer transition-colors ${activeVariant === i ? "bg-white/20" : "text-white/50 hover:text-white"}`}
               >
                 {v.label}
               </button>
@@ -364,7 +367,7 @@ function EntryItem({ entry }: { entry: Entry }) {
           type="button"
           onClick={handleCopy}
           title={copied ? "Copied!" : "Copy"}
-          className="cursor-pointer border-l border-white/20 pl-s4"
+          className="cursor-pointer border-l border-white/20 pl-s1"
         >
           <Icon name={copied ? "check" : "copy"} size="sm" />
         </button>
@@ -381,8 +384,8 @@ export default function CatalogPage() {
   const layout = levelLayout[active];
 
   return (
-    <main className="mx-auto w-full max-w-s14 px-s9 pt-s10 pb-s8 flex flex-col gap-s8">
-      <nav aria-label="Catalog sections" className="flex flex-wrap gap-s4">
+    <main className="mx-auto w-full max-w-page px-s11 pt-s18 pb-s7 flex flex-col gap-s7">
+      <nav aria-label="Catalog sections" className="flex flex-wrap gap-s1">
         {tabs.map((t) => {
           const isActive = active === t.id;
           const count = entries.filter((e) => e.level === t.id).length;
@@ -392,7 +395,7 @@ export default function CatalogPage() {
               type="button"
               onClick={() => setActive(t.id)}
               aria-current={isActive ? "page" : undefined}
-              className={`px-s6 py-s5 rounded-pill font-body text-p2 transition-colors duration-300 ease-out cursor-pointer ${
+              className={`px-s3 py-s2 rounded-pill font-body text-p2 transition-colors duration-300 ease-out cursor-pointer ${
                 isActive ? "bg-prim text-white" : "bg-surface text-prim hover:bg-white/20"
               }`}
             >
@@ -403,9 +406,9 @@ export default function CatalogPage() {
         })}
       </nav>
 
-      <section className="flex flex-col gap-s7">
+      <section className="flex flex-col gap-s4">
         {layout === "row" ? (
-          <ul className="flex flex-wrap gap-s7">
+          <ul className="flex flex-wrap gap-s4">
             {items.map((e, i) => (
               <li key={`${e.level}-${e.label}-${i}`}>
                 <EntryItem entry={e} />
@@ -413,7 +416,7 @@ export default function CatalogPage() {
             ))}
           </ul>
         ) : layout === "grid" ? (
-          <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-s7">
+          <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-s4">
             {items.map((e, i) => (
               <li key={`${e.level}-${e.label}-${i}`}>
                 <EntryItem entry={e} />
@@ -421,7 +424,7 @@ export default function CatalogPage() {
             ))}
           </ul>
         ) : (
-          <ul className="flex flex-col gap-s7">
+          <ul className="flex flex-col gap-s4">
             {items.map((e, i) => (
               <li key={`${e.level}-${e.label}-${i}`}>
                 <EntryItem entry={e} />

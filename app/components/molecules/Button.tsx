@@ -3,7 +3,7 @@ import { Icon, type IconName } from "@/app/components/atoms";
 
 type ButtonVariant = "primary" | "secondary";
 
-const BASE = "h-s8 px-s6 gap-s7 rounded-pill";
+const BASE = "h-s6 px-s3 gap-s4 rounded-pill";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:   `${BASE} bg-brand text-white`,
