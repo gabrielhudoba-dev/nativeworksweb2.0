@@ -5,3 +5,4 @@ export { Heading } from "./Heading";
 export { Icon, type IconName } from "./Icon";
 export { IconButton } from "./IconButton";
 export { Text } from "./Text";
+export { TextLink } from "./TextLink";

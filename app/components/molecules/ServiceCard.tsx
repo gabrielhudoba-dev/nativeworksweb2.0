@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Text, Heading } from "@/app/components/atoms";
+import { Text, Heading, TextLink } from "@/app/components/atoms";
 import { Button } from "./Button";
 import { useSquircle } from "@/app/hooks/useSquircle";
 
@@ -42,13 +42,12 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
         <div className="flex flex-col gap-s3">
           <Heading variant="h3">{title}</Heading>
           <Text variant="p3" className="-mt-s3">{desc}</Text>
-          <button
-            type="button"
-            className={`border-b border-prim inline-block self-start pb-s1 ${expandedContent ? "cursor-pointer" : "cursor-default"}`}
-            onClick={(e) => { if (expandedContent) { e.stopPropagation(); setExpanded(v => !v); } }}
+          <TextLink
+            onClick={(e) => { if (expandedContent) { e.stopPropagation(); setExpanded(v => !v); } else e.stopPropagation(); }}
+            className={expandedContent ? "cursor-pointer" : "cursor-default"}
           >
-            <Text variant="p3" as="span">{expanded && expandedContent ? "Read less" : "Read more"}</Text>
-          </button>
+            {expanded && expandedContent ? "Read less" : "Read more"}
+          </TextLink>
         </div>
 
         {expanded && expandedContent && (

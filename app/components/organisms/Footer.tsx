@@ -36,12 +36,12 @@ export function Footer() {
         </div>
 
         {/* Bottom row */}
-        <div className="shadow-[inset_0_1px_0_0_rgba(9,14,58,0.1)] pt-s6 flex items-center justify-between">
+        <div className="pt-s9 flex items-center justify-between">
           <div className="flex items-center gap-s4">
-            <Link href="/terms" className="font-body font-normal text-l3 text-prim hover:text-prim/60 transition-colors">
+            <Link href="/terms" className="font-body font-normal text-l3 text-prim translate-y-[5.5px] hover:text-prim/60 transition-colors">
               Terms of service
             </Link>
-            <Link href="/privacy" className="font-body font-normal text-l3 text-prim hover:text-prim/60 transition-colors">
+            <Link href="/privacy" className="font-body font-normal text-l3 text-prim translate-y-[5.5px] hover:text-prim/60 transition-colors">
               Privacy policy
             </Link>
           </div>
