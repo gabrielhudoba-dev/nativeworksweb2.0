@@ -64,7 +64,7 @@ export function HeroSection() {
 
       {/* Headline — flows on the 24px baseline grid (no vh, no vertical
           centering; both break the rhythm). Spacing is all multiples of 24. */}
-      <div className="pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start gap-s4 sm:gap-s6 text-left">
+      <div className="pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
         <Heading variant="h2" className="max-w-[672px]">
           New era of digital product design.
         </Heading>
