@@ -94,9 +94,9 @@ function StatsStrip({ stats }: { stats: StatsItem["stats"] }) {
   const rows: Array<typeof stats> = [];
   for (let i = 0; i < stats.length; i += 3) rows.push(stats.slice(i, i + 3));
   return (
-    <div style={DOT_BG} className="col-span-2 rounded-lg py-s9">
+    <div style={DOT_BG} className="col-span-1 sm:col-span-2 rounded-lg py-s6 sm:py-s9 px-0">
       {rows.map((row, i) => (
-        <div key={i} className={`grid grid-cols-3 ${i > 0 ? "mt-s9" : ""}`}>
+        <div key={i} className={`grid grid-cols-1 sm:grid-cols-3 gap-y-s6 sm:gap-y-0 ${i > 0 ? "mt-s6 sm:mt-s9" : ""}`}>
           {row.map((s) => (
             <StatColumn key={s.value} value={s.value} label={s.label} />
           ))}
@@ -109,12 +109,12 @@ function StatsStrip({ stats }: { stats: StatsItem["stats"] }) {
 export default function CaseStudiesPage() {
   return (
     <main className="bg-white">
-      <section className="px-s11 pt-[192px] pb-s12 max-w-page mx-auto">
-        <Heading variant="h2">Case Studies</Heading>
+      <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[192px] pb-s6 max-w-page mx-auto">
+        <Heading variant="h3" as="h1" style={{ fontSize: "40px" }}>Case Studies</Heading>
       </section>
 
-      <section className="px-s11 max-w-page mx-auto pb-[288px]">
-        <div className="grid grid-cols-2 gap-x-s12 gap-y-s12">
+      <section className="px-page max-w-page mx-auto pb-s12 lg:pb-[288px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s12 gap-y-s6 sm:gap-y-s12">
           {GRID_ITEMS.map((item, i) => {
             if (item.type === "case-study") {
               return (
@@ -132,10 +132,11 @@ export default function CaseStudiesPage() {
               return <StatsStrip key={i} stats={item.stats} />;
             }
             if (item.type === "image") {
-              return <ImageBlock key={i} src={item.src} alt={item.alt} className="col-span-2" />;
+              return <ImageBlock key={i} src={item.src} alt={item.alt} variant="fill" className="col-span-1 sm:col-span-2 h-[360px]" />;
             }
+            const prevItem = i > 0 ? GRID_ITEMS[i - 1] : null;
             return (
-              <article key={i} className="flex flex-col">
+              <article key={i} className={`flex flex-col${prevItem?.type === "text" ? " mt-s6 sm:mt-0" : ""}`}>
                 <Heading variant="h3" style={{ fontSize: "40px" }}>{item.title}</Heading>
                 <Text variant="p2">{item.description}</Text>
                 <Refer name={item.author.name} role={item.author.role} avatar={item.author.avatar} className="mt-s3" />

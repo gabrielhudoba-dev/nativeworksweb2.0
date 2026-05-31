@@ -16,10 +16,11 @@ type Member = {
 // Grid layout from Figma (row × col):
 // Row 1: Martin(c1)  Mario(c2)    Adam(c3)
 // Row 2: —           Peter(c2)    —
-// Row 3: —           Patrik(c2)   Patricia(c3)
-// Row 4: Gabriel(c1) Denis(c2)    —
-// Row 5: Matej(c1)   Katarina(c2) TBD Design(c3)
-// Row 6: —           —            TBD Data(c3)
+// Row 3: [team photo spans c2–c3]
+// Row 4: —           Patrik(c2)   Patricia(c3)
+// Row 5: Gabriel(c1) Denis(c2)    —
+// Row 6: Matej(c1)   Katarina(c2) TBD Design(c3)
+// Row 7: —           —            TBD Data(c3)
 const MEMBERS: Member[] = [
   {
     name: "Martin Mroc",
@@ -100,6 +101,28 @@ const MEMBERS: Member[] = [
   },
 ];
 
+// Static Tailwind class lookups — must be literal strings for Tailwind scanning.
+const LG_COL: Record<1 | 2 | 3, string> = {
+  1: "lg:col-start-1",
+  2: "lg:col-start-2",
+  3: "lg:col-start-3",
+};
+// row in MEMBERS → lg:row-start-N (rows 3+ shift +1 for the photo at row 3)
+const LG_ROW: Record<number, string> = {
+  1: "lg:row-start-1",
+  2: "lg:row-start-2",
+  4: "lg:row-start-4", // original row 3
+  5: "lg:row-start-5", // original row 4
+  6: "lg:row-start-6", // original row 5
+  7: "lg:row-start-7", // original row 6
+};
+
+function lgRowClass(row: number): string {
+  // rows 1–2 stay; rows 3+ get +1 because the photo occupies desktop row 3
+  const gridRow = row <= 2 ? row : row + 1;
+  return LG_ROW[gridRow] ?? "";
+}
+
 type Company = {
   name: string;
   logo?: string;
@@ -117,9 +140,9 @@ export default function CollectivePage() {
     <main className="bg-white">
 
       {/* Hero */}
-      <section className="px-s11 pt-[192px] pb-s12 max-w-page mx-auto grid grid-cols-3 gap-x-s12">
-        <Heading variant="page">Collective</Heading>
-        <Text variant="p1" className="text-prim col-start-2 col-span-2">
+      <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[216px] pb-s6 max-w-page mx-auto grid grid-cols-1 lg:grid-cols-3 gap-x-s12 gap-y-s3">
+        <Heading variant="h2">Collective</Heading>
+        <Text variant="p1" className="text-prim lg:col-start-2 lg:col-span-2 pb-s3">
           A curated group of product specialists working on your mobile app or
           web system. Inside your team. Solving product problems from early
           concepts to product friction. Meet our members and their associated
@@ -128,36 +151,40 @@ export default function CollectivePage() {
         </Text>
       </section>
 
-      {/* Members + team photo — explicit grid placement matching Figma */}
-      <section className="px-s11 max-w-page mx-auto pb-s12">
-        <div className="grid grid-cols-3 gap-x-s12 gap-y-s12" style={{ gridAutoRows: "auto" }}>
-          {/* Team photo at row 3, after second row of members */}
-          <div style={{ gridColumn: "2 / span 2", gridRow: 3 }} className="h-[384px]">
-            <ImageBlock src="/images/teamImageNarrow.png" alt="Native Works team" variant="fill" />
-          </div>
-          {MEMBERS.map((m) => (
-            <div
-              key={m.name + m.role}
-              style={{ gridColumn: m.col, gridRow: m.row <= 2 ? m.row : m.row + 1 }}
-            >
-              <MemberCard
-                name={m.name}
-                role={m.role}
-                bio={m.bio}
-                avatar={m.photo}
-                logos={m.logos}
-              />
+      {/* Members + team photo
+          Mobile/tablet: natural flow in 1-col (sm: 2-col), team photo after first 3 members.
+          Desktop (lg): explicit 3-col Figma grid with col/row placement via Tailwind classes. */}
+      <section className="px-page max-w-page mx-auto pb-s12 pt-s6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-s9 sm:gap-x-s12 gap-y-s9 sm:gap-y-s12">
+
+          {/* First 3 members — desktop row 1 */}
+          {MEMBERS.slice(0, 3).map((m) => (
+            <div key={m.name + m.role} className={`${LG_COL[m.col]} ${lgRowClass(m.row)}`}>
+              <MemberCard name={m.name} role={m.role} bio={m.bio} avatar={m.photo} logos={m.logos} />
             </div>
           ))}
+
+          {/* Team photo — mobile: full-width after first 3; desktop: col 2–3, row 3 */}
+          <div className="col-span-1 sm:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-3 aspect-[9/16] sm:aspect-auto sm:h-[320px] lg:h-[384px]">
+            <ImageBlock src="/images/teamImageNarrow.png" alt="Native Works team" variant="fill" className="h-full" />
+          </div>
+
+          {/* Remaining members — desktop rows 2, 4–7 */}
+          {MEMBERS.slice(3).map((m) => (
+            <div key={m.name + m.role} className={`${LG_COL[m.col]} ${lgRowClass(m.row)}`}>
+              <MemberCard name={m.name} role={m.role} bio={m.bio} avatar={m.photo} logos={m.logos} />
+            </div>
+          ))}
+
         </div>
       </section>
 
       {/* Member companies */}
-      <section className="px-s11 max-w-page mx-auto border-t border-prim/10 pt-s9 pb-[288px]">
+      <section className="px-page max-w-page mx-auto border-t border-prim/10 pt-s9 pb-s12 lg:pb-[288px]">
         <Heading variant="h3">Member companies</Heading>
-        <div className="flex gap-s6 mt-s9">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-s4 sm:gap-s6 mt-s9">
           {COMPANIES.map((c) => (
-            <div key={c.name} className="flex-1 aspect-[3/2] overflow-hidden rounded-sm">
+            <div key={c.name} className="aspect-[3/2] overflow-hidden rounded-sm">
               {c.logo ? (
                 <img
                   src={c.logo}

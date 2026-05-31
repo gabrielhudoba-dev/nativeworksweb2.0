@@ -135,28 +135,28 @@ export default function CapabilitiesPage() {
     <main className="bg-white">
 
       {/* Hero */}
-      <section className="px-s11 pt-[192px] pb-s9 max-w-page mx-auto">
+      <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[192px] pb-s9 max-w-page mx-auto">
         <Heading variant="h2">Capabilities</Heading>
       </section>
 
       {/* Sections */}
-      <section className="px-s11 max-w-page mx-auto pb-[288px]">
+      <section className="px-page max-w-page mx-auto pb-s12 lg:pb-[192px]">
         {SECTIONS.map((section) => (
           <div
             key={section.title}
-            className="flex gap-s3 items-baseline border-t border-prim/10 py-s9"
+            className="flex flex-col lg:flex-row gap-s3 lg:items-baseline border-t first:border-t-0 border-prim/10 py-s6 lg:py-s9"
           >
             {/* Category title */}
-            <div className="w-[400px] shrink-0">
-              <p className="font-display font-medium text-[32px] leading-[1] tracking-[-0.02em] text-prim">{section.title}</p>
+            <div className="w-full lg:w-[400px] lg:shrink-0">
+              <p className="font-display font-medium text-[24px] sm:text-[28px] lg:text-[32px] leading-[1] tracking-[-0.02em] text-prim">{section.title}</p>
             </div>
 
             {/* Items grid */}
-            <div className="grid grid-cols-2 gap-x-s3 gap-y-0 flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s3 gap-y-s1 sm:gap-y-0 flex-1">
               {section.items.map((item) => (
                 <p
                   key={item}
-                  className="font-body font-normal text-[20px] leading-[24px] tracking-[-0.02em] text-prim"
+                  className="font-body font-normal text-[16px] sm:text-[18px] lg:text-[20px] leading-[24px] tracking-[-0.02em] text-prim"
                 >
                   {item}
                 </p>

@@ -20,6 +20,7 @@ export function HeroSection() {
   const [slide, setSlide] = useState(0);
   const [controlVisible, setControlVisible] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const navOpen = useNavOpen();
   const galleryRef = useRef<HTMLDivElement>(null);
   const { ref: gallerySquircleRef, style: gallerySquircleStyle } = useSquircle(21, 0.6);
@@ -47,10 +48,10 @@ export function HeroSection() {
   }, [paused]);
 
   return (
-    <section className="px-s11 pb-s12 max-w-page mx-auto">
-      {/* Gallery slide controls — fixed below the nav pill */}
-      <div className="fixed top-[82px] left-0 right-0 z-50 flex justify-center">
-        <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${controlVisible && !navOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"}`}>
+    <section className="px-page pb-s6 sm:pb-s12 max-w-page mx-auto">
+      {/* Gallery slide controls — fixed above bottom nav on mobile, below top nav on sm+ */}
+      <div className="fixed bottom-[82px] sm:bottom-auto sm:top-[82px] left-0 right-0 z-50 flex justify-center">
+        <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${controlVisible && !navOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-2 sm:-translate-y-2 pointer-events-none"}`}>
           <GalleryNav
             count={SLIDES}
             active={slide}
@@ -63,26 +64,36 @@ export function HeroSection() {
 
       {/* Headline — flows on the 24px baseline grid (no vh, no vertical
           centering; both break the rhythm). Spacing is all multiples of 24. */}
-      <div className="pt-s18 mt-s6 flex flex-col items-center gap-s6 text-center">
+      <div className="pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start gap-s4 sm:gap-s6 text-left">
         <Heading variant="h2" className="max-w-[672px]">
           New era of digital product design.
         </Heading>
-        <Text variant="p2" className="max-w-[544px] text-prim">
-          A curated group of product specialists working on your mobile app or
-          web system. Inside your team. Solving product problems from early
-          concepts to product friction. With a level of speed previously
-          impossible. Delivered through to production-ready output.
-        </Text>
+        <div className="max-w-[544px]">
+          <Text variant="p2" className={`text-prim ${!expanded ? "line-clamp-4 sm:line-clamp-none" : ""}`}>
+            A curated group of product specialists working on your mobile app or
+            web system. Inside your team. Solving product problems from early
+            concepts to product friction. With a level of speed previously
+            impossible. Delivered through to production-ready output.
+          </Text>
+          {!expanded && (
+            <button
+              className="sm:hidden mt-s1 text-p2 font-body font-medium text-prim/40"
+              onClick={() => setExpanded(true)}
+            >
+              Read more
+            </button>
+          )}
+        </div>
       </div>
-      <div className="flex items-end justify-between pt-s18 pb-s6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between pt-s6 sm:pt-s18 pb-s6 gap-s4 sm:gap-0">
         <Text variant="p1" className="max-w-[336px] text-prim text-left">
           Product creation is changing. Shorter cycles. Faster Outcome.
         </Text>
-        <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" className="pr-s1" />
+        <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" className="hidden sm:flex sm:pr-s1" />
       </div>
 
       {/* Gallery — 640px */}
-      <div ref={gallerySquircleRef} style={{ ...gallerySquircleStyle, height: "648px" }} className="w-full">
+      <div ref={gallerySquircleRef} style={gallerySquircleStyle} className="w-full aspect-[9/16] sm:aspect-auto sm:h-[480px] lg:h-[648px]">
       <div
         ref={galleryRef}
         className="w-full h-full overflow-hidden bg-surface relative"
@@ -106,6 +117,11 @@ export function HeroSection() {
           </div>
         ))}
       </div>
+      </div>
+
+      {/* Refer — mobile only, below gallery */}
+      <div className="sm:hidden pt-s3">
+        <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />
       </div>
     </section>
   );
