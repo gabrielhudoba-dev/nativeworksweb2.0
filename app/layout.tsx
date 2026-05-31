@@ -23,12 +23,6 @@ export default function RootLayout({
           {children}
           <PageLinksSection />
           <ConditionalFooter />
-          <Link
-            href="/catalog?debug"
-            className="fixed bottom-s3 right-s3 z-50 font-body text-[11px] font-medium bg-prim/10 hover:bg-prim/20 text-prim/50 rounded-full px-s1 py-[4px] transition-colors"
-          >
-            catalog
-          </Link>
           <RhythmDev />
         </NavigationProvider>
       </body>
