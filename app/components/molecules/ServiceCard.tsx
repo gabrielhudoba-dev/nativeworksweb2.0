@@ -41,7 +41,7 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
       >
         <div className="flex flex-col gap-s3">
           <Heading variant="h3">{title}</Heading>
-          <Text variant="p3" className="-mt-s3">{desc}</Text>
+          <Text variant="p2" className="-mt-s3">{desc}</Text>
           <TextLink
             onClick={(e) => { if (expandedContent) { e.stopPropagation(); setExpanded(v => !v); } else e.stopPropagation(); }}
             className={expandedContent ? "cursor-pointer" : "cursor-default"}

@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
-import { Heading, Text } from "@/app/components/atoms";
-import { StatColumn, Refer } from "@/app/components/molecules";
-import { useSquircle } from "@/app/hooks/useSquircle";
+import { Heading, ImageBlock, Text } from "@/app/components/atoms";
+import { Refer, StatColumn } from "@/app/components/molecules";
+import { CaseStudyCard } from "@/app/components/organisms";
 import { DOT_BG } from "@/app/styles/patterns";
 
 type CaseStudyItem = {
@@ -24,7 +23,8 @@ type TextItem = {
   description: string;
   author: { name: string; role: string; avatar: string };
 };
-type GridItem = CaseStudyItem | StatsItem | TextItem;
+type ImageItem = { type: "image"; src: string; alt: string };
+type GridItem = CaseStudyItem | StatsItem | TextItem | ImageItem;
 
 const GRID_ITEMS: GridItem[] = [
   {
@@ -42,7 +42,14 @@ const GRID_ITEMS: GridItem[] = [
       { value: "3×", label: "Reduction in time-to-first-value after onboarding redesign" },
       { value: "40%", label: "Increase in AI feature discoverability across core workflows" },
       { value: "4.7/5", label: "Post-redesign user satisfaction score" },
+      { value: "2×", label: "Increase in feature adoption within first week" },
+      { value: "60%", label: "Drop in support tickets related to onboarding confusion" },
     ],
+  },
+  {
+    type: "image",
+    src: "/images/sline01.png",
+    alt: "Notion AI product showcase",
   },
   {
     type: "case-study",
@@ -83,38 +90,17 @@ const GRID_ITEMS: GridItem[] = [
   },
 ];
 
-function CaseStudyCard({ variant, image, title, description, author }: Omit<CaseStudyItem, "type">) {
-  const { ref, style } = useSquircle(21, 0.6);
-
-  const imageEl = (
-    <div ref={ref} style={style} className="relative overflow-hidden h-[360px]">
-      <Image src={image.src} alt={image.alt} fill className="object-cover" sizes="50vw" />
-    </div>
-  );
-
-  const textEl = (
-    <article className="flex flex-col mt-s9">
-      <Heading variant="h3" style={{ fontSize: "40px" }}>{title}</Heading>
-      <Text variant="p2">{description}</Text>
-      <Refer name={author.name} role={author.role} avatar={author.avatar} className=" mt-s3" />
-    </article>
-  );
-
-  return (
-    <div className="col-span-2 grid grid-cols-2 gap-x-s12">
-      {variant === "left" ? <>{textEl}{imageEl}</> : <>{imageEl}{textEl}</>}
-    </div>
-  );
-}
-
 function StatsStrip({ stats }: { stats: StatsItem["stats"] }) {
+  const rows: Array<typeof stats> = [];
+  for (let i = 0; i < stats.length; i += 3) rows.push(stats.slice(i, i + 3));
   return (
-    <div
-      style={DOT_BG}
-      className="col-span-2 rounded-lg grid grid-cols-3 py-s9"
-    >
-      {stats.map((s) => (
-        <StatColumn key={s.value} value={s.value} label={s.label} />
+    <div style={DOT_BG} className="col-span-2 rounded-lg py-s9">
+      {rows.map((row, i) => (
+        <div key={i} className={`grid grid-cols-3 ${i > 0 ? "mt-s9" : ""}`}>
+          {row.map((s) => (
+            <StatColumn key={s.value} value={s.value} label={s.label} />
+          ))}
+        </div>
       ))}
     </div>
   );
@@ -123,12 +109,10 @@ function StatsStrip({ stats }: { stats: StatsItem["stats"] }) {
 export default function CaseStudiesPage() {
   return (
     <main className="bg-white">
-      {/* Hero — pt-[168px]=7×24, pb-s12=96=4×24 ✓ */}
-      <section className="px-s11 pt-[168px] pb-s12 max-w-page mx-auto">
+      <section className="px-s11 pt-[192px] pb-s12 max-w-page mx-auto">
         <Heading variant="h2">Case Studies</Heading>
       </section>
 
-      {/* Grid — gap-y-s12=96=4×24 ✓ */}
       <section className="px-s11 max-w-page mx-auto pb-[288px]">
         <div className="grid grid-cols-2 gap-x-s12 gap-y-s12">
           {GRID_ITEMS.map((item, i) => {
@@ -147,11 +131,14 @@ export default function CaseStudiesPage() {
             if (item.type === "stats") {
               return <StatsStrip key={i} stats={item.stats} />;
             }
+            if (item.type === "image") {
+              return <ImageBlock key={i} src={item.src} alt={item.alt} className="col-span-2" />;
+            }
             return (
               <article key={i} className="flex flex-col">
                 <Heading variant="h3" style={{ fontSize: "40px" }}>{item.title}</Heading>
                 <Text variant="p2">{item.description}</Text>
-                <Refer name={item.author.name} role={item.author.role} avatar={item.author.avatar} className=" mt-s3" />
+                <Refer name={item.author.name} role={item.author.role} avatar={item.author.avatar} className="mt-s3" />
               </article>
             );
           })}

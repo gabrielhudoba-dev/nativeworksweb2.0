@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
-import { Navigation, NavigationProvider } from "@/app/components/organisms";
+import { Navigation, NavigationProvider, PageLinksSection } from "@/app/components/organisms";
 import { ConditionalFooter } from "@/app/components/ConditionalFooter";
 import { RhythmDev } from "@/app/components/RhythmDev";
 
@@ -21,6 +21,7 @@ export default function RootLayout({
         <NavigationProvider>
           <Navigation />
           {children}
+          <PageLinksSection />
           <ConditionalFooter />
           <Link
             href="/catalog?debug"

@@ -74,6 +74,10 @@
   --text-h2--line-height: 72px;        /* 3×24 — lh 1.0 */
   --text-h2--letter-spacing: -0.02em;
 
+  --text-hpage: 56px;                  /* page/section header across sub-pages */
+  --text-hpage--line-height: 72px;     /* 3×24 — lh 1.28 */
+  --text-hpage--letter-spacing: -0.02em;
+
   --text-numb1: 60px;
   --text-numb1--line-height: 72px;     /* 3×24 — lh 1.2 */
   --text-numb1--letter-spacing: -0.02em;
@@ -82,8 +86,15 @@
   --text-h3--line-height: 48px;        /* 2×24 — lh 1.5 */
   --text-h3--letter-spacing: -0.02em;
 
+  --text-h4: 28px;                     /* between h3 and h5 */
+  --text-h4--line-height: 48px;        /* 2×24 — lh 1.7 */
+  --text-h4--letter-spacing: -0.02em;
+
   --text-h5: 20px;
   --text-h5--line-height: 24px;     /* 1×24 — lh 1.2 */
+
+  --text-p0: 28px;
+  --text-p0--line-height: 48px;     /* 2×24 — lh 1.7 */
 
   --text-p1: 20px;
   --text-p1--line-height: 24px;     /* 1×24 — lh 1.2 */

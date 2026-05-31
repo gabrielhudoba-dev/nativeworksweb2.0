@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Heading } from "@/app/components/atoms";
 
 const LINKS = [
@@ -9,9 +12,12 @@ const LINKS = [
 ];
 
 export function PageLinksSection() {
+  const pathname = usePathname();
+  const links = LINKS.filter((l) => l.href !== pathname);
+
   return (
-    <section className="px-s11 py-s12 max-w-page mx-auto">
-      {LINKS.map(({ label, href }) => (
+    <section className="px-s11 pb-s12 max-w-page mx-auto">
+      {links.map(({ label, href }) => (
         <div key={href}>
           <Link href={href} className="block py-s3">
             <Heading variant="h2" as="span">{label}</Heading>

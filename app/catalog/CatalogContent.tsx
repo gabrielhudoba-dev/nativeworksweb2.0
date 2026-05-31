@@ -4,14 +4,18 @@ import { useState, type ReactNode } from "react";
 import {
   Avatar,
   Badge,
+  CaseStudyImage,
   Heading,
   Icon,
   IconButton,
+  ImageBlock,
   Logo,
   Text,
+  TextLink,
   type IconName,
 } from "@/app/components/atoms";
-import { Button, GalleryNav, NavPrimPill, Refer, ServiceCard, SocialLink, SOCIAL_ICONS, StageCard, StatColumn } from "@/app/components/molecules";
+import { Button, PrimTextBlock, GalleryNav, NavPrimPill, Refer, ServiceCard, SocialLink, SOCIAL_ICONS, StageCard, StatColumn } from "@/app/components/molecules";
+import { CaseStudyCard } from "@/app/components/organisms";
 
 function NavPrimPillPreview() {
   const [open, setOpen] = useState(false);
@@ -228,6 +232,33 @@ const entries: Entry[] = [
     ],
   },
 
+  {
+    level: "atoms",
+    label: "ImageBlock",
+    copy: '<ImageBlock src="..." alt="..." variant="default" />',
+    variants: [
+      { label: "default", preview: <ImageBlock src="/images/teamImageFull.png" alt="Team" /> },
+      { label: "portrait", preview: <ImageBlock src="/images/martin.png" alt="Martin Mroc" variant="portrait" /> },
+    ],
+  },
+  {
+    level: "atoms",
+    label: "CaseStudyImage",
+    copy: '<CaseStudyImage src="/images/sline01.png" alt="..." />',
+    variants: [
+      { label: "default", preview: <CaseStudyImage src="/images/sline01.png" alt="Notion AI" /> },
+    ],
+  },
+  {
+    level: "atoms",
+    label: "TextLink",
+    copy: '<TextLink href="#">Link text</TextLink>',
+    variants: [
+      { label: "link", preview: <TextLink href="#">View case study</TextLink> },
+      { label: "button", preview: <TextLink>Button link</TextLink> },
+    ],
+  },
+
   // ─── Molecules ───
   {
     level: "molecules",
@@ -293,6 +324,23 @@ const entries: Entry[] = [
         preview: <StatColumn value="33%" label="Increase in weekly active user retention" refer={{ name: "Milan Tibansky", role: "Growth Lead", avatar: "/images/milan.png" }} />,
       },
       { label: "plain", preview: <StatColumn value="2 weeks" label="Avg. time to first value" /> },
+    ],
+  },
+  {
+    level: "molecules",
+    label: "PrimTextBlock",
+    copy: '<PrimTextBlock title="Notion AI" description="..." author={{name:"Martin Novák",role:"Lead Designer",avatar:"/images/martin.png"}} />',
+    variants: [
+      {
+        label: "default",
+        preview: (
+          <PrimTextBlock
+            title="Notion AI"
+            description="AI features increased complexity. Users did not understand where to start or how the product worked. Core workflows became fragmented."
+            author={{ name: "Martin Novák", role: "Lead Designer", avatar: "/images/martin.png" }}
+          />
+        ),
+      },
     ],
   },
   {

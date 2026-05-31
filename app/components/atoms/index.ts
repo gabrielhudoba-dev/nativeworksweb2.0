@@ -1,4 +1,6 @@
 export { Avatar } from "./Avatar";
+export { CaseStudyImage } from "./CaseStudyImage";
+export { ImageBlock } from "./ImageBlock";
 export { Logo } from "./Logo";
 export { Badge } from "./Badge";
 export { Heading } from "./Heading";

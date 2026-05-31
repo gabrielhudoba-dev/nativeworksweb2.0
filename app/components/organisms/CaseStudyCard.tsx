@@ -1,0 +1,23 @@
+"use client";
+
+import { CaseStudyImage } from "@/app/components/atoms";
+import { PrimTextBlock } from "@/app/components/molecules";
+
+export type CaseStudyCardProps = {
+  variant: "left" | "right";
+  image: { src: string; alt: string };
+  title: React.ReactNode;
+  description: string;
+  author: { name: string; role: string; avatar: string };
+};
+
+export function CaseStudyCard({ variant, image, title, description, author }: CaseStudyCardProps) {
+  const imageEl = <CaseStudyImage src={image.src} alt={image.alt} />;
+  const contentEl = <PrimTextBlock title={title} description={description} author={author} />;
+
+  return (
+    <div className="col-span-2 grid grid-cols-2 gap-x-s12">
+      {variant === "left" ? <>{contentEl}{imageEl}</> : <>{imageEl}{contentEl}</>}
+    </div>
+  );
+}

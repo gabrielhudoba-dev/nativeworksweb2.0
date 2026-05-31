@@ -1,3 +1,6 @@
+export { CaseStudyCard } from "./CaseStudyCard";
+export { MemberCard } from "./MemberCard";
+export type { CaseStudyCardProps } from "./CaseStudyCard";
 export { Footer } from "./Footer";
 export { HeroSection } from "./HeroSection";
 export { InterveningSection } from "./InterveningSection";

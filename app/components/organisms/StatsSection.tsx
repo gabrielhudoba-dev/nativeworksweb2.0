@@ -11,7 +11,7 @@ export function StatsSection() {
           <br />
           Delivered faster.
         </Heading>
-        <Text variant="p2" className="mb-s12">
+        <Text variant="p2" className="mb-s9">
           Fewer steps. Higher quality. AI-accelerated.
         </Text>
         <div className="grid grid-cols-3">

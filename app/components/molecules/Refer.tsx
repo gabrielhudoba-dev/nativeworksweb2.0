@@ -5,20 +5,22 @@ type Props = {
   name: string;
   role: string;
   avatar?: string;
+  showName?: boolean;
   className?: string;
 };
 
-export function Refer({ name, role, avatar, className }: Props) {
+export function Refer({ name, role, avatar, showName = true, className }: Props) {
+  const centered = !showName;
   return (
-    <div className={`flex items-start gap-s2${className ? ` ${className}` : ""}`}>
+    <div className={`flex ${centered ? "items-center" : "items-start"} gap-s2${className ? ` ${className}` : ""}`}>
       {avatar ? (
-        <Avatar src={avatar} alt={name} size={48} className="translate-y-[5.5px]" />
+        <Avatar src={avatar} alt={name} size={48} className={centered ? "" : "translate-y-[5.5px]"} />
       ) : (
-        <span className="size-s7 rounded-pill bg-surface shrink-0 inline-block translate-y-[5.5px]" />
+        <span className={`size-s7 rounded-pill bg-surface shrink-0 inline-block${centered ? "" : " translate-y-[5.5px]"}`} />
       )}
       <div className="flex flex-col gap-0">
-        <Text variant="l2" as="span">{name}</Text>
-        <Text variant="l2" as="span" className="font-normal">{role}</Text>
+        {showName && <Text variant="l2" as="span">{name}</Text>}
+        <Text variant="l2" as="span" className={showName ? "font-normal" : ""}>{role}</Text>
       </div>
     </div>
   );

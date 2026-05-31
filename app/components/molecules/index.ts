@@ -1,4 +1,5 @@
 export { Button } from "./Button";
+export { PrimTextBlock } from "./PrimTextBlock";
 export { GalleryNav } from "./GalleryNav";
 export { NavPrimPill } from "./NavPrimPill";
 export { Refer } from "./Refer";
