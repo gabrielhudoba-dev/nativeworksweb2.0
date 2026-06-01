@@ -99,8 +99,8 @@
   --text-p1: 20px;
   --text-p1--line-height: 24px;     /* 1×24 — lh 1.2 */
 
-  --text-p2: 20px;                  /* body */
-  --text-p2--line-height: 24px;     /* 1×24 — lh 1.2 */
+  --text-p2: 18px;                  /* body */
+  --text-p2--line-height: 24px;     /* 1×24 — lh 1.33 */
 
   --text-p3: 16px;                  /* body */
   --text-p3--line-height: 24px;     /* 1×24 — lh 1.5 */
@@ -226,5 +226,56 @@ button, [role="button"], a {
     animation: scroll-fade-up linear both;
     animation-timeline: view();
     animation-range: entry 0% entry 30%;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Responsive system
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Gutter — single source for page horizontal padding ─────────────────
+   Direct pixel values (not references to spacing tokens) for reliability.
+   Used by .px-page and any -mx-[var(--gutter)] component.              */
+:root {
+  --gutter: 32px;       /* < 640px  (s4 = 4×8) */
+}
+@media (min-width: 640px) {
+  :root { --gutter: 56px; }    /* ≥ 640px  (s7 = 7×8) */
+}
+@media (min-width: 1024px) {
+  :root { --gutter: 88px; }   /* ≥ 1024px (s11 = 11×8) */
+}
+
+/* ─── px-page — responsive page-edge padding ──────────────────────────── */
+.px-page {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* ─── Responsive typography tokens ───────────────────────────────────────
+   Override the @theme values at smaller viewports. Tailwind utilities (e.g.
+   text-h2) use var(--text-h2) so they respond automatically.             */
+@media (max-width: 1023px) {
+  :root {
+    --text-h2: 48px;
+    --text-h2--line-height: 48px;
+    --text-hpage: 40px;
+    --text-hpage--line-height: 48px;
+    --text-numb1: 48px;
+    --text-numb1--line-height: 48px;
+  }
+}
+@media (max-width: 639px) {
+  :root {
+    --text-h2: 36px;
+    --text-h2--line-height: 48px;
+    --text-hpage: 28px;
+    --text-hpage--line-height: 48px;
+    --text-numb1: 36px;
+    --text-numb1--line-height: 48px;
+    --text-h3: 24px;
+    --text-h3--line-height: 32px;
+    --text-h4: 22px;
+    --text-h4--line-height: 32px;
   }
 }

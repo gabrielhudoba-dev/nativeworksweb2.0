@@ -17,7 +17,7 @@ type Props = {
 export function PrimTextBlock({ title, description, author, showName = true, logos, image, className = "" }: Props) {
   return (
     <article className={`flex flex-col mt-s9 ${className}`}>
-      <Heading variant="h4">{title}</Heading>
+      <Heading variant="h3" style={{ fontSize: "40px" }}>{title}</Heading>
       <Text variant="p2">{description}</Text>
       {logos && logos.length > 0 && (
         <div className="flex items-center gap-s3 mt-s3">

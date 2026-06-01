@@ -70,15 +70,15 @@ export function ServicesSection() {
   const [activeCard, setActiveCard] = useState(0);
 
   return (
-    <section className="pt-s9 pb-s12 px-s11 max-w-page mx-auto">
+    <section className="pt-s5 sm:pt-s9 pb-s6 sm:pb-s12 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
         Inside the team.<br />Inside the product.
       </Heading>
-      <Text variant="p2" className="mb-s12 max-w-[800px]">
+      <Text variant="p2" className="mb-s6 sm:mb-s12 max-w-[800px]">
         We work closely in to your product focusing on specific problem.
       </Text>
-      <div className="overflow-x-auto -mx-s11 py-s3 -my-s3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="grid grid-flow-col auto-cols-[320px] lg:grid-flow-row lg:grid-cols-3 lg:auto-cols-auto gap-s1 px-s11 snap-x snap-mandatory lg:snap-none">
+      <div className="overflow-x-auto -mx-[var(--gutter)] py-s3 -my-s3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="grid grid-flow-col auto-cols-[300px] sm:auto-cols-[320px] lg:grid-flow-row lg:grid-cols-3 lg:auto-cols-auto gap-s1 pl-[var(--gutter)] [&>*:last-child]:mr-[var(--gutter)] snap-x snap-mandatory lg:snap-none lg:[&>*:last-child]:mr-0">
           {CARDS.map((card, i) => (
             <ServiceCard
               key={card.title}

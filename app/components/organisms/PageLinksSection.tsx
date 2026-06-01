@@ -16,7 +16,7 @@ export function PageLinksSection() {
   const links = LINKS.filter((l) => l.href !== pathname);
 
   return (
-    <section className="px-s11 pb-s12 max-w-page mx-auto">
+    <section className="w-full px-page pb-s6 sm:pb-s12 max-w-page mx-auto">
       {links.map(({ label, href }) => (
         <div key={href}>
           <Link href={href} className="block py-s3">

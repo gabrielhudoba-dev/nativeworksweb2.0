@@ -13,7 +13,6 @@ export function ImageBlock({ src, alt, variant = "default", className = "" }: Pr
   const { ref, style } = useSquircle(21, 0.6);
   const sizeClass =
     variant === "portrait" ? "w-full aspect-[3/4]" :
-    variant === "fill"     ? "w-full h-full" :
                              "w-full";
   const imgClass =
     variant === "default" ? "w-full h-auto object-cover" : "w-full h-full object-cover object-center";
