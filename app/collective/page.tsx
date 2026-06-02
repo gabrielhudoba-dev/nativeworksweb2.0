@@ -1,7 +1,8 @@
-"use client";
-
 import { Heading, ImageBlock, Text } from "@/app/components/atoms";
 import { MemberCard } from "@/app/components/organisms";
+import { getContent, getMembers } from "@/lib/content";
+
+export const revalidate = 60;
 
 type Member = {
   name: string;
@@ -135,19 +136,17 @@ const COMPANIES: Company[] = [
   { name: "skrovan.studio", dark: true },
 ];
 
-export default function CollectivePage() {
+export default async function CollectivePage() {
+  const [content, members] = await Promise.all([getContent(), getMembers()]);
+
   return (
     <main className="bg-white">
 
       {/* Hero */}
       <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[216px] pb-s6 max-w-page mx-auto grid grid-cols-1 lg:grid-cols-3 gap-x-s12 gap-y-s3">
-        <Heading variant="h2">Collective</Heading>
+        <Heading variant="h2">{content.collective_title ?? "Collective"}</Heading>
         <Text variant="p1" className="text-prim lg:col-start-2 lg:col-span-2 pb-s3">
-          A curated group of product specialists working on your mobile app or
-          web system. Inside your team. Solving product problems from early
-          concepts to product friction. Meet our members and their associated
-          companies, from previous clients to the experiences that shape how
-          we work.
+          {content.collective_desc ?? "A curated group of product specialists."}
         </Text>
       </section>
 
@@ -158,9 +157,9 @@ export default function CollectivePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-s9 sm:gap-x-s12 gap-y-s9 sm:gap-y-s12">
 
           {/* First 3 members — desktop row 1 */}
-          {MEMBERS.slice(0, 3).map((m) => (
-            <div key={m.name + m.role} className={`${LG_COL[m.col]} ${lgRowClass(m.row)}`}>
-              <MemberCard name={m.name} role={m.role} bio={m.bio} avatar={m.photo} logos={m.logos} />
+          {members.slice(0, 3).map((m) => (
+            <div key={m.name + m.role} className={`${LG_COL[m.col as 1|2|3]} ${lgRowClass(m.row)}`}>
+              <MemberCard name={m.name} role={m.role} bio={m.bio} avatar={m.photo ?? undefined} logos={m.logos ?? undefined} />
             </div>
           ))}
 
@@ -170,9 +169,9 @@ export default function CollectivePage() {
           </div>
 
           {/* Remaining members — desktop rows 2, 4–7 */}
-          {MEMBERS.slice(3).map((m) => (
-            <div key={m.name + m.role} className={`${LG_COL[m.col]} ${lgRowClass(m.row)}`}>
-              <MemberCard name={m.name} role={m.role} bio={m.bio} avatar={m.photo} logos={m.logos} />
+          {members.slice(3).map((m) => (
+            <div key={m.name + m.role} className={`${LG_COL[m.col as 1|2|3]} ${lgRowClass(m.row)}`}>
+              <MemberCard name={m.name} role={m.role} bio={m.bio} avatar={m.photo ?? undefined} logos={m.logos ?? undefined} />
             </div>
           ))}
 

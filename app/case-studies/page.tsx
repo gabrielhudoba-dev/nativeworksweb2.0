@@ -1,8 +1,9 @@
-"use client";
-
 import { Heading, ImageBlock, Text } from "@/app/components/atoms";
 import { Refer, StatColumn } from "@/app/components/molecules";
 import { CaseStudyCard } from "@/app/components/organisms";
+import { getContent } from "@/lib/content";
+
+export const revalidate = 60;
 import { DOT_BG } from "@/app/styles/patterns";
 
 type CaseStudyItem = {
@@ -106,11 +107,13 @@ function StatsStrip({ stats }: { stats: StatsItem["stats"] }) {
   );
 }
 
-export default function CaseStudiesPage() {
+export default async function CaseStudiesPage() {
+  const content = await getContent();
+
   return (
     <main className="bg-white">
       <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[192px] pb-s6 max-w-page mx-auto">
-        <Heading variant="h3" as="h1" style={{ fontSize: "40px" }}>Case Studies</Heading>
+        <Heading variant="h3" as="h1" style={{ fontSize: "40px" }}>{content.case_studies_title ?? "Case Studies"}</Heading>
       </section>
 
       <section className="px-page max-w-page mx-auto pb-s12 lg:pb-[288px]">

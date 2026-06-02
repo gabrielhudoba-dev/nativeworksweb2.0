@@ -1,6 +1,7 @@
-"use client";
-
 import { Heading } from "@/app/components/atoms";
+import { getContent } from "@/lib/content";
+
+export const revalidate = 60;
 
 type CapabilitySection = {
   title: string;
@@ -130,13 +131,15 @@ const SECTIONS: CapabilitySection[] = [
   },
 ];
 
-export default function CapabilitiesPage() {
+export default async function CapabilitiesPage() {
+  const content = await getContent();
+
   return (
     <main className="bg-white">
 
       {/* Hero */}
       <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[192px] pb-s9 max-w-page mx-auto">
-        <Heading variant="h2">Capabilities</Heading>
+        <Heading variant="h2">{content.capabilities_title ?? "Capabilities"}</Heading>
       </section>
 
       {/* Sections */}

@@ -66,20 +66,26 @@ const SPRINT_FEATURES = (
   </>
 );
 
-export function ServicesSection() {
+import type { SiteContent, Service } from "@/lib/content";
+
+type Props = { content: SiteContent; services: Service[] };
+
+export function ServicesSection({ content, services }: Props) {
   const [activeCard, setActiveCard] = useState(0);
 
   return (
     <section className="pt-s5 sm:pt-s9 pb-s6 sm:pb-s12 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
-        Inside the team.<br />Inside the product.
+        {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
+          <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+        ))}
       </Heading>
       <Text variant="p2" className="mb-s6 sm:mb-s12 max-w-[800px]">
-        We work closely in to your product focusing on specific problem.
+        {content.services_desc ?? "We work closely in to your product focusing on specific problem."}
       </Text>
       <div className="overflow-x-auto -mx-[var(--gutter)] py-s3 -my-s3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="grid grid-flow-col auto-cols-[300px] sm:auto-cols-[320px] lg:grid-flow-row lg:grid-cols-3 lg:auto-cols-auto gap-s1 pl-[var(--gutter)] [&>*:last-child]:mr-[var(--gutter)] snap-x snap-mandatory lg:snap-none lg:[&>*:last-child]:mr-0">
-          {CARDS.map((card, i) => (
+          {services.map((card, i) => (
             <ServiceCard
               key={card.title}
               title={card.title}
@@ -88,7 +94,7 @@ export function ServicesSection() {
               duration={card.duration}
               active={activeCard === i}
               onClick={() => setActiveCard(i)}
-              onLetStart={(e) => handleLetStart(e, card.email)}
+              onLetStart={(e) => handleLetStart(e, { name: card.title, detail: `${card.price} / ${card.duration}` })}
               expandedContent={i === 0 ? SPRINT_FEATURES : undefined}
             />
           ))}

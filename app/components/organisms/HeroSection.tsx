@@ -6,6 +6,7 @@ import { Heading, Text } from "@/app/components/atoms";
 import { GalleryNav, Refer } from "@/app/components/molecules";
 import { useNavOpen } from "./NavigationProvider";
 import { useSquircle } from "@/app/hooks/useSquircle";
+import type { SiteContent } from "@/lib/content";
 
 const SLIDES = 4;
 const GALLERY_IMAGES = [
@@ -16,7 +17,9 @@ const GALLERY_IMAGES = [
 ];
 const AUTOPLAY_INTERVAL = 7000;
 
-export function HeroSection() {
+type Props = { content: SiteContent };
+
+export function HeroSection({ content }: Props) {
   const [slide, setSlide] = useState(0);
   const [controlVisible, setControlVisible] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -66,14 +69,11 @@ export function HeroSection() {
           centering; both break the rhythm). Spacing is all multiples of 24. */}
       <div className="pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
         <Heading variant="h2" className="max-w-[672px]">
-          New era of digital product design.
+          {content.hero_title ?? "New era of digital product design."}
         </Heading>
         <div className="max-w-[544px]">
           <Text variant="p2" className={`text-prim ${!expanded ? "line-clamp-4 sm:line-clamp-none" : ""}`}>
-            A curated group of product specialists working on your mobile app or
-            web system. Inside your team. Solving product problems from early
-            concepts to product friction. With a level of speed previously
-            impossible. Delivered through to production-ready output.
+            {content.hero_desc ?? "A curated group of product specialists working on your mobile app or web system."}
           </Text>
           {!expanded && (
             <button
@@ -87,9 +87,9 @@ export function HeroSection() {
       </div>
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between pt-s6 sm:pt-s18 pb-s6 gap-s4 sm:gap-0">
         <Text variant="p1" className="max-w-[336px] text-prim text-left">
-          Product creation is changing. Shorter cycles. Faster Outcome.
+          {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
         </Text>
-        <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" className="hidden sm:flex sm:pr-s1" />
+        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar="/images/martin.png" className="hidden sm:flex sm:pr-s1" />
       </div>
 
       {/* Gallery — 640px */}
@@ -121,7 +121,7 @@ export function HeroSection() {
 
       {/* Refer — mobile only, below gallery */}
       <div className="sm:hidden pt-s3">
-        <Refer name="Martin Mroc" role="CDO, Vibe Studio" avatar="/images/martin.png" />
+        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar="/images/martin.png" />
       </div>
     </section>
   );
