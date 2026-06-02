@@ -1,6 +1,7 @@
 import { Heading, ImageBlock, Text } from "@/app/components/atoms";
 import { MemberCard } from "@/app/components/organisms";
-import { getContent, getMembers } from "@/lib/content";
+import { getContent, getMembers, getCollectiveCompanies } from "@/lib/content";
+import { CompanyLogo } from "./CompanyLogo";
 
 export const revalidate = 60;
 
@@ -124,29 +125,18 @@ function lgRowClass(row: number): string {
   return LG_ROW[gridRow] ?? "";
 }
 
-type Company = {
-  name: string;
-  logo?: string;
-  dark?: boolean;
-};
-
-const COMPANIES: Company[] = [
-  { name: "Vibe Studio" },
-  { name: "Madelo®", logo: "/images/madelo-logo.png", dark: true },
-  { name: "skrovan.studio", dark: true },
-];
 
 export default async function CollectivePage() {
-  const [content, members] = await Promise.all([getContent(), getMembers()]);
+  const [content, members, companies] = await Promise.all([getContent("collective"), getMembers(), getCollectiveCompanies()]);
 
   return (
     <main className="bg-white">
 
       {/* Hero */}
       <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[216px] pb-s6 max-w-page mx-auto grid grid-cols-1 lg:grid-cols-3 gap-x-s12 gap-y-s3">
-        <Heading variant="h2">{content.collective_title ?? "Collective"}</Heading>
+        <Heading variant="h2">{content.hero_title ?? "Collective"}</Heading>
         <Text variant="p1" className="text-prim lg:col-start-2 lg:col-span-2 pb-s3">
-          {content.collective_desc ?? "A curated group of product specialists."}
+          {content.hero_desc ?? "A curated group of product specialists."}
         </Text>
       </section>
 
@@ -180,27 +170,15 @@ export default async function CollectivePage() {
 
       {/* Member companies */}
       <section className="px-page max-w-page mx-auto border-t border-prim/10 pt-s9 pb-s12 lg:pb-[288px]">
-        <Heading variant="h3">Member companies</Heading>
+        <Heading variant="h3">{content.companies_title ?? "Member companies"}</Heading>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-s4 sm:gap-s6 mt-s9">
-          {COMPANIES.map((c) => (
+          {companies.map((c) => (
             <div key={c.name} className="aspect-[3/2] overflow-hidden rounded-sm">
               {c.logo ? (
-                <img
-                  src={c.logo}
-                  alt={c.name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const el = e.currentTarget;
-                    el.style.display = "none";
-                    const fallback = el.nextElementSibling as HTMLElement | null;
-                    if (fallback) fallback.style.display = "flex";
-                  }}
-                />
-              ) : null}
-              <div
-                className={`w-full h-full ${c.dark ? "bg-prim" : "bg-surface"}`}
-                style={c.logo ? { display: "none" } : undefined}
-              />
+                <CompanyLogo src={c.logo} alt={c.name} dark={c.dark} />
+              ) : (
+                <div className={`w-full h-full ${c.dark ? "bg-prim" : "bg-surface"}`} />
+              )}
             </div>
           ))}
         </div>

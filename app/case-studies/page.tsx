@@ -1,97 +1,12 @@
 import { Heading, ImageBlock, Text } from "@/app/components/atoms";
 import { Refer, StatColumn } from "@/app/components/molecules";
 import { CaseStudyCard } from "@/app/components/organisms";
-import { getContent } from "@/lib/content";
-
-export const revalidate = 60;
+import { getContent, getCaseStudiesItems } from "@/lib/content";
 import { DOT_BG } from "@/app/styles/patterns";
 
-type CaseStudyItem = {
-  type: "case-study";
-  variant: "left" | "right";
-  image: { src: string; alt: string };
-  title: React.ReactNode;
-  description: string;
-  author: { name: string; role: string; avatar: string };
-};
-type StatsItem = {
-  type: "stats";
-  stats: Array<{ value: string; label: string }>;
-};
-type TextItem = {
-  type: "text";
-  title: React.ReactNode;
-  description: string;
-  author: { name: string; role: string; avatar: string };
-};
-type ImageItem = { type: "image"; src: string; alt: string };
-type GridItem = CaseStudyItem | StatsItem | TextItem | ImageItem;
+export const revalidate = 60;
 
-const GRID_ITEMS: GridItem[] = [
-  {
-    type: "case-study",
-    variant: "right",
-    image: { src: "/images/sline01.png", alt: "Notion AI case study" },
-    title: "Notion AI",
-    description:
-      "AI features increased complexity. Users did not understand where to start or how the product worked. Core workflows became fragmented.",
-    author: { name: "Martin Novák", role: "Lead Designer", avatar: "/images/martin.png" },
-  },
-  {
-    type: "stats",
-    stats: [
-      { value: "3×", label: "Reduction in time-to-first-value after onboarding redesign" },
-      { value: "40%", label: "Increase in AI feature discoverability across core workflows" },
-      { value: "4.7/5", label: "Post-redesign user satisfaction score" },
-      { value: "2×", label: "Increase in feature adoption within first week" },
-      { value: "60%", label: "Drop in support tickets related to onboarding confusion" },
-    ],
-  },
-  {
-    type: "image",
-    src: "/images/sline01.png",
-    alt: "Notion AI product showcase",
-  },
-  {
-    type: "case-study",
-    variant: "left",
-    image: { src: "/images/sline02.png", alt: "Coinbase Advanced Trade case study" },
-    title: (
-      <>
-        Coinbase
-        <br />
-        Advanced Trade
-      </>
-    ),
-    description:
-      "The platform was powerful but overwhelming. Advanced features reduced usability and conversion. New users dropped before first trade.",
-    author: { name: "Milan Horváth", role: "Lead Designer", avatar: "/images/milan.png" },
-  },
-  {
-    type: "stats",
-    stats: [
-      { value: "28%", label: "Reduction in first-trade drop-off rate" },
-      { value: "2.5×", label: "Increase in onboarding-to-first-trade conversion" },
-      { value: "9/10", label: "Traders rating the redesigned advanced flow" },
-    ],
-  },
-  {
-    type: "text",
-    title: "Linear",
-    description:
-      "Rapid growth created inconsistency across the product. New features increased UX fragmentation. Internal teams moved faster than the system could support.",
-    author: { name: "Martin Novák", role: "Lead Designer", avatar: "/images/martin.png" },
-  },
-  {
-    type: "text",
-    title: "Stealth AI Startup",
-    description:
-      "The product was built quickly using AI tools. The UI existed, but the product lacked structure, clarity, and consistency.",
-    author: { name: "Milan Horváth", role: "Lead Designer", avatar: "/images/milan.png" },
-  },
-];
-
-function StatsStrip({ stats }: { stats: StatsItem["stats"] }) {
+function StatsStrip({ stats }: { stats: Array<{ value: string; label: string }> }) {
   const rows: Array<typeof stats> = [];
   for (let i = 0; i < stats.length; i += 3) rows.push(stats.slice(i, i + 3));
   return (
@@ -107,42 +22,51 @@ function StatsStrip({ stats }: { stats: StatsItem["stats"] }) {
   );
 }
 
+function renderTitle(title: string) {
+  return title.split("\n").map((line, i, arr) => (
+    <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+  ));
+}
+
 export default async function CaseStudiesPage() {
-  const content = await getContent();
+  const [content, items] = await Promise.all([
+    getContent("case-studies"),
+    getCaseStudiesItems(),
+  ]);
 
   return (
     <main className="bg-white">
       <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[192px] pb-s6 max-w-page mx-auto">
-        <Heading variant="h3" as="h1" style={{ fontSize: "40px" }}>{content.case_studies_title ?? "Case Studies"}</Heading>
+        <Heading variant="h3" as="h1" style={{ fontSize: "40px" }}>{content.hero_title ?? "Case Studies"}</Heading>
       </section>
 
       <section className="px-page max-w-page mx-auto pb-s12 lg:pb-[288px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s12 gap-y-s6 sm:gap-y-s12">
-          {GRID_ITEMS.map((item, i) => {
-            if (item.type === "case-study") {
+          {items.map((item, i) => {
+            if (item.type === "case_study") {
               return (
                 <CaseStudyCard
-                  key={i}
-                  variant={item.variant}
-                  image={item.image}
-                  title={item.title}
-                  description={item.description}
-                  author={item.author}
+                  key={item.id}
+                  variant={item.variant as "left" | "right"}
+                  image={{ src: item.image_src!, alt: item.image_alt! }}
+                  title={renderTitle(item.title!)}
+                  description={item.description!}
+                  author={{ name: item.author_name!, role: item.author_role!, avatar: item.author_avatar! }}
                 />
               );
             }
             if (item.type === "stats") {
-              return <StatsStrip key={i} stats={item.stats} />;
+              return <StatsStrip key={item.id} stats={item.stats} />;
             }
             if (item.type === "image") {
-              return <ImageBlock key={i} src={item.src} alt={item.alt} variant="fill" className="col-span-1 sm:col-span-2 h-[360px]" />;
+              return <ImageBlock key={item.id} src={item.image_src!} alt={item.image_alt!} variant="fill" className="col-span-1 sm:col-span-2 h-[360px]" />;
             }
-            const prevItem = i > 0 ? GRID_ITEMS[i - 1] : null;
+            const prevItem = i > 0 ? items[i - 1] : null;
             return (
-              <article key={i} className={`flex flex-col${prevItem?.type === "text" ? " mt-s6 sm:mt-0" : ""}`}>
-                <Heading variant="h3" style={{ fontSize: "40px" }}>{item.title}</Heading>
+              <article key={item.id} className={`flex flex-col${prevItem?.type === "text" ? " mt-s6 sm:mt-0" : ""}`}>
+                <Heading variant="h3" style={{ fontSize: "40px" }}>{renderTitle(item.title!)}</Heading>
                 <Text variant="p2">{item.description}</Text>
-                <Refer name={item.author.name} role={item.author.role} avatar={item.author.avatar} className="mt-s3" />
+                <Refer name={item.author_name!} role={item.author_role!} avatar={item.author_avatar!} className="mt-s3" />
               </article>
             );
           })}

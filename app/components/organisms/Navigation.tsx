@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { NavPrimPill } from "@/app/components/molecules";
 import { Heading, Text } from "@/app/components/atoms";
 import { useNavContext } from "./NavigationProvider";
+import type { SiteContent } from "@/lib/content";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -15,7 +16,9 @@ const NAV_LINKS = [
   { label: "Process", href: "/process-insights" },
 ];
 
-export function Navigation() {
+type Props = { content: SiteContent };
+
+export function Navigation({ content }: Props) {
   const { open, setOpen } = useNavContext();
   const pathname = usePathname();
 
@@ -80,7 +83,7 @@ export function Navigation() {
           <div className="px-page mt-s6 sm:mt-s11 pb-s13 sm:pb-s7 flex flex-col gap-s2">
             <Text variant="l2" className="opacity-50">Contacts</Text>
             <span className="font-display font-medium text-h5 tracking-[-0.02em] text-prim inline-block translate-y-[4px]">
-              hello@natiweworks.eu
+              {content.nav_email ?? "hello@natiweworks.eu"}
             </span>
           </div>
         </div>

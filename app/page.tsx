@@ -10,7 +10,7 @@ export const revalidate = 60; // ISR — obsah sa aktualizuje každú minútu
 
 export default async function Home() {
   const [content, services, stages, stats] = await Promise.all([
-    getContent(),
+    getContent("home"),
     getServices(),
     getStages(),
     getStats(),

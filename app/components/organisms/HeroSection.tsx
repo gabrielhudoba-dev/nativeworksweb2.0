@@ -89,7 +89,7 @@ export function HeroSection({ content }: Props) {
         <Text variant="p1" className="max-w-[336px] text-prim text-left">
           {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
         </Text>
-        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar="/images/martin.png" className="hidden sm:flex sm:pr-s1" />
+        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar={content.hero_refer_avatar ?? "/images/martin.png"} className="hidden sm:flex sm:pr-s1" />
       </div>
 
       {/* Gallery — 640px */}
@@ -121,7 +121,7 @@ export function HeroSection({ content }: Props) {
 
       {/* Refer — mobile only, below gallery */}
       <div className="sm:hidden pt-s3">
-        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar="/images/martin.png" />
+        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar={content.hero_refer_avatar ?? "/images/martin.png"} />
       </div>
     </section>
   );

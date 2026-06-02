@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Logo, Text } from "@/app/components/atoms";
 import { SocialLink } from "@/app/components/molecules/SocialLink";
 import { useSquircle } from "@/app/hooks/useSquircle";
+import type { SiteContent } from "@/lib/content";
 
 const SOCIAL: { platform: Parameters<typeof SocialLink>[0]["platform"]; href: string }[] = [
   { platform: "linkedin", href: "https://linkedin.com" },
@@ -11,7 +12,9 @@ const SOCIAL: { platform: Parameters<typeof SocialLink>[0]["platform"]; href: st
   { platform: "x", href: "https://x.com" },
 ];
 
-export function Footer() {
+type Props = { content: SiteContent };
+
+export function Footer({ content }: Props) {
   const { ref, style } = useSquircle(21, 0.6);
 
   return (
@@ -25,7 +28,7 @@ export function Footer() {
               <Logo size="md" className="h-s6 w-auto" />
             </Link>
             <Text variant="p3">
-              New era of digital product design.
+              {content.footer_tagline ?? "New era of digital product design."}
             </Text>
           </div>
           <div className="flex items-center gap-s2">

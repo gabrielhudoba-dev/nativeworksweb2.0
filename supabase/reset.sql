@@ -1,4 +1,33 @@
 -- ════════════════════════════════════════════════════════════════════════════
+-- RESET — zmaž všetko a vytvor nové
+-- Spusti v Supabase → SQL Editor
+-- ════════════════════════════════════════════════════════════════════════════
+
+drop table if exists content                        cascade;
+drop table if exists home_content                   cascade;
+drop table if exists collective_content             cascade;
+drop table if exists capabilities_content           cascade;
+drop table if exists case_studies_content           cascade;
+drop table if exists services                       cascade;
+drop table if exists stages                         cascade;
+drop table if exists stats                          cascade;
+drop table if exists members                        cascade;
+drop table if exists "0_global"                     cascade;
+drop table if exists "1_home"                       cascade;
+drop table if exists "1_home_services"              cascade;
+drop table if exists "1_home_stages"                cascade;
+drop table if exists "1_home_stats"                 cascade;
+drop table if exists "2_collective"                 cascade;
+drop table if exists "2_collective_members"         cascade;
+drop table if exists "2_collective_companies"       cascade;
+drop table if exists "3_capabilities"               cascade;
+drop table if exists "3_capabilities_sections"      cascade;
+drop table if exists "3_capabilities_section_items" cascade;
+drop table if exists "4_case_studies"               cascade;
+drop table if exists "4_case_studies_items"         cascade;
+drop table if exists "4_case_studies_item_stats"    cascade;
+
+-- ════════════════════════════════════════════════════════════════════════════
 -- 0 · GLOBAL  (texty zdieľané naprieč stránkami)
 -- ════════════════════════════════════════════════════════════════════════════
 
