@@ -13,7 +13,6 @@ const NAV_LINKS = [
   { label: "Case Studies", href: "/case-studies" },
   { label: "Collective", href: "/collective" },
   { label: "Capabilities", href: "/capabilities" },
-  { label: "Process", href: "/process-insights" },
 ];
 
 type Props = { content: SiteContent };

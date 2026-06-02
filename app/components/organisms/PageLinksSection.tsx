@@ -8,7 +8,6 @@ const LINKS = [
   { label: "Collective", href: "/collective" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Capabilities", href: "/capabilities" },
-  { label: "Process", href: "/process-insights" },
 ];
 
 export function PageLinksSection() {
