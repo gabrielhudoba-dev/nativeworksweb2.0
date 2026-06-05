@@ -28,7 +28,8 @@ function GalleryNavPreview() {
   return (
     <GalleryNav
       count={COUNT}
-      active={active}
+      firstVisible={active}
+      visibleCount={1}
       onPrev={() => setActive(i => (i - 1 + COUNT) % COUNT)}
       onNext={() => setActive(i => (i + 1) % COUNT)}
       onDotClick={setActive}

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { Badge, Heading, Icon, Text } from "@/app/components/atoms";
 import { ServiceCard } from "@/app/components/molecules/ServiceCard";
+import { Slider } from "@/app/components/molecules/Slider";
+import { useSliderSection } from "@/app/hooks/useSliderSection";
+import type { SiteContent, Service } from "@/lib/content";
 
 function handleLetStart(e: React.MouseEvent, card: { name: string; detail: string }) {
   e.stopPropagation();
@@ -13,12 +16,11 @@ function handleLetStart(e: React.MouseEvent, card: { name: string; detail: strin
   window.location.href = `mailto:hello@nativeworks.com?subject=${subject}&body=${body}`;
 }
 
-import type { SiteContent, Service } from "@/lib/content";
-
 type Props = { content: SiteContent; services: Service[] };
 
 export function ServicesSection({ content, services }: Props) {
   const [activeCard, setActiveCard] = useState(0);
+  const { sliderRef, containerRef, onViewChange } = useSliderSection("services-slider", services.length);
 
   const sprintFeatures = (
     <>
@@ -59,8 +61,15 @@ export function ServicesSection({ content, services }: Props) {
       <Text variant="p2" className="mb-s6 sm:mb-s12 max-w-[800px]">
         {content.services_desc ?? "We work closely in to your product focusing on specific problem."}
       </Text>
-      <div className="overflow-x-auto -mx-[var(--gutter)] py-s3 -my-s3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="grid grid-flow-col auto-cols-[300px] sm:auto-cols-[320px] lg:grid-flow-row lg:grid-cols-3 lg:auto-cols-auto gap-s1 pl-[var(--gutter)] [&>*:last-child]:mr-[var(--gutter)] snap-x snap-mandatory lg:snap-none lg:[&>*:last-child]:mr-0">
+
+      {/* py-s3 -my-s3 gives the active card's 2px ring room before the scroll container clips it */}
+      <div ref={containerRef}>
+        <Slider
+          ref={sliderRef}
+          cols={3}
+          containerClassName="py-s3 -my-s3"
+          onViewChange={onViewChange}
+        >
           {services.map((card, i) => (
             <ServiceCard
               key={card.title}
@@ -74,7 +83,7 @@ export function ServicesSection({ content, services }: Props) {
               expandedContent={i === 0 ? sprintFeatures : undefined}
             />
           ))}
-        </div>
+        </Slider>
       </div>
     </section>
   );

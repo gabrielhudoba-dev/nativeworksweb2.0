@@ -5,29 +5,37 @@ import { IconButton } from "@/app/components/atoms/IconButton";
 
 type Props = {
   count: number;
-  active: number;
+  firstVisible: number;
+  visibleCount: number;
   onPrev: () => void;
   onNext: () => void;
   onDotClick: (index: number) => void;
+  /** "dots" = all indicators are circles; "pill" = active indicator is a wider bar. Default: "dots" */
+  variant?: "dots" | "pill";
 };
 
-export function GalleryNav({ count, active, onPrev, onNext, onDotClick }: Props) {
+export function GalleryNav({ count, firstVisible, visibleCount, onPrev, onNext, onDotClick, variant = "dots" }: Props) {
   return (
     <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
       <div className="flex items-center justify-between px-s3 h-s7 w-pill bg-[#D9D9D9]/20">
         <IconButton icon="chevron-left" label="Predchádzajúci" onClick={onPrev} />
         <div className="flex items-center justify-center gap-s1 flex-1 mx-s1 h-s1">
-          {Array.from({ length: count }).map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={`Go to slide ${i + 1}`}
-              onClick={() => onDotClick(i)}
-              className={`h-s1 rounded-pill transition-[width,background-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer shrink-0 ${
-                active === i ? "bg-prim w-s11" : "bg-prim/20 w-s1"
-              }`}
-            />
-          ))}
+          {Array.from({ length: count }).map((_, i) => {
+            const active = i >= firstVisible && i < firstVisible + visibleCount;
+            return (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Go to slide ${i + 1}`}
+                onClick={() => onDotClick(i)}
+                className={`h-s1 rounded-full shrink-0 transition-[width,background-color] duration-300 cursor-pointer ${
+                  active
+                    ? (variant === "pill" ? "w-s4 bg-prim" : "w-s1 bg-prim")
+                    : "w-s1 bg-prim/20"
+                }`}
+              />
+            );
+          })}
         </div>
         <IconButton icon="chevron-right" label="Nasledujúci" onClick={onNext} />
       </div>

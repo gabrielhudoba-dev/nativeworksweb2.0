@@ -8,3 +8,6 @@ export { ServiceCard } from "./ServiceCard";
 export { SocialLink, SOCIAL_ICONS } from "./SocialLink";
 export type { SocialPlatform } from "./SocialLink";
 export { StatColumn } from "./StatColumn";
+export { StatsSlider } from "./StatsSlider";
+export { DotsNav } from "./DotsNav";
+export { Slider } from "./Slider";
