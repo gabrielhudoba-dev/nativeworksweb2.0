@@ -53,16 +53,6 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
           {desc}
         </Text>
       </div>
-      {features && features.length > 0 && (
-        <div className="flex flex-col py-[12px] pl-s2 pr-s2">
-          {features.map((feat, i) => (
-            <div key={feat}>
-              {i > 0 && <div className="h-px bg-prim/20 my-s3" />}
-              <Text variant="h5" as="p">{feat}</Text>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
