@@ -25,7 +25,7 @@ function LogoCycler({ logos }: { logos: string[] }) {
       setTimeout(() => {
         setCycleIdx((i) => (i + 1) % cycling.length);
         setFadeIn(true);
-      }, 400);
+      }, 300);
     }, 10000);
     return () => clearInterval(id);
   }, [cycling.length]);
@@ -41,7 +41,7 @@ function LogoCycler({ logos }: { logos: string[] }) {
           src={cycling[cycleIdx]}
           alt=""
           className="h-s4 w-auto grayscale shrink-0"
-          style={{ opacity: fadeIn ? 0.2 : 0, transition: "opacity 0.4s ease" }}
+          style={{ opacity: fadeIn ? 0.2 : 0, transition: "opacity var(--duration-base) var(--ease-system)" }}
         />
       )}
     </div>

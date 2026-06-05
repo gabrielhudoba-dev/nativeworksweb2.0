@@ -40,7 +40,7 @@ export function Navigation({ content }: Props) {
       <div
         className={[
           "fixed inset-0 z-40 bg-white overflow-y-auto",
-          "transition-[opacity,transform] duration-500 ease-out",
+          "transition-[opacity,transform] duration-300 ease-system",
           open
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 translate-y-3 sm:-translate-y-3 pointer-events-none",
@@ -59,7 +59,7 @@ export function Navigation({ content }: Props) {
               return (
                 <li key={href} className="relative group">
                   <div className={[
-                    "absolute top-[-8px] bottom-[-8px] inset-x-s2 rounded-lg bg-brand/10 transition-opacity duration-200",
+                    "absolute top-[-8px] bottom-[-8px] inset-x-s2 rounded-lg bg-brand/10 transition-opacity duration-150",
                     active ? "opacity-100" : "opacity-0 group-hover:opacity-100",
                   ].join(" ")} />
                   <div className="max-w-page mx-auto">

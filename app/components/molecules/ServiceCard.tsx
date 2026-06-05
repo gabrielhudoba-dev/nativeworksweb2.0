@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Text, Heading, TextLink } from "@/app/components/atoms";
+import { Text, Heading } from "@/app/components/atoms";
 import { Button } from "./Button";
-import { useSquircle } from "@/app/hooks/useSquircle";
 
 type Props = {
   title: string;
@@ -13,59 +12,57 @@ type Props = {
   active: boolean;
   onClick: () => void;
   onLetStart: (e: React.MouseEvent) => void;
-  expandedContent?: React.ReactNode;
+  features?: string[];
 };
 
-export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, expandedContent }: Props) {
+export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, features }: Props) {
   const [expanded, setExpanded] = useState(false);
-  const { ref: outerRef, style: outerStyle } = useSquircle(23, 0.6);
-  const { ref: innerRef, style: innerStyle } = useSquircle(21, 0.6);
 
   return (
-    <div
-      ref={outerRef}
-      style={{
-        ...outerStyle,
-        padding: "2px",
-        margin: "-2px 0", /* cancel the 2px ring from vertical flow so inner content stays on the 24px grid */
-        background: active ? "var(--color-prim)" : "transparent",
-        transition: "background 350ms cubic-bezier(0.16, 1, 0.3, 1)",
-      }}
-      className="cursor-pointer"
-      onClick={onClick}
-    >
-      <div
-        ref={innerRef}
-        style={innerStyle}
-        className="grain bg-surface flex flex-col justify-between pt-s6 pb-s6 px-s4 min-h-[528px]"
-      >
-        <div className="flex flex-col gap-s3">
-          <Heading variant="h3">{title}</Heading>
-          <Text variant="p2" className="-mt-s3">{desc}</Text>
-          <TextLink
-            onClick={(e) => { if (expandedContent) { e.stopPropagation(); setExpanded(v => !v); } else e.stopPropagation(); }}
-            className={expandedContent ? "cursor-pointer" : "cursor-default"}
-          >
-            {expanded && expandedContent ? "Read less" : "Read more"}
-          </TextLink>
+    <div className="flex flex-col h-full cursor-pointer" onClick={onClick}>
+      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[370px] pt-s6 pb-s4 px-s2">
+        <div className="px-[8px]">
+          <Heading variant="h4" className="text-[24px] leading-[24px]">
+            {title.split(' ').slice(0, -1).join(' ')}<br />{title.split(' ').at(-1)}™
+          </Heading>
         </div>
-
-        {expanded && expandedContent && (
-          <div className="flex flex-col gap-s3 py-s6 border-t border-prim/10 opacity-60">
-            {expandedContent}
-          </div>
-        )}
-
-        <div className="flex flex-col gap-s3">
-          <div className="flex items-center justify-between px-[2px]">
+        <div className="flex flex-col gap-0">
+          <div className="flex items-center justify-between px-[8px] pb-s3">
             <Text variant="h5" as="span">{price}</Text>
             <Text variant="h5" as="span">{duration}</Text>
           </div>
-          <Button variant={active ? "primary" : "secondary"} rightIcon="arrow-right" className="w-full" onClick={onLetStart}>
+          <Button
+            variant={active ? "dark" : "secondary"}
+            size="lg"
+            rightIcon="arrow-right"
+            className="w-full"
+            onClick={active ? onLetStart : (e) => { e.stopPropagation(); onClick(); }}
+          >
             {"Let's Start"}
           </Button>
         </div>
       </div>
+      <div
+        className="flex-1 flex flex-col"
+        onClick={(e) => { e.stopPropagation(); setExpanded(v => !v); }}
+      >
+        <Text
+          variant="p2"
+          className={`pl-s2 pr-s2 mt-s5 mb-s6 cursor-pointer ${expanded ? "" : "line-clamp-4"}`}
+        >
+          {desc}
+        </Text>
+      </div>
+      {features && features.length > 0 && (
+        <div className="flex flex-col py-[12px] pl-s2 pr-s2">
+          {features.map((feat, i) => (
+            <div key={feat}>
+              {i > 0 && <div className="h-px bg-prim/20 my-s3" />}
+              <Text variant="h5" as="p">{feat}</Text>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

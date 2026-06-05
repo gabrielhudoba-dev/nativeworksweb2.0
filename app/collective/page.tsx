@@ -135,9 +135,11 @@ export default async function CollectivePage() {
       {/* Hero */}
       <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[216px] pb-s6 max-w-page mx-auto grid grid-cols-1 lg:grid-cols-3 gap-x-s12 gap-y-s3">
         <Heading variant="h2">{content.hero_title ?? "Collective"}</Heading>
-        <Text variant="p1" className="text-prim lg:col-start-2 lg:col-span-2 pb-s3">
-          {content.hero_desc ?? "A curated group of product specialists."}
-        </Text>
+        <div className="lg:col-start-2 lg:col-span-2 pb-s3">
+          <Text variant="p1" className="text-prim">
+            {content.hero_desc ?? "A curated group of product specialists."}
+          </Text>
+        </div>
       </section>
 
       {/* Members + team photo
@@ -172,7 +174,7 @@ export default async function CollectivePage() {
       <section className="px-page max-w-page mx-auto border-t border-prim/10 pt-s9 pb-s12 lg:pb-[288px]">
         <Heading variant="h3">{content.companies_title ?? "Member companies"}</Heading>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-s4 sm:gap-s6 mt-s9">
-          {companies.map((c) => (
+          {companies.map((c, i) => (
             <div key={c.name} className="aspect-[3/2] overflow-hidden rounded-sm">
               {c.logo ? (
                 <CompanyLogo src={c.logo} alt={c.name} dark={c.dark} />

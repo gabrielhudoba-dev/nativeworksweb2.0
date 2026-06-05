@@ -1,4 +1,4 @@
-import { createElement, HTMLAttributes } from "react";
+import { createElement, forwardRef, HTMLAttributes } from "react";
 
 type HeadingVariant = "h2" | "h3" | "h4" | "numb1" | "page";
 
@@ -26,11 +26,14 @@ type Props = HTMLAttributes<HTMLHeadingElement> & {
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "div" | "span";
 };
 
-export function Heading({ variant, as, className = "", ...rest }: Props) {
-  const Tag = as ?? defaultTagFor[variant];
-  const inlineFix = as === "span" ? "inline-block" : "";
-  return createElement(Tag, {
-    ...rest,
-    className: `${variantClass[variant]} ${inlineFix} ${className}`.trim().replace(/\s+/g, " "),
-  });
-}
+export const Heading = forwardRef<HTMLHeadingElement, Props>(
+  function Heading({ variant, as, className = "", ...rest }, ref) {
+    const Tag = as ?? defaultTagFor[variant];
+    const inlineFix = as === "span" ? "inline-block" : "";
+    return createElement(Tag, {
+      ...rest,
+      ref,
+      className: `${variantClass[variant]} ${inlineFix} ${className}`.trim().replace(/\s+/g, " "),
+    });
+  }
+);

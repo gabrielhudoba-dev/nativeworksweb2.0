@@ -1,3 +1,5 @@
+"use client";
+
 import { Heading } from "@/app/components/atoms";
 import { StageSlider } from "./StageSlider";
 import type { SiteContent, Stage } from "@/lib/content";

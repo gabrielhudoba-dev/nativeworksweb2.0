@@ -45,21 +45,22 @@ export default async function CaseStudiesPage() {
           {items.map((item, i) => {
             if (item.type === "case_study") {
               return (
-                <CaseStudyCard
-                  key={item.id}
-                  variant={item.variant as "left" | "right"}
-                  image={{ src: item.image_src!, alt: item.image_alt! }}
-                  title={renderTitle(item.title!)}
-                  description={item.description!}
-                  author={{ name: item.author_name!, role: item.author_role!, avatar: item.author_avatar! }}
-                />
+                <div key={item.id} className="col-span-1 sm:col-span-2">
+                  <CaseStudyCard
+                    variant={item.variant as "left" | "right"}
+                    image={{ src: item.image_src!, alt: item.image_alt! }}
+                    title={renderTitle(item.title!)}
+                    description={item.description!}
+                    author={{ name: item.author_name!, role: item.author_role!, avatar: item.author_avatar! }}
+                  />
+                </div>
               );
             }
             if (item.type === "stats") {
-              return <StatsStrip key={item.id} stats={item.stats} />;
+              return <div key={item.id} className="col-span-1 sm:col-span-2"><StatsStrip stats={item.stats} /></div>;
             }
             if (item.type === "image") {
-              return <ImageBlock key={item.id} src={item.image_src!} alt={item.image_alt!} variant="fill" className="col-span-1 sm:col-span-2 h-[360px]" />;
+              return <div key={item.id} className="col-span-1 sm:col-span-2"><ImageBlock src={item.image_src!} alt={item.image_alt!} variant="fill" className="h-[360px]" /></div>;
             }
             const prevItem = i > 0 ? items[i - 1] : null;
             return (

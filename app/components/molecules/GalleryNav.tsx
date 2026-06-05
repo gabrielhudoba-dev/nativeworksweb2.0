@@ -23,7 +23,7 @@ export function GalleryNav({ count, active, onPrev, onNext, onDotClick }: Props)
               type="button"
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => onDotClick(i)}
-              className={`h-s1 rounded-pill transition-[width,background-color] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer shrink-0 ${
+              className={`h-s1 rounded-pill transition-[width,background-color] duration-300 ease-system cursor-pointer shrink-0 ${
                 active === i ? "bg-prim w-s11" : "bg-prim/20 w-s1"
               }`}
             />

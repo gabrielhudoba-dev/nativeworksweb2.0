@@ -50,24 +50,30 @@ export function HeroSection({ content }: Props) {
     return () => clearInterval(id);
   }, [paused]);
 
+
+  const controlCls = controlVisible && !navOpen
+    ? "opacity-100 translate-y-0 pointer-events-auto"
+    : "opacity-0 translate-y-2 sm:-translate-y-2 pointer-events-none";
+
   return (
     <section className="px-page pb-s6 sm:pb-s12 max-w-page mx-auto">
-      {/* Gallery slide controls — fixed above bottom nav on mobile, below top nav on sm+ */}
+      {/* Gallery slide controls */}
       <div className="fixed bottom-[82px] sm:bottom-auto sm:top-[82px] left-0 right-0 z-50 flex justify-center">
-        <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${controlVisible && !navOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-2 sm:-translate-y-2 pointer-events-none"}`}>
+        <div className={`transition-all duration-300 ease-system ${controlCls}`}>
           <GalleryNav
             count={SLIDES}
             active={slide}
-            onPrev={() => setSlide(s => (s - 1 + SLIDES) % SLIDES)}
-            onNext={() => setSlide(s => (s + 1) % SLIDES)}
+            onPrev={() => setSlide((s) => (s - 1 + SLIDES) % SLIDES)}
+            onNext={() => setSlide((s) => (s + 1) % SLIDES)}
             onDotClick={setSlide}
           />
         </div>
       </div>
 
-      {/* Headline — flows on the 24px baseline grid (no vh, no vertical
-          centering; both break the rhythm). Spacing is all multiples of 24. */}
-      <div className="pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
+      {/* Headline */}
+      <div
+        className="hero-in pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center"
+      >
         <Heading variant="h2" className="max-w-[672px]">
           {content.hero_title ?? "New era of digital product design."}
         </Heading>
@@ -85,43 +91,59 @@ export function HeroSection({ content }: Props) {
           )}
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between pt-s6 sm:pt-s18 pb-s6 gap-s4 sm:gap-0">
+
+      {/* Tagline + refer */}
+      <div
+        className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between pt-s6 sm:pt-s18 pb-s6 gap-s4 sm:gap-0"
+        style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
+      >
         <Text variant="p1" className="max-w-[336px] text-prim text-left">
           {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
         </Text>
-        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar={content.hero_refer_avatar ?? "/images/martin.png"} className="hidden sm:flex sm:pr-s1" />
+        <Refer
+          name={content.hero_refer_name ?? "Martin Mroc"}
+          role={content.hero_refer_role ?? "CDO, Vibe Studio"}
+          avatar={content.hero_refer_avatar ?? "/images/martin.png"}
+          className="hidden sm:flex sm:pr-s1"
+        />
       </div>
 
-      {/* Gallery — 640px */}
-      <div ref={gallerySquircleRef} style={gallerySquircleStyle} className="w-full aspect-[9/16] sm:aspect-auto sm:h-[480px] lg:h-[648px]">
-      <div
-        ref={galleryRef}
-        className="w-full h-full overflow-hidden bg-surface relative"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
-        aria-roledescription="carousel"
-        aria-label="Ukážky projektov"
-      >
-        {GALLERY_IMAGES.map((img, i) => (
+      {/* Gallery */}
+      <div className="hero-in" style={{ "--hero-delay": "0.35s" } as React.CSSProperties}>
+        <div ref={gallerySquircleRef} style={gallerySquircleStyle} className="w-full aspect-[9/16] sm:aspect-auto sm:h-[480px] lg:h-[648px]">
           <div
-            key={i}
-            aria-roledescription="slide"
-            aria-label={`${i + 1} z ${SLIDES}`}
-            aria-hidden={i !== slide}
-            className="absolute inset-0 transition-opacity duration-700 ease-in-out"
-            style={{ opacity: i === slide ? 1 : 0 }}
+            ref={galleryRef}
+            className="w-full h-full overflow-hidden bg-surface relative"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={() => setPaused(false)}
+            aria-roledescription="carousel"
+            aria-label="Ukážky projektov"
           >
-            <Image src={img.src} alt={img.alt} fill className="object-cover" priority={i === 0} />
+            {GALLERY_IMAGES.map((img, i) => (
+              <div
+                key={i}
+                aria-roledescription="slide"
+                aria-label={`${i + 1} z ${SLIDES}`}
+                aria-hidden={i !== slide}
+                className="absolute inset-0 transition-opacity duration-500 ease-system"
+                style={{ opacity: i === slide ? 1 : 0 }}
+              >
+                <Image src={img.src} alt={img.alt} fill className="object-cover" priority={i === 0} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
       </div>
 
-      {/* Refer — mobile only, below gallery */}
+      {/* Refer — mobile only */}
       <div className="sm:hidden pt-s3">
-        <Refer name={content.hero_refer_name ?? "Martin Mroc"} role={content.hero_refer_role ?? "CDO, Vibe Studio"} avatar={content.hero_refer_avatar ?? "/images/martin.png"} />
+        <Refer
+          name={content.hero_refer_name ?? "Martin Mroc"}
+          role={content.hero_refer_role ?? "CDO, Vibe Studio"}
+          avatar={content.hero_refer_avatar ?? "/images/martin.png"}
+        />
       </div>
     </section>
   );

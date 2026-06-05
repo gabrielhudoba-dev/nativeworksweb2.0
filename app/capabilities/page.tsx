@@ -20,10 +20,7 @@ export default async function CapabilitiesPage() {
       {/* Sections */}
       <section className="px-page max-w-page mx-auto pb-s12 lg:pb-[192px]">
         {sections.map((section) => (
-          <div
-            key={section.id}
-            className="flex flex-col lg:flex-row gap-s3 lg:items-baseline border-t first:border-t-0 border-prim/10 py-s6 lg:py-s9"
-          >
+          <div key={section.id} className="flex flex-col lg:flex-row gap-s3 lg:items-baseline border-t first:border-t-0 border-prim/10 py-s6 lg:py-s9">
             <div className="w-full lg:w-[400px] lg:shrink-0">
               <p className="font-display font-medium text-[24px] sm:text-[28px] lg:text-[32px] leading-[1] tracking-[-0.02em] text-prim">{section.title}</p>
             </div>

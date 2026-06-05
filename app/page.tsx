@@ -19,9 +19,9 @@ export default async function Home() {
   return (
     <main className="bg-white">
       <HeroSection content={content} />
-      <div className="scroll-reveal"><StatsSection content={content} stats={stats} /></div>
-      <div className="scroll-reveal"><InterveningSection content={content} stages={stages} /></div>
-      <div className="scroll-reveal"><ServicesSection content={content} services={services} /></div>
+      <StatsSection content={content} stats={stats} />
+      <InterveningSection content={content} stages={stages} />
+      <ServicesSection content={content} services={services} />
     </main>
   );
 }

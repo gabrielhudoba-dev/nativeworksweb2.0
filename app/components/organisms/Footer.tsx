@@ -22,7 +22,7 @@ export function Footer({ content }: Props) {
       <div className="px-s4 sm:px-s7 pt-s6 pb-s6">
 
         {/* Top row — logo + social */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-s6 gap-s4 sm:gap-0">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-s6 gap-s3 sm:gap-0">
           <div className="flex flex-col gap-s3">
             <Link href="/" aria-label="Native Works">
               <Logo size="md" className="h-s6 w-auto" />
@@ -38,18 +38,21 @@ export function Footer({ content }: Props) {
           </div>
         </div>
 
+        {/* Divider */}
+        <hr className="border-t border-prim/50 mt-s6" />
+
         {/* Bottom row */}
-        <div className="pt-s6 sm:pt-s9 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-s2 sm:gap-0">
+        <div className="pt-s3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-s2 sm:gap-0">
           <div className="flex items-center gap-s4">
-            <Link href="/terms" className="font-body font-normal text-l3 text-prim translate-y-[5.5px] hover:text-prim/60 transition-colors">
+            <Link href="/terms" className="font-body font-normal text-p3 text-prim translate-y-[5.5px] hover:text-prim/60 transition-colors">
               Terms of service
             </Link>
-            <Link href="/privacy" className="font-body font-normal text-l3 text-prim translate-y-[5.5px] hover:text-prim/60 transition-colors">
+            <Link href="/privacy" className="font-body font-normal text-p3 text-prim translate-y-[5.5px] hover:text-prim/60 transition-colors">
               Privacy policy
             </Link>
           </div>
-          <Text variant="l3">
-            © 2025–{new Date().getFullYear()} Native Works
+          <Text variant="p3">
+            © {new Date().getFullYear()}–3025 Native Works
           </Text>
         </div>
 

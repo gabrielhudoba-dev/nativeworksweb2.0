@@ -16,7 +16,7 @@ export function CaseStudyCard({ variant, image, title, description, author }: Ca
   const contentEl = <PrimTextBlock title={title} description={description} author={author} />;
 
   return (
-    <div className="col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-s12 gap-y-s6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s12 gap-y-s6">
       {variant === "left" ? <>{contentEl}{imageEl}</> : <>{imageEl}{contentEl}</>}
     </div>
   );

@@ -7,7 +7,7 @@ type TextVariant = "h5" | "p0" | "p1" | "p2" | "p3" | "l1" | "l2" | "l3" | "badg
 // off the line). Opt a single element out with className="off-rhythm".
 // l3 / badge stay off-grid on purpose (16px lh, UI chips, not reading flow).
 const variantClass: Record<TextVariant, string> = {
-  h5:    "font-body font-normal text-h5 text-prim translate-y-[4px]",
+  h5:    "font-body font-medium text-h5 text-prim translate-y-[4px]",
   p0:    "font-body font-normal text-p0 text-prim translate-y-[13px]",
   p1:    "font-body font-normal text-p1 text-prim translate-y-[4px]",
   p2:    "font-body font-normal text-p2 text-prim translate-y-[4px]",
