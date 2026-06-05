@@ -29,7 +29,7 @@ export function ServicesSection({ content, services }: Props) {
   ];
 
   return (
-    <section className="pt-s5 sm:pt-s9 pb-s6 sm:pb-s12 px-page max-w-page mx-auto">
+    <section className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>

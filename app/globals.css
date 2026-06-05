@@ -269,6 +269,18 @@ button, [role="button"], a {
   padding-right: var(--gutter);
 }
 
+/* nav pill: pt-s3(24)+h-s8(64)+2gap = 90px mobile; pt-s2(16)+h-s8(64)+2gap = 82px desktop */
+:root {
+  --gallery-nav-top: 82px;
+  --hero-section-pt: 0px;
+}
+@media (max-width: 639px) {
+  :root {
+    --gallery-nav-top: 90px;
+    --hero-section-pt: 150px;
+  }
+}
+
 /* ─── Responsive typography tokens ───────────────────────────────────────
    Override the @theme values at smaller viewports. Tailwind utilities (e.g.
    text-h2) use var(--text-h2) so they respond automatically.             */

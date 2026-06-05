@@ -51,16 +51,16 @@ export function HeroSection({ content }: Props) {
   }, [paused]);
 
   return (
-    <section className="px-page pb-s6 sm:pb-s12 max-w-page mx-auto">
-      <div className="hero-in pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
+    <section className="px-page pb-s9 sm:pb-s12 max-w-page mx-auto" style={{ paddingTop: "var(--hero-section-pt)" }}>
+      <div className="hero-in pt-s18 sm:pt-s15 lg:pt-s18 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
         <Heading variant="h1" className="max-w-[800px]">
           {content.hero_title ?? "New era of digital product design."}
         </Heading>
-        <div className="max-w-[544px]">
+        <div className="max-w-[544px] pb-[80px]">
           <Text
             variant="p2"
             className={`text-prim sm:!line-clamp-none cursor-pointer select-none transition-all duration-300 ${expanded ? "" : "line-clamp-3"}`}
-            onClick={() => setExpanded(true)}
+            onClick={() => setExpanded((v) => !v)}
           >
             {content.hero_desc ?? "A curated group of product specialists working on your mobile app or web system."}
           </Text>
@@ -68,7 +68,7 @@ export function HeroSection({ content }: Props) {
       </div>
 
       <div
-        className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between pt-s6 sm:pt-s18 pb-s6 gap-s4 sm:gap-0"
+        className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between sm:pt-s18 pb-[24px] gap-s4 sm:gap-0"
         style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
       >
         <Text variant="p1" className="max-w-[336px] text-prim text-left">

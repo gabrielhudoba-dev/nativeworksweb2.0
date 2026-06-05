@@ -12,7 +12,7 @@ export function InterveningSection({ content, stages }: Props) {
 
   return (
     <section>
-      <div className="pt-s5 sm:pt-s9 pb-s6 sm:pb-s12 px-page max-w-page mx-auto">
+      <div className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
         <Heading variant="h2" className="mb-s6 sm:mb-s12">
           {(content.intervening_title ?? "Intervening\nat any stage.").split("\n").map((line, i, arr) => (
             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
