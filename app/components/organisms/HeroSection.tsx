@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Heading, Text } from "@/app/components/atoms";
-import { GalleryNav, Refer } from "@/app/components/molecules";
+import { Refer } from "@/app/components/molecules";
 import { useNavOpen } from "./NavigationProvider";
 import { useSquircle } from "@/app/hooks/useSquircle";
+import { useRegisterSliderNav } from "@/app/hooks/useRegisterSliderNav";
 import type { SiteContent } from "@/lib/content";
 
 const SLIDES = 4;
@@ -21,27 +22,28 @@ type Props = { content: SiteContent };
 
 export function HeroSection({ content }: Props) {
   const [slide, setSlide] = useState(0);
-  const [controlVisible, setControlVisible] = useState(false);
   const [paused, setPaused] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const navOpen = useNavOpen();
   const galleryRef = useRef<HTMLDivElement>(null);
   const { ref: gallerySquircleRef, style: gallerySquircleStyle } = useSquircle(21, 0.6);
 
-  useEffect(() => {
-    const el = galleryRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const ratio = entries[0].intersectionRatio;
-        if (ratio >= 0.8) setControlVisible(true);
-        else if (ratio < 0.6) setControlVisible(false);
-      },
-      { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const onPrev = useCallback(() => setSlide((s) => (s - 1 + SLIDES) % SLIDES), []);
+  const onNext = useCallback(() => setSlide((s) => (s + 1) % SLIDES), []);
+  const onDotClick = useCallback((i: number) => setSlide(i), []);
+
+  useRegisterSliderNav({
+    id: "hero-gallery",
+    count: SLIDES,
+    firstVisible: slide,
+    visibleCount: 1,
+    onPrev,
+    onNext,
+    onDotClick,
+    containerRef: galleryRef,
+    showThreshold: 0.8,
+    hideThreshold: 0.6,
+  });
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -50,30 +52,9 @@ export function HeroSection({ content }: Props) {
     return () => clearInterval(id);
   }, [paused]);
 
-
-  const controlCls = controlVisible && !navOpen
-    ? "opacity-100 translate-y-0 pointer-events-auto"
-    : "opacity-0 translate-y-2 sm:-translate-y-2 pointer-events-none";
-
   return (
     <section className="px-page pb-s6 sm:pb-s12 max-w-page mx-auto">
-      {/* Gallery slide controls */}
-      <div className="fixed bottom-[82px] sm:bottom-auto sm:top-[82px] left-0 right-0 z-50 flex justify-center">
-        <div className={`transition-all duration-300 ease-system ${controlCls}`}>
-          <GalleryNav
-            count={SLIDES}
-            active={slide}
-            onPrev={() => setSlide((s) => (s - 1 + SLIDES) % SLIDES)}
-            onNext={() => setSlide((s) => (s + 1) % SLIDES)}
-            onDotClick={setSlide}
-          />
-        </div>
-      </div>
-
-      {/* Headline */}
-      <div
-        className="hero-in pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center"
-      >
+      <div className="hero-in pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
         <Heading variant="h2" className="max-w-[672px]">
           {content.hero_title ?? "New era of digital product design."}
         </Heading>
@@ -92,7 +73,6 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
-      {/* Tagline + refer */}
       <div
         className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between pt-s6 sm:pt-s18 pb-s6 gap-s4 sm:gap-0"
         style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
@@ -108,7 +88,6 @@ export function HeroSection({ content }: Props) {
         />
       </div>
 
-      {/* Gallery */}
       <div className="hero-in" style={{ "--hero-delay": "0.35s" } as React.CSSProperties}>
         <div ref={gallerySquircleRef} style={gallerySquircleStyle} className="w-full aspect-[9/16] sm:aspect-auto sm:h-[480px] lg:h-[648px]">
           <div
@@ -137,7 +116,6 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
-      {/* Refer — mobile only */}
       <div className="sm:hidden pt-s3">
         <Refer
           name={content.hero_refer_name ?? "Martin Mroc"}

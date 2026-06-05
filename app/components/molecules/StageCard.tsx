@@ -15,7 +15,7 @@ export function StageCard({ title, desc }: Props) {
     <div
       ref={ref}
       style={style}
-      className="grain bg-surface flex flex-col justify-end gap-s3 pt-s3 pb-s6 px-s3 w-pill lg:w-auto h-[288px] snap-start shrink-0 lg:shrink"
+      className="grain bg-surface flex flex-col justify-end gap-s3 pt-s3 pb-s6 px-s3 w-full h-[288px]"
     >
       <Heading variant="h4" className="translate-y-[12.5px]">{title}</Heading>
       <Text variant="p2">{desc}</Text>

@@ -2,11 +2,14 @@
 
 import { Heading } from "@/app/components/atoms";
 import { StageSlider } from "./StageSlider";
+import { useSliderSection } from "@/app/hooks/useSliderSection";
 import type { SiteContent, Stage } from "@/lib/content";
 
 type Props = { content: SiteContent; stages: Stage[] };
 
 export function InterveningSection({ content, stages }: Props) {
+  const { sliderRef, containerRef, onViewChange } = useSliderSection("stage-slider", stages.length);
+
   return (
     <section>
       <div className="pt-s5 sm:pt-s9 pb-s6 sm:pb-s12 px-page max-w-page mx-auto">
@@ -15,7 +18,9 @@ export function InterveningSection({ content, stages }: Props) {
             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
           ))}
         </Heading>
-        <StageSlider stages={stages} />
+        <div ref={containerRef}>
+          <StageSlider stages={stages} sliderRef={sliderRef} onViewChange={onViewChange} />
+        </div>
       </div>
     </section>
   );

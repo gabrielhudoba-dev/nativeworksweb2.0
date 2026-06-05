@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
 import { Navigation, NavigationProvider, PageLinksSection } from "@/app/components/organisms";
+import { GlobalGalleryNav } from "@/app/components/organisms/GlobalGalleryNav";
 import { ConditionalFooter } from "@/app/components/ConditionalFooter";
 import { RhythmDev } from "@/app/components/RhythmDev";
+import { SliderNavProvider } from "@/app/context/SliderNavContext";
 import { getGlobalContent } from "@/lib/content";
 
 export const revalidate = 60;
@@ -24,11 +26,14 @@ export default async function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col font-body">
         <NavigationProvider>
-          <Navigation content={globalContent} />
-          {children}
-          <PageLinksSection />
-          <ConditionalFooter content={globalContent} />
-          <RhythmDev />
+          <SliderNavProvider>
+            <Navigation content={globalContent} />
+            <GlobalGalleryNav />
+            {children}
+            <PageLinksSection />
+            <ConditionalFooter content={globalContent} />
+            <RhythmDev />
+          </SliderNavProvider>
         </NavigationProvider>
       </body>
     </html>
