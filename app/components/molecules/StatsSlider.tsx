@@ -7,11 +7,12 @@ type Props = {
   stats: Stat[];
   sliderRef?: RefObject<SliderHandle | null>;
   onViewChange?: (view: SliderView) => void;
+  containerClassName?: string;
 };
 
-export function StatsSlider({ stats, sliderRef, onViewChange }: Props) {
+export function StatsSlider({ stats, sliderRef, onViewChange, containerClassName }: Props) {
   return (
-    <Slider ref={sliderRef} cols={3} onViewChange={onViewChange}>
+    <Slider ref={sliderRef} cols={3} onViewChange={onViewChange} containerClassName={containerClassName}>
       {stats.map((s) => (
         <StatColumn
           key={s.id}

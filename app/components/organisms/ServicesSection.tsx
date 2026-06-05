@@ -57,7 +57,7 @@ export function ServicesSection({ content, services }: Props) {
               active={activeCard === i}
               onClick={() => setActiveCard(i)}
               onLetStart={(e) => handleLetStart(e, { name: card.title, detail: `${card.price} / ${card.duration}` })}
-              features={i === 0 ? sprintFeatures : undefined}
+              features={sprintFeatures}
             />
           ))}
         </Slider>

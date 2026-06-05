@@ -26,7 +26,7 @@ export function StatsSection({ content, stats }: Props) {
         </div>
 
         <div ref={containerRef} className="px-page max-w-page mx-auto">
-          <StatsSlider stats={stats} sliderRef={sliderRef} onViewChange={onViewChange} />
+          <StatsSlider stats={stats} sliderRef={sliderRef} onViewChange={onViewChange} containerClassName="py-s3 -my-s3" />
         </div>
       </div>
     </section>

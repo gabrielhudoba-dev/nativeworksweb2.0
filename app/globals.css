@@ -70,6 +70,10 @@
      integer multiple of 24, so every line lands on the 24px baseline grid.
      Body is 16/24 (1.5) — same ratio as a classic vertical-rhythm setup.   */
 
+  --text-h1: 96px;                     /* 4×24 font */
+  --text-h1--line-height: 96px;        /* 4×24 — lh 1.0 */
+  --text-h1--letter-spacing: -0.03em;
+
   --text-h2: 72px;                     /* 3×24 font */
   --text-h2--line-height: 72px;        /* 3×24 — lh 1.0 */
   --text-h2--letter-spacing: -0.02em;
@@ -270,6 +274,8 @@ button, [role="button"], a {
    text-h2) use var(--text-h2) so they respond automatically.             */
 @media (max-width: 1023px) {
   :root {
+    --text-h1: 72px;
+    --text-h1--line-height: 72px;
     --text-h2: 48px;
     --text-h2--line-height: 48px;
     --text-hpage: 40px;
@@ -280,6 +286,8 @@ button, [role="button"], a {
 }
 @media (max-width: 639px) {
   :root {
+    --text-h1: 48px;
+    --text-h1--line-height: 48px;
     --text-h2: 36px;
     --text-h2--line-height: 48px;
     --text-hpage: 28px;

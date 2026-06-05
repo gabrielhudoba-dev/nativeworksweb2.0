@@ -30,7 +30,7 @@ export function GalleryNav({ count, firstVisible, visibleCount, onPrev, onNext, 
                 onClick={() => onDotClick(i)}
                 className={`h-s1 rounded-pill shrink-0 transition-[width,background-color] duration-300 ease-system cursor-pointer ${
                   active
-                    ? (variant === "pill" ? "w-s11 bg-prim" : "w-s1 bg-prim")
+                    ? (variant === "pill" ? "w-s6 bg-prim" : "w-s1 bg-prim")
                     : "w-s1 bg-prim/20"
                 }`}
               />

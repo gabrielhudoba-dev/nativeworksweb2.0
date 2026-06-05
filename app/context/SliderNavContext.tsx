@@ -14,31 +14,51 @@ export type NavState = {
   onDotClick: (i: number) => void;
 };
 
+type SectionEntry = { nav: NavState; ratio: number };
+
 type Ctx = {
   nav: NavState | null;
-  setNav: (id: string, state: NavState | null) => void;
+  setSection: (id: string, entry: SectionEntry | null) => void;
 };
 
-const SliderNavContext = createContext<Ctx>({ nav: null, setNav: () => {} });
+const SliderNavContext = createContext<Ctx>({ nav: null, setSection: () => {} });
 
 export function SliderNavProvider({ children }: { children: React.ReactNode }) {
-  const [nav, setNavState] = useState<NavState | null>(null);
-  const activeId = useRef<string | null>(null);
+  const sectionsRef = useRef<Map<string, SectionEntry>>(new Map());
+  const [nav, setNav] = useState<NavState | null>(null);
 
-  const setNav = useCallback((id: string, state: NavState | null) => {
-    if (state === null) {
-      if (activeId.current === id) {
-        activeId.current = null;
-        setNavState(null);
-      }
-    } else {
-      activeId.current = id;
-      setNavState({ ...state, id });
+  const recompute = useCallback(() => {
+    let best: SectionEntry | null = null;
+    for (const entry of sectionsRef.current.values()) {
+      if (!best || entry.ratio > best.ratio) best = entry;
     }
+    const newNav = best?.nav ?? null;
+    setNav((prev) => {
+      if (
+        prev?.id === newNav?.id &&
+        prev?.firstVisible === newNav?.firstVisible &&
+        prev?.visibleCount === newNav?.visibleCount
+      ) {
+        return prev;
+      }
+      return newNav;
+    });
   }, []);
 
+  const setSection = useCallback(
+    (id: string, entry: SectionEntry | null) => {
+      if (entry === null) {
+        sectionsRef.current.delete(id);
+      } else {
+        sectionsRef.current.set(id, entry);
+      }
+      recompute();
+    },
+    [recompute],
+  );
+
   return (
-    <SliderNavContext.Provider value={{ nav, setNav }}>
+    <SliderNavContext.Provider value={{ nav, setSection }}>
       {children}
     </SliderNavContext.Provider>
   );

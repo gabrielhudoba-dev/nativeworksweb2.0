@@ -3,11 +3,9 @@
 import { useEffect, useRef, RefObject } from "react";
 import { useSliderNav, NavState } from "@/app/context/SliderNavContext";
 
-type Options = NavState & {
+type Options = Omit<NavState, "id"> & {
   id: string;
   containerRef: RefObject<Element | null>;
-  showThreshold?: number;
-  hideThreshold?: number;
 };
 
 export function useRegisterSliderNav({
@@ -19,27 +17,27 @@ export function useRegisterSliderNav({
   onNext,
   onDotClick,
   containerRef,
-  showThreshold = 0.3,
-  hideThreshold = 0.15,
 }: Options) {
-  const { setNav } = useSliderNav();
-  const inView = useRef(false);
+  const { setSection } = useSliderNav();
+  const ratioRef = useRef(0);
   const stateRef = useRef<NavState>({ id, count, firstVisible, visibleCount, onPrev, onNext, onDotClick });
 
   useEffect(() => {
     stateRef.current = { id, count, firstVisible, visibleCount, onPrev, onNext, onDotClick };
   });
 
-  // Push updated state when primitives change while section is in view.
-  // The indicator only makes sense when some cards are off-screen.
+  // Push updated nav state whenever the visible window changes while section is in view.
   useEffect(() => {
-    if (!inView.current) return;
+    if (ratioRef.current <= 0) return;
     if (visibleCount >= count) {
-      setNav(id, null);
+      setSection(id, null);
       return;
     }
-    setNav(id, { id, count, firstVisible, visibleCount, onPrev, onNext, onDotClick });
-  }, [id, count, firstVisible, visibleCount, onPrev, onNext, onDotClick, setNav]);
+    setSection(id, {
+      nav: { id, count, firstVisible, visibleCount, onPrev, onNext, onDotClick },
+      ratio: ratioRef.current,
+    });
+  }, [id, count, firstVisible, visibleCount, onPrev, onNext, onDotClick, setSection]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -50,18 +48,31 @@ export function useRegisterSliderNav({
     const io = new IntersectionObserver(
       ([entry]) => {
         const ratio = entry.intersectionRatio;
-        if (!inView.current && ratio >= showThreshold) {
-          inView.current = true;
-          const s = stateRef.current;
-          if (s.visibleCount >= s.count) {
-            setNav(id, null);
-            return;
-          }
-          setNav(id, { id: s.id, count: s.count, firstVisible: s.firstVisible, visibleCount: s.visibleCount, onPrev: s.onPrev, onNext: s.onNext, onDotClick: s.onDotClick });
-        } else if (inView.current && ratio < hideThreshold) {
-          inView.current = false;
-          setNav(id, null);
+        ratioRef.current = ratio;
+
+        if (ratio <= 0) {
+          setSection(id, null);
+          return;
         }
+
+        const s = stateRef.current;
+        if (s.visibleCount >= s.count) {
+          setSection(id, null);
+          return;
+        }
+
+        setSection(id, {
+          nav: {
+            id: s.id,
+            count: s.count,
+            firstVisible: s.firstVisible,
+            visibleCount: s.visibleCount,
+            onPrev: s.onPrev,
+            onNext: s.onNext,
+            onDotClick: s.onDotClick,
+          },
+          ratio,
+        });
       },
       { threshold: thresholds },
     );
@@ -69,8 +80,8 @@ export function useRegisterSliderNav({
     io.observe(el);
     return () => {
       io.disconnect();
-      inView.current = false;
-      setNav(id, null);
+      ratioRef.current = 0;
+      setSection(id, null);
     };
-  }, [id, containerRef, showThreshold, hideThreshold, setNav]);
+  }, [id, containerRef, setSection]);
 }

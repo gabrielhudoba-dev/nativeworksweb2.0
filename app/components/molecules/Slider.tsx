@@ -97,7 +97,7 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
     <div
       ref={scrollRef}
       style={{ touchAction: "pan-x" }}
-      className={`flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden gap-s1 ${containerClassName}`}
+      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden gap-s1 ${containerClassName}`}
     >
       {Children.map(children, (child) => (
         <div className={`shrink-0 snap-start ${COL_CLASSES[cols]} ${slideClassName}`}>

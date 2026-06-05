@@ -41,8 +41,6 @@ export function HeroSection({ content }: Props) {
     onNext,
     onDotClick,
     containerRef: galleryRef,
-    showThreshold: 0.8,
-    hideThreshold: 0.6,
   });
 
   useEffect(() => {
@@ -55,21 +53,17 @@ export function HeroSection({ content }: Props) {
   return (
     <section className="px-page pb-s6 sm:pb-s12 max-w-page mx-auto">
       <div className="hero-in pt-s6 sm:pt-s15 lg:pt-s18 mt-s3 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
-        <Heading variant="h2" className="max-w-[672px]">
+        <Heading variant="h1" className="max-w-[800px]">
           {content.hero_title ?? "New era of digital product design."}
         </Heading>
         <div className="max-w-[544px]">
-          <Text variant="p2" className={`text-prim ${!expanded ? "line-clamp-4 sm:line-clamp-none" : ""}`}>
+          <Text
+            variant="p2"
+            className={`text-prim sm:!line-clamp-none cursor-pointer select-none transition-all duration-300 ${expanded ? "" : "line-clamp-3"}`}
+            onClick={() => setExpanded(true)}
+          >
             {content.hero_desc ?? "A curated group of product specialists working on your mobile app or web system."}
           </Text>
-          {!expanded && (
-            <button
-              className="sm:hidden mt-s1 text-p2 font-body font-medium text-prim/40"
-              onClick={() => setExpanded(true)}
-            >
-              Read more
-            </button>
-          )}
         </div>
       </div>
 
