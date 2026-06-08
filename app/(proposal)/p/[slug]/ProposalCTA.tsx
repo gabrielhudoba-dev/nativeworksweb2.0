@@ -74,28 +74,58 @@ export function ProposalCTA({
     const el = sectionRef.current;
     if (!el) return;
 
-    let gsap: any, ScrollTrigger: any;
+    let g: any, ST: any;
+    let cleanupWheel: (() => void) | undefined;
 
-    import("gsap").then((g) => {
-      gsap = g.gsap ?? g.default;
-      return import("gsap/ScrollTrigger");
-    }).then((st) => {
-      ScrollTrigger = st.ScrollTrigger ?? st.default;
+    Promise.all([
+      import("gsap").then((m) => m.gsap ?? m.default),
+      import("gsap/ScrollTrigger").then((m) => m.ScrollTrigger ?? m.default),
+    ]).then(([gsap, ScrollTrigger]) => {
+      g = gsap; ST = ScrollTrigger;
       gsap.registerPlugin(ScrollTrigger);
 
-      // Pin the section in place for 300px of scroll — creates tension before releasing
+      let isPinned = false;
+
       ScrollTrigger.create({
         trigger: el,
-        start: "top 10%",
-        end: "+=300",
+        // Pin when the bottom of the section sits 64px above viewport bottom
+        start: "bottom bottom-=64",
         pin: true,
         pinSpacing: false,
         anticipatePin: 1,
+        onEnter: () => {
+          isPinned = true;
+          // Slide up + spring on entry
+          gsap.fromTo(el,
+            { y: 32 },
+            { y: 0, duration: 0.9, ease: "elastic.out(1, 0.45)" }
+          );
+        },
+        onLeaveBack: () => { isPinned = false; },
       });
+
+      // Elastic resistance when user tries to scroll past
+      const onWheel = (e: WheelEvent) => {
+        if (!isPinned || e.deltaY <= 0) return;
+        e.preventDefault();
+        gsap.killTweensOf(el);
+        gsap.fromTo(el,
+          { y: 0 },
+          {
+            y: 20, duration: 0.12, ease: "power2.out",
+            onComplete: () =>
+              gsap.to(el, { y: 0, duration: 1.1, ease: "elastic.out(1, 0.3)" }),
+          }
+        );
+      };
+
+      window.addEventListener("wheel", onWheel, { passive: false });
+      cleanupWheel = () => window.removeEventListener("wheel", onWheel);
     });
 
     return () => {
-      ScrollTrigger?.getAll().forEach((t: any) => t.kill());
+      cleanupWheel?.();
+      ST?.getAll().forEach((t: any) => t.kill());
     };
   }, []);
 
