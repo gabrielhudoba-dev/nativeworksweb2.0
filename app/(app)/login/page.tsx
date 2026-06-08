@@ -27,7 +27,7 @@ export default async function LoginPage({
 
   return (
     <main className="min-h-screen flex items-center justify-center px-s4">
-      <div className="w-full max-w-form flex flex-col items-center gap-s10 text-center">
+      <div className="w-full max-w-form flex flex-col items-center gap-s10 text-center mb-[80px]">
         <Logo size="md" />
 
         <div className="flex flex-col gap-0">
