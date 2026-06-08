@@ -720,10 +720,9 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                   {s.isRetainer && <span className="font-body font-medium text-l1 text-prim/40 shrink-0">/mo</span>}
                 </span>
               ) : (
-                <span className="w-[80px] text-right font-body font-medium text-l1 text-prim">
-                  {s.isRetainer
-                    ? (total !== null && !isNaN(total) ? fmt(total) : (s.price || "—"))
-                    : (s.price || "—")}
+                <span className="w-[80px] flex items-center justify-end gap-[2px] font-body font-medium text-l1 text-prim">
+                  {s.price || "—"}
+                  {s.isRetainer && <span className="font-medium text-prim/40">/mo</span>}
                 </span>
               )}
               {mode === "edit" && (
