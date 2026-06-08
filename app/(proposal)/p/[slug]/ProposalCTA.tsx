@@ -77,7 +77,7 @@ export function ProposalCTA({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-s2">
         {/* Accept — opens pre-filled email */}
         <a
-          href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Akceptujem cenovú ponuku — ${proposalTitle}`)}&body=${encodeURIComponent(`Dobrý deň,\n\ntýmto akceptujem cenovú ponuku „${proposalTitle}" a prosím o zaslanie zmluvných dokumentov na podpis.\n\nS pozdravom,`)}`}
+          href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Accepting proposal — ${proposalTitle}`)}&body=${encodeURIComponent(`Hi,\n\nI'd like to accept the proposal "${proposalTitle}" and kindly request the contract documents for signing.\n\nBest regards,`)}`}
           className="group grain bg-prim text-white rounded-lg flex flex-col justify-between gap-s8 p-s5 min-h-[180px] text-left hover:opacity-95 transition-opacity"
         >
           <span className="grid place-items-center size-s6 rounded-pill bg-white/15">
