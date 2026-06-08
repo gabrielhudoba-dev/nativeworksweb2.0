@@ -68,8 +68,13 @@ export function ProposalCTA({
     Cal.ns[namespace]("ui", { hideEventTypeDetails: false, layout: "month_view" });
   }, [namespace]);
 
+  useEffect(() => {
+    document.documentElement.style.scrollSnapType = "y proximity";
+    return () => { document.documentElement.style.scrollSnapType = ""; };
+  }, []);
+
   return (
-    <section className="flex flex-col gap-s4 pt-s8 border-t border-prim/10">
+    <section className="flex flex-col gap-s4" style={{ scrollSnapAlign: "start" }}>
       <h2 className="font-display font-medium text-h3 text-prim tracking-[-0.02em]">
         Ready to move forward?
       </h2>
