@@ -407,71 +407,80 @@ export type SavedBlockRef = { notionPageId: string; serviceIds: string[] };
  */
 export async function saveBlocks(
   blocksDatabaseId: string,
-  proposalPageId: string,
+  _proposalPageId: string,
   blocks: Array<Omit<ProposalBlock, "services"> & { services?: ProposalService[] }>
 ): Promise<SavedBlockRef[]> {
-  const existing = await getProposalBlocks(blocksDatabaseId, proposalPageId);
-  const existingIds = new Set(existing.map((b) => b.notionPageId));
+  // Blocks that already have a notionPageId are existing — no need to re-query Notion.
+  // Only fetch existing IDs when there are new blocks (no notionPageId) or we need to
+  // detect deleted blocks.
   const incomingIds = new Set(blocks.filter((b) => b.notionPageId).map((b) => b.notionPageId));
+  const hasNewBlocks = blocks.some((b) => !b.notionPageId);
+  const allHaveIds = !hasNewBlocks;
 
-  // Archive removed blocks
-  for (const old of existing) {
-    if (!incomingIds.has(old.notionPageId)) {
-      await withRetry(() =>
-        notionFetch(`/pages/${old.notionPageId}`, {
-          method: "PATCH",
-          body: JSON.stringify({ archived: true }),
-        })
-      );
-    }
+  // Only fetch existing blocks when needed (detecting deletions or new blocks on first save).
+  let existingIds: Set<string> = incomingIds;
+  if (!allHaveIds || blocks.length === 0) {
+    const existing = await getProposalBlocks(blocksDatabaseId, _proposalPageId);
+    existingIds = new Set(existing.map((b) => b.notionPageId));
+    // Archive removed blocks in parallel
+    const toArchive = existing.filter((old) => !incomingIds.has(old.notionPageId));
+    await Promise.all(
+      toArchive.map((old) =>
+        withRetry(() =>
+          notionFetch(`/pages/${old.notionPageId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ archived: true }),
+          })
+        )
+      )
+    );
   }
 
-  const refs: SavedBlockRef[] = [];
+  // Upsert all blocks in parallel
+  const refs = await Promise.all(
+    blocks.map(async (b, i) => {
+      const props: Record<string, unknown> = {
+        "Name":        { title: richText(b.blockType) },
+        "Block Type":  { select: { name: b.blockType } },
+        "Locked":      { checkbox: b.locked },
+        "Sort Order":  { number: i },
+        "Heading":     { rich_text: richText(b.heading ?? "") },
+        "Body":        { rich_text: richText(b.body ?? "") },
+        "Client Name": { rich_text: richText(b.clientName ?? "") },
+        "Subtitle":    { rich_text: richText(b.subtitle ?? "") },
+        "Items":       { rich_text: richText((b.items ?? []).join("\n")) },
+        // Pricing services stored as JSON; process/approach use this field for stages
+        "Stages JSON": { rich_text: richText(
+          b.blockType === "pricing"
+            ? JSON.stringify(b.services ?? [])
+            : (b.stagesJson ?? "")
+        ) },
+      };
 
-  // Upsert each block in order
-  for (let i = 0; i < blocks.length; i++) {
-    const b = blocks[i];
-    const props: Record<string, unknown> = {
-      "Name":        { title: richText(b.blockType) },
-      "Block Type":  { select: { name: b.blockType } },
-      "Locked":      { checkbox: b.locked },
-      "Sort Order":  { number: i },
-      "Heading":     { rich_text: richText(b.heading ?? "") },
-      "Body":        { rich_text: richText(b.body ?? "") },
-      "Client Name": { rich_text: richText(b.clientName ?? "") },
-      "Subtitle":    { rich_text: richText(b.subtitle ?? "") },
-      "Items":       { rich_text: richText((b.items ?? []).join("\n")) },
-      // Pricing services are stored as JSON in "Stages JSON" (process/approach use the same field for stages)
-      "Stages JSON": { rich_text: richText(
-        b.blockType === "pricing"
-          ? JSON.stringify(b.services ?? [])
-          : (b.stagesJson ?? "")
-      ) },
-    };
+      let blockId = b.notionPageId;
+      if (b.notionPageId && existingIds.has(b.notionPageId)) {
+        await withRetry(() =>
+          notionFetch(`/pages/${b.notionPageId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ properties: props }),
+          })
+        );
+      } else {
+        const created = await withRetry(() =>
+          notionFetch("/pages", {
+            method: "POST",
+            body: JSON.stringify({
+              parent: { database_id: blocksDatabaseId },
+              properties: props,
+            }),
+          })
+        );
+        blockId = created.id as string;
+      }
 
-    let blockId = b.notionPageId;
-    if (b.notionPageId && existingIds.has(b.notionPageId)) {
-      await withRetry(() =>
-        notionFetch(`/pages/${b.notionPageId}`, {
-          method: "PATCH",
-          body: JSON.stringify({ properties: props }),
-        })
-      );
-    } else {
-      const created = await withRetry(() =>
-        notionFetch("/pages", {
-          method: "POST",
-          body: JSON.stringify({
-            parent: { database_id: blocksDatabaseId },
-            properties: props,
-          }),
-        })
-      );
-      blockId = created.id as string;
-    }
-
-    refs.push({ notionPageId: blockId, serviceIds: [] });
-  }
+      return { notionPageId: blockId, serviceIds: [] } satisfies SavedBlockRef;
+    })
+  );
 
   return refs;
 }
