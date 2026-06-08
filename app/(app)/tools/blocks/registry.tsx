@@ -127,10 +127,10 @@ function ClientPicker({
               </button>
             ))}
             {query.trim().length > 0 && !searching && results.length === 0 && (
-              <span className="px-s3 py-s2 font-body text-l3 text-prim/40">No clients found</span>
+              <span className="px-s3 py-s2 font-body text-l1 text-prim/40">No clients found</span>
             )}
             {query.trim().length === 0 && (
-              <span className="px-s3 py-s2 font-body text-l3 text-prim/40">Type to search…</span>
+              <span className="px-s3 py-s2 font-body text-l1 text-prim/40">Type to search…</span>
             )}
           </span>
         </>

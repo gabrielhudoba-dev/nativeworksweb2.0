@@ -85,8 +85,9 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
       <button
         type="button"
         onClick={onShareClick}
-        className="inline-flex items-center gap-s1 h-s4 px-s2 rounded-pill border border-prim/15 text-prim font-body font-medium text-l2 hover:border-prim/30 transition-colors cursor-pointer"
+        className="inline-flex items-center gap-s1 pb-px h-s5 px-s3 rounded-pill bg-prim/8 text-prim font-body font-medium text-l1 hover:bg-prim/14 transition-colors cursor-pointer"
       >
+        <Icon name="share" size="sm" />
         Share
       </button>
 

@@ -242,17 +242,17 @@ function EditorToolbar({
   return (
     <div className="sticky top-s9 z-20 flex items-center justify-between gap-s4 h-s8 px-s4 pb-px bg-white/85 backdrop-blur border-b border-prim/8">
       <div className="flex items-center gap-s2 min-w-0">
-        <a href="/tools" className="grid place-items-center size-s5 rounded-md text-prim/50 hover:bg-prim/8 hover:text-prim transition-colors">
+        <a href="/tools" className="grid place-items-center size-s5 rounded-pill text-prim/50 hover:bg-prim/8 hover:text-prim transition-colors">
           <Icon name="chevron-left" size="md" />
         </a>
         <span className="font-body font-medium text-l1 text-prim truncate">{title}</span>
         <StatusBadge status={status} />
       </div>
-      <div className="flex items-center gap-s3">
+      <div className="flex items-center gap-s1">
         <button
           type="button"
           onClick={onSave}
-          className={`font-body text-l2 transition-colors ${
+          className={`inline-flex items-center h-s5 px-s2 font-body text-l1 transition-colors ${
             saveState === "error"
               ? "text-error hover:opacity-80 cursor-pointer"
               : "text-prim/45"
@@ -265,7 +265,7 @@ function EditorToolbar({
           href={`/p/${slug}`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center h-s4 px-s2 rounded-pill bg-prim text-white font-body font-medium text-l2 hover:opacity-85 transition-opacity"
+          className="inline-flex items-center pb-px h-s5 px-s3 rounded-pill bg-prim text-white font-body font-medium text-l1 hover:opacity-85 transition-opacity"
         >
           Preview
         </a>

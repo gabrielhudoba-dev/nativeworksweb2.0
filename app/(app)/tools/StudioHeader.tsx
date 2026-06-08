@@ -70,7 +70,7 @@ export function StudioHeader({ name, avatar }: { name: string | null; avatar: st
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="flex items-center gap-s1 rounded-md px-s3 py-1 hover:bg-prim/5 transition-colors cursor-pointer"
+            className="flex items-center gap-s1 rounded-md px-s2 py-1 hover:bg-prim/5 transition-colors cursor-pointer"
           >
             <Avatar name={name} avatar={avatar} size={24} />
             <span className="font-body text-l2 text-prim/70">{name}</span>
