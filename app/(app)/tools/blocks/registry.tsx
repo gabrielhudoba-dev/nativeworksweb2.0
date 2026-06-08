@@ -281,7 +281,7 @@ function ApproachBlock({ block, mode, onChange }: RenderProps) {
                 value={stage.duration ?? ""}
                 onChange={(v) => setStage(i, { duration: v })}
                 placeholder="Duration"
-                className="inline-flex items-center h-s4 px-s2 rounded-pill bg-prim/6 font-body text-l3 text-prim/50"
+                className="inline-flex items-center h-s3 px-[6px] rounded bg-prim/8 font-body text-[10px] text-prim/50 font-medium uppercase tracking-wide"
               />
             </div>
             <EditableText
