@@ -49,7 +49,7 @@ export default async function PublicProposalPage({
               <ProposalCTA
                 key={block.id}
                 slug={slug}
-                calLink={process.env.NEXT_PUBLIC_CALCOM_LINK ?? "gabrielhudoba/proposal"}
+                calLink={process.env.NEXT_PUBLIC_CALCOM_LINK ?? "gabrielhudoba/engagement"}
                 proposalTitle={proposal.title ?? ""}
               />
             );
