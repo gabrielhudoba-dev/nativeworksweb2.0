@@ -651,7 +651,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
   return (
     <section className="flex flex-col gap-s4">
       {/* Heading row with column labels inline */}
-      <div className="flex items-center gap-s3 pb-s1 pr-s7">
+      <div className={`flex items-center gap-s3 pb-s1 ${mode === "edit" ? "pr-s7" : ""}`}>
         <EditableText
           mode={mode}
           as="span"
@@ -670,7 +670,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
           const months = s.isRetainer ? parseMonths(s.duration) : null;
           const total = months !== null ? parseFloat(s.price.replace(/[^0-9.]/g, "")) * months : null;
           return (
-            <div key={s.id} className="relative flex items-center gap-s3 py-s2 pr-s7 group/row hover:bg-surface/60 rounded-sm transition-colors">
+            <div key={s.id} className={`relative flex items-center gap-s3 py-s2 ${mode === "edit" ? "pr-s7" : ""} group/row hover:bg-surface/60 rounded-sm transition-colors`}>
               {/* Name */}
               {mode === "edit" ? (
                 <ServiceNameCell value={s.title} onCommit={(patch) => setService(i, patch)} />
