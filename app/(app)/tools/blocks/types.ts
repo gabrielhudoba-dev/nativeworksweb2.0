@@ -207,8 +207,8 @@ export function fromNotionBlock(b: ProposalBlock): EditorBlock {
     subtitle: b.subtitle,
     items: b.items,
     stages,
-    services: b.services.map((s) => ({
-      id: s.notionPageId,
+    services: b.services.map((s, i) => ({
+      id: s.notionPageId || `json-${i}`,
       notionPageId: s.notionPageId,
       isRetainer: s.desc === "__retainer__",
       title: s.title,
