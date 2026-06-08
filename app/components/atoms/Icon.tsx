@@ -9,7 +9,9 @@ import {
   Copy,
   DotsThreeVertical,
   Microscope,
+  PencilSimple,
   PersonSimpleRun,
+  TextT,
   Trash,
   X,
 } from "@phosphor-icons/react/ssr";
@@ -54,7 +56,9 @@ const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
   "dots-three-vertical": DotsThreeVertical,
   menu: Menu,
   microscope: Microscope,
+  "pencil-simple": PencilSimple,
   "person-simple-run": PersonSimpleRun,
+  "text-t": TextT,
   trash: Trash,
 };
 

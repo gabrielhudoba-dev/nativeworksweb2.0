@@ -233,6 +233,12 @@ export async function deleteProposalAction(proposalPageId: string): Promise<void
   revalidatePath("/tools");
 }
 
+export async function renameProposalAction(proposalPageId: string, title: string): Promise<void> {
+  await requireCreator();
+  await updateProposal(proposalPageId, { title: title.trim() });
+  revalidatePath("/tools");
+}
+
 /** Move a proposal through its lifecycle, stamping the matching timestamp. */
 export async function transitionStatusAction(
   proposalPageId: string,
