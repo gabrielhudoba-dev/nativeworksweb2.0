@@ -225,6 +225,14 @@ button, [role="button"], a {
    ────────────────────────────────────────────────────────────────────────── */
 .off-rhythm { translate: none !important; }
 
+/* ─── Inline editable (studio builder) ─── */
+.editable:empty::before {
+  content: attr(data-placeholder);
+  color: color-mix(in srgb, var(--color-prim) 35%, transparent);
+  pointer-events: none;
+}
+.editable:focus { background: color-mix(in srgb, var(--color-brand) 6%, transparent); border-radius: 4px; }
+
 /* ─── Grain texture ─── */
 .grain {
   position: relative;

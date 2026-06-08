@@ -7,8 +7,10 @@ import {
   CaretRight,
   Check,
   Copy,
+  DotsThreeVertical,
   Microscope,
   PersonSimpleRun,
+  Trash,
   X,
 } from "@phosphor-icons/react/ssr";
 
@@ -49,9 +51,11 @@ const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
   copy: Copy,
   "chevron-left": ChevronLeft,
   "chevron-right": ChevronRight,
+  "dots-three-vertical": DotsThreeVertical,
   menu: Menu,
   microscope: Microscope,
   "person-simple-run": PersonSimpleRun,
+  trash: Trash,
 };
 
 export type IconName = keyof typeof registry;

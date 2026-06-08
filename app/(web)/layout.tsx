@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/app/globals.css";
 import Link from "next/link";
 import { Navigation, NavigationProvider, PageLinksSection } from "@/app/components/organisms";
 import { GlobalGalleryNav } from "@/app/components/organisms/GlobalGalleryNav";
