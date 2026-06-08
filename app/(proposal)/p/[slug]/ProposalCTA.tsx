@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Icon } from "@/app/components/atoms";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -68,13 +68,27 @@ export function ProposalCTA({
     Cal.ns[namespace]("ui", { hideEventTypeDetails: false, layout: "month_view" });
   }, [namespace]);
 
+  const sectionRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
-    document.documentElement.style.scrollSnapType = "y proximity";
-    return () => { document.documentElement.style.scrollSnapType = ""; };
+    const el = sectionRef.current;
+    if (!el) return;
+    let fired = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!fired && entry.isIntersecting) {
+          fired = true;
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      },
+      { threshold: 0.25 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="flex flex-col gap-s4" style={{ scrollSnapAlign: "start" }}>
+    <section ref={sectionRef} className="flex flex-col gap-s4">
       <h2 className="font-display font-medium text-h3 text-prim tracking-[-0.02em]">
         Ready to move forward?
       </h2>
