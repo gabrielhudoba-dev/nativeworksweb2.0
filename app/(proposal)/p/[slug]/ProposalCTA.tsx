@@ -85,39 +85,42 @@ export function ProposalCTA({
       gsap.registerPlugin(ScrollTrigger);
 
       let isPinned = false;
+      // Inner wrapper receives all animations — never animate the pinned element itself
+      const inner = el.firstElementChild as HTMLElement | null;
 
       ScrollTrigger.create({
         trigger: el,
         start: "bottom bottom-=64",
         pin: true,
-        pinSpacing: false,
+        pinSpacing: true,   // spacer keeps content below in place — no layout jump
         anticipatePin: 1,
         onEnter: () => {
           isPinned = true;
-          gsap.fromTo(el,
-            { y: 40, opacity: 0.6 },
-            { y: 0, opacity: 1, duration: 1.1, ease: "expo.out", clearProps: "opacity" }
-          );
+          if (inner) {
+            gsap.fromTo(inner,
+              { y: 28, opacity: 0.5 },
+              { y: 0, opacity: 1, duration: 1.0, ease: "expo.out", clearProps: "opacity" }
+            );
+          }
         },
         onLeaveBack: () => {
           isPinned = false;
-          gsap.killTweensOf(el);
-          gsap.set(el, { clearProps: "transform,opacity" });
+          if (inner) gsap.set(inner, { clearProps: "transform,opacity" });
         },
       });
 
-      // Smooth elastic resistance on overscroll
+      // Elastic resistance: animate inner wrapper, not the pinned shell
       const onWheel = (e: WheelEvent) => {
-        if (!isPinned || e.deltaY <= 0) return;
+        if (!isPinned || e.deltaY <= 0 || !inner) return;
         e.preventDefault();
-        gsap.killTweensOf(el);
-        gsap.to(el, {
-          y: 18,
-          duration: 0.3,
+        gsap.killTweensOf(inner);
+        gsap.to(inner, {
+          y: 16,
+          duration: 0.25,
           ease: "sine.out",
           overwrite: true,
           onComplete: () =>
-            gsap.to(el, { y: 0, duration: 1.6, ease: "elastic.out(1, 0.5)", overwrite: true }),
+            gsap.to(inner, { y: 0, duration: 1.5, ease: "elastic.out(1, 0.45)", overwrite: true }),
         });
       };
 
