@@ -579,7 +579,7 @@ function ServiceNameCell({
           <span className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
           <span className="absolute z-40 top-[calc(100%+4px)] left-0 w-[260px] flex flex-col rounded-lg bg-white border border-prim/12 shadow-lg overflow-hidden max-h-[240px] overflow-y-auto">
             {!loaded && (
-              <span className="px-s3 py-s2 font-body text-l3 text-prim/40">Loading…</span>
+              <span className="px-s3 py-s2 font-body text-l1 text-prim/40">Loading…</span>
             )}
             {loaded && catalog.length === 0 && (
               <span className="px-s3 py-s2 font-body text-l3 text-prim/40">No catalog services</span>
@@ -592,7 +592,7 @@ function ServiceNameCell({
                 className="flex flex-col items-start text-left px-s3 py-[10px] hover:bg-surface transition-colors cursor-pointer border-b border-prim/6 last:border-0"
               >
                 <span className="font-body font-medium text-l1 text-prim">{c.title}</span>
-                {c.price && <span className="font-body text-l3 text-prim/40">{c.price}{c.duration ? ` · ${c.duration}` : ""}</span>}
+                {c.price && <span className="font-body text-l2 text-prim/40">{c.price}{c.duration ? ` · ${c.duration}` : ""}</span>}
               </button>
             ))}
           </span>
@@ -609,6 +609,13 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
     onChange?.({ services: next });
   };
   const removeService = (i: number) => onChange?.({ services: services.filter((_, j) => j !== i) });
+  const moveService = (i: number, dir: -1 | 1) => {
+    const next = [...services];
+    const j = i + dir;
+    if (j < 0 || j >= next.length) return;
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange?.({ services: next });
+  };
   const addService = () =>
     onChange?.({
       services: [
@@ -644,7 +651,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
   return (
     <section className="flex flex-col gap-s4">
       {/* Heading row with column labels inline */}
-      <div className="flex items-center gap-s3 pb-s1">
+      <div className="flex items-center gap-s3 pb-s1 pr-s7">
         <EditableText
           mode={mode}
           as="span"
@@ -663,7 +670,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
           const months = s.isRetainer ? parseMonths(s.duration) : null;
           const total = months !== null ? parseFloat(s.price.replace(/[^0-9.]/g, "")) * months : null;
           return (
-            <div key={s.id} className="relative flex items-center gap-s3 py-s2 group/row hover:bg-surface/60 rounded-sm transition-colors">
+            <div key={s.id} className="relative flex items-center gap-s3 py-s2 pr-s7 group/row hover:bg-surface/60 rounded-sm transition-colors">
               {/* Name */}
               {mode === "edit" ? (
                 <ServiceNameCell value={s.title} onCommit={(patch) => setService(i, patch)} />
@@ -695,7 +702,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                   value={s.duration}
                   onChange={(e) => setService(i, { duration: e.target.value })}
                   placeholder={s.isRetainer ? "0 months" : "1 FTE"}
-                  className="w-[88px] text-right font-body text-l1 text-prim/60 bg-transparent outline-none placeholder:text-prim/20"
+                  className="w-[88px] text-right font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
                 />
               ) : (
                 <span className="w-[88px] text-right font-body text-l1 text-prim/50">{s.duration || "—"}</span>

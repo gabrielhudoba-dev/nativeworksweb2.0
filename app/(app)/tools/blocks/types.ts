@@ -116,7 +116,7 @@ export function makeBlock(blockType: BlockType): EditorBlock {
     case "impact":
       return { ...b, heading: "Impact", body: "Describe the measurable outcomes and business value this engagement will deliver." };
     case "pricing":
-      return { ...b, heading: "Services", services: [] };
+      return { ...b, heading: "Services", body: "19", services: [] };
     case "cta":
       return { ...b, heading: "Ready to move forward?" };
     case "process":
