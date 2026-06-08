@@ -88,35 +88,37 @@ export function ProposalCTA({
 
       ScrollTrigger.create({
         trigger: el,
-        // Pin when the bottom of the section sits 64px above viewport bottom
         start: "bottom bottom-=64",
         pin: true,
         pinSpacing: false,
         anticipatePin: 1,
         onEnter: () => {
           isPinned = true;
-          // Slide up + spring on entry
           gsap.fromTo(el,
-            { y: 32 },
-            { y: 0, duration: 0.9, ease: "elastic.out(1, 0.45)" }
+            { y: 40, opacity: 0.6 },
+            { y: 0, opacity: 1, duration: 1.1, ease: "expo.out", clearProps: "opacity" }
           );
         },
-        onLeaveBack: () => { isPinned = false; },
+        onLeaveBack: () => {
+          isPinned = false;
+          gsap.killTweensOf(el);
+          gsap.set(el, { clearProps: "transform,opacity" });
+        },
       });
 
-      // Elastic resistance when user tries to scroll past
+      // Smooth elastic resistance on overscroll
       const onWheel = (e: WheelEvent) => {
         if (!isPinned || e.deltaY <= 0) return;
         e.preventDefault();
         gsap.killTweensOf(el);
-        gsap.fromTo(el,
-          { y: 0 },
-          {
-            y: 20, duration: 0.12, ease: "power2.out",
-            onComplete: () =>
-              gsap.to(el, { y: 0, duration: 1.1, ease: "elastic.out(1, 0.3)" }),
-          }
-        );
+        gsap.to(el, {
+          y: 18,
+          duration: 0.3,
+          ease: "sine.out",
+          overwrite: true,
+          onComplete: () =>
+            gsap.to(el, { y: 0, duration: 1.6, ease: "elastic.out(1, 0.5)", overwrite: true }),
+        });
       };
 
       window.addEventListener("wheel", onWheel, { passive: false });
