@@ -763,7 +763,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                   <span className="font-body text-l3 text-prim/40">%</span>
                 </span>
               ) : (
-                <span className="font-body text-l3 text-prim/40">
+                <span className="font-body text-l2 text-prim/50">
                   {hasVat ? `${vatRate}%` : "exempt / reverse charge"}
                 </span>
               )}
