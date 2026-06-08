@@ -260,7 +260,7 @@ function ApproachBlock({ block, mode, onChange }: RenderProps) {
       />
       <div className="flex flex-col gap-s6">
         {stages.map((stage, i) => (
-          <div key={i} className="relative flex flex-col gap-s1 pl-s5 border-l-2 border-prim/10">
+          <div key={i} className="relative flex flex-col gap-s1 -ml-s3 pl-s3 border-l-2 border-prim/10">
             {mode === "edit" && (
               <div className="absolute top-0 right-0">
                 <RemoveButton onClick={() => removeStage(i)} label="Remove phase" />
