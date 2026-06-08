@@ -73,18 +73,30 @@ export function ProposalCTA({
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    let fired = false;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!fired && entry.isIntersecting) {
-          fired = true;
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      },
-      { threshold: 0.25 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+
+    let gsap: any, ScrollTrigger: any;
+
+    import("gsap").then((g) => {
+      gsap = g.gsap ?? g.default;
+      return import("gsap/ScrollTrigger");
+    }).then((st) => {
+      ScrollTrigger = st.ScrollTrigger ?? st.default;
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Pin the section in place for 300px of scroll — creates tension before releasing
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 10%",
+        end: "+=300",
+        pin: true,
+        pinSpacing: false,
+        anticipatePin: 1,
+      });
+    });
+
+    return () => {
+      ScrollTrigger?.getAll().forEach((t: any) => t.kill());
+    };
   }, []);
 
   return (
