@@ -8,7 +8,7 @@ const BASE = "h-s6 px-s3 gap-s4 rounded-pill";
 const variantClass: Record<ButtonVariant, string> = {
   primary:   `${BASE} bg-brand text-white`,
   secondary: `${BASE} bg-cta/20 text-prim`,
-  dark:      `h-s8 px-s3 gap-s4 rounded-pill bg-prim text-surface`,
+  dark:      `h-s8 px-s3 gap-s4 rounded-pill bg-accent text-white`,
 };
 
 type CommonProps = {
