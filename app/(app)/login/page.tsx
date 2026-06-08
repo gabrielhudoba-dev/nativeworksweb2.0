@@ -32,18 +32,10 @@ export default async function LoginPage({
 
         <div className="flex flex-col gap-s1">
           <Heading variant="h3">Native Tools</Heading>
-          <Text variant="p2" className="text-prim/60">
+          <Text variant="p2" className="text-prim/60 max-w-xs mx-auto">
             Sign in with your Notion account to access the Native Tools. Only Native Works team members can access this area.
           </Text>
         </div>
-
-        {error && (
-          <Text variant="p3" className="text-error">
-            {error === "access_denied"
-              ? "Access was denied. Please try again."
-              : "Sign in failed. Please try again."}
-          </Text>
-        )}
 
         <a
           href={authUrl}
@@ -54,6 +46,14 @@ export default async function LoginPage({
           </svg>
           Continue with Notion
         </a>
+
+        {error && (
+          <Text variant="p3" className="text-error">
+            {error === "access_denied"
+              ? "Access was denied. Please try again."
+              : "Sign in failed. Please try again."}
+          </Text>
+        )}
 
         {process.env.NODE_ENV !== "production" && (
           <a
