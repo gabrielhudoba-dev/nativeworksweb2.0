@@ -30,9 +30,9 @@ export default async function LoginPage({
       <div className="w-full max-w-form flex flex-col items-center gap-s8 text-center">
         <Logo size="md" />
 
-        <div className="flex flex-col gap-s1">
+        <div className="flex flex-col gap-[4px]">
           <Heading variant="h3">Native Tools</Heading>
-          <Text variant="p2" className="text-prim/60 max-w-xs mx-auto">
+          <Text variant="p2" className="text-prim/60 max-w-[344px] mx-auto">
             Sign in with your Notion account to access the Native Tools. Only Native Works team members can access this area.
           </Text>
         </div>
