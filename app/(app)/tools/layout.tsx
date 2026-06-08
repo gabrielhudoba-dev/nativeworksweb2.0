@@ -10,7 +10,7 @@ export default async function StudioLayout({ children }: { children: React.React
 
   return (
     <div className="min-h-screen flex flex-col">
-      <StudioHeader name={session.name} />
+      <StudioHeader name={session.name} avatar={session.avatar ?? null} />
       <main className="flex-1">{children}</main>
     </div>
   );

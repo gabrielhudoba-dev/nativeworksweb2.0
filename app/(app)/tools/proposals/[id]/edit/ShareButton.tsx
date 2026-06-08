@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Icon } from "@/app/components/atoms";
+import { Field, Input, Textarea } from "@/app/(app)/components/FormField";
+import { AppButton } from "@/app/(app)/components/AppButton";
 import {
   shareProposalAction,
   getShareEmailTemplateAction,
@@ -14,12 +16,12 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("link");
 
-  // ── Link tab state ──────────────────────────────────────────────────────────
+  // ── Link tab ────────────────────────────────────────────────────────────────
   const [url, setUrl] = useState<string | null>(null);
   const [linkLoading, setLinkLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // ── Email tab state ─────────────────────────────────────────────────────────
+  // ── Email tab ───────────────────────────────────────────────────────────────
   const [emailLoaded, setEmailLoaded] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [to, setTo] = useState("");
@@ -29,7 +31,6 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
   const [sendResult, setSendResult] = useState<"sent" | "error" | null>(null);
   const [sendError, setSendError] = useState("");
 
-  // ── Open / generate share URL ───────────────────────────────────────────────
   async function onShareClick() {
     setOpen(true);
     if (url) return;
@@ -42,19 +43,15 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
     }
   }
 
-  // ── Copy link ───────────────────────────────────────────────────────────────
   async function copy() {
     if (!url) return;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch {
-      /* clipboard blocked */
-    }
+    } catch { /* clipboard blocked */ }
   }
 
-  // ── Load email template on first open of Email tab ─────────────────────────
   async function onEmailTab() {
     setTab("email");
     setSendResult(null);
@@ -71,35 +68,24 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
     }
   }
 
-  // ── Send email ──────────────────────────────────────────────────────────────
   async function onSend() {
     if (!to.trim() || !subject.trim() || !body.trim()) return;
     setSending(true);
     setSendResult(null);
     const res = await sendProposalEmailAction(proposalPageId, to.trim(), subject, body);
     setSending(false);
-    if (res.ok) {
-      setSendResult("sent");
-      setTo("");
-    } else {
-      setSendResult("error");
-      setSendError(res.error);
-    }
+    if (res.ok) { setSendResult("sent"); setTo(""); }
+    else { setSendResult("error"); setSendError(res.error); }
   }
 
-  // ── Close ───────────────────────────────────────────────────────────────────
-  function close() {
-    setOpen(false);
-    setTab("link");
-    setSendResult(null);
-  }
+  function close() { setOpen(false); setTab("link"); setSendResult(null); }
 
   return (
     <div className="relative">
       <button
         type="button"
         onClick={onShareClick}
-        className="inline-flex items-center gap-s1 h-s6 px-s3 rounded-pill border border-prim/15 text-prim font-body font-medium text-l2 hover:border-prim/30 transition-colors cursor-pointer"
+        className="inline-flex items-center gap-s1 h-s4 px-s2 rounded-pill border border-prim/15 text-prim font-body font-medium text-l2 hover:border-prim/30 transition-colors cursor-pointer"
       >
         Share
       </button>
@@ -108,15 +94,17 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
         <>
           <div className="fixed inset-0 z-20" onClick={close} />
 
-          <div className="absolute z-30 top-[calc(100%+6px)] right-0 w-[380px] rounded-lg bg-white border border-prim/10 shadow-lg overflow-hidden flex flex-col">
-            {/* Tabs */}
+          {/* Popover — shadow-elevated from token, w-form = 560px capped at viewport */}
+          <div className="absolute z-30 top-[calc(100%+s1)] right-0 w-[380px] max-w-[calc(100vw-s4)] rounded-lg bg-white border border-prim/10 shadow-elevated overflow-hidden flex flex-col">
+
+            {/* ── Tabs ─────────────────────────────────────────────────────── */}
             <div className="flex border-b border-prim/8">
               {(["link", "email"] as Tab[]).map((t) => (
                 <button
                   key={t}
                   type="button"
                   onClick={t === "email" ? onEmailTab : () => setTab("link")}
-                  className={`flex-1 py-s2 font-body font-medium text-l2 transition-colors capitalize ${
+                  className={`flex-1 py-s2 font-body font-medium text-l2 transition-colors ${
                     tab === t
                       ? "text-prim border-b-2 border-prim -mb-px"
                       : "text-prim/40 hover:text-prim/70"
@@ -134,18 +122,19 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
                   Anyone with this link can view the proposal.
                 </span>
                 <div className="flex items-center gap-s1">
-                  <input
+                  <Input
                     readOnly
                     value={linkLoading ? "Generating…" : url ?? ""}
+                    onChange={() => {}}
                     onFocus={(e) => e.currentTarget.select()}
-                    className="flex-1 h-s6 px-s2 rounded-md border border-prim/15 bg-surface font-body text-l3 text-prim/80 outline-none"
+                    size="sm"
                   />
                   <button
                     type="button"
                     onClick={copy}
                     disabled={!url}
                     aria-label="Copy link"
-                    className="grid place-items-center size-s6 rounded-md bg-prim text-white hover:opacity-85 disabled:opacity-40 transition-opacity cursor-pointer"
+                    className="grid place-items-center size-s6 rounded-md bg-prim text-white hover:opacity-85 disabled:opacity-40 transition-opacity shrink-0 cursor-pointer"
                   >
                     <Icon name={copied ? "check" : "copy"} size="sm" />
                   </button>
@@ -157,64 +146,43 @@ export function ShareButton({ proposalPageId }: { proposalPageId: string }) {
             {tab === "email" && (
               <div className="p-s3 flex flex-col gap-s2">
                 {emailLoading ? (
-                  <span className="font-body text-l3 text-prim/40 py-s4 text-center">Loading template…</span>
+                  <span className="font-body text-l3 text-prim/40 py-s4 text-center">
+                    Loading template…
+                  </span>
                 ) : (
                   <>
-                    {/* To */}
-                    <label className="flex flex-col gap-s1">
-                      <span className="font-body text-l3 text-prim/55">To</span>
-                      <input
-                        type="email"
-                        value={to}
-                        onChange={(e) => setTo(e.target.value)}
-                        placeholder="client@example.com"
-                        className="h-s6 px-s2 rounded-md border border-prim/15 bg-white font-body text-l2 text-prim outline-none focus:border-brand transition-colors"
-                      />
-                    </label>
+                    <Field label="To" required>
+                      <Input type="email" value={to} onChange={setTo} placeholder="client@example.com" size="sm" />
+                    </Field>
+                    <Field label="Subject">
+                      <Input value={subject} onChange={setSubject} size="sm" />
+                    </Field>
+                    <Field label="Message">
+                      <Textarea value={body} onChange={setBody} rows={7} />
+                    </Field>
 
-                    {/* Subject */}
-                    <label className="flex flex-col gap-s1">
-                      <span className="font-body text-l3 text-prim/55">Subject</span>
-                      <input
-                        type="text"
-                        value={subject}
-                        onChange={(e) => setSubject(e.target.value)}
-                        className="h-s6 px-s2 rounded-md border border-prim/15 bg-white font-body text-l2 text-prim outline-none focus:border-brand transition-colors"
-                      />
-                    </label>
-
-                    {/* Body */}
-                    <label className="flex flex-col gap-s1">
-                      <span className="font-body text-l3 text-prim/55">Message</span>
-                      <textarea
-                        rows={7}
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                        className="px-s2 py-s1 rounded-md border border-prim/15 bg-white font-body text-l2 text-prim outline-none focus:border-brand transition-colors resize-none leading-relaxed"
-                      />
-                    </label>
-
-                    {/* Feedback */}
                     {sendResult === "sent" && (
-                      <div className="flex items-center gap-s1 text-green-600 font-body text-l3">
+                      <div className="flex items-center gap-s1 text-success font-body text-l3">
                         <Icon name="check" size="sm" />
                         Email sent successfully.
                       </div>
                     )}
                     {sendResult === "error" && (
-                      <span className="font-body text-l3 text-red-500">{sendError}</span>
+                      <span className="font-body text-l3 text-error">{sendError}</span>
                     )}
 
-                    {/* Send button */}
-                    <button
-                      type="button"
+                    <AppButton
+                      variant="primary"
+                      size="sm"
+                      loading={sending}
+                      loadingText="Sending…"
+                      disabled={!to.trim() || !subject.trim()}
                       onClick={onSend}
-                      disabled={sending || !to.trim() || !subject.trim()}
-                      className="self-start inline-flex items-center gap-s1 h-s6 px-s4 rounded-pill bg-prim text-white font-body font-medium text-l2 hover:opacity-85 disabled:opacity-40 transition-opacity cursor-pointer"
+                      className="self-start"
                     >
-                      {sending ? "Sending…" : "Send email"}
-                      {!sending && <Icon name="arrow-right" size="sm" />}
-                    </button>
+                      Send email
+                      <Icon name="arrow-right" size="sm" />
+                    </AppButton>
                   </>
                 )}
               </div>

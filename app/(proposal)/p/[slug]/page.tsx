@@ -31,27 +31,32 @@ export default async function PublicProposalPage({
           This proposal is still being prepared.
         </p>
       ) : (
-        blocks.map((block) => (
-          <BlockView key={block.id} block={block} mode="view" />
-        ))
+        blocks.map((block) => {
+          if (block.blockType === "cta") {
+            return proposal.status === "signed" ? (
+              <section key={block.id} className="flex items-center gap-s3 pt-s8 border-t border-prim/10">
+                <span className="grid place-items-center size-s6 rounded-pill bg-success text-white">
+                  <Icon name="check" size="md" />
+                </span>
+                <div className="flex flex-col">
+                  <span className="font-display font-medium text-h4 text-prim">Signed</span>
+                  <span className="font-body text-l2 text-prim/50">
+                    This proposal has been accepted and signed. Thank you.
+                  </span>
+                </div>
+              </section>
+            ) : (
+              <ProposalCTA
+                key={block.id}
+                slug={slug}
+                calLink={process.env.NEXT_PUBLIC_CALCOM_LINK ?? "gabrielhudoba/proposal"}
+                proposalTitle={proposal.title ?? ""}
+              />
+            );
+          }
+          return <BlockView key={block.id} block={block} mode="view" />;
+        })
       )}
-
-      {blocks.length > 0 &&
-        (proposal.status === "signed" ? (
-          <section className="flex items-center gap-s3 pt-s8 border-t border-prim/10">
-            <span className="grid place-items-center size-s6 rounded-pill bg-green-600 text-white">
-              <Icon name="check" size="md" />
-            </span>
-            <div className="flex flex-col">
-              <span className="font-display font-medium text-h4 text-prim">Signed</span>
-              <span className="font-body text-l2 text-prim/50">
-                This proposal has been accepted and signed. Thank you.
-              </span>
-            </div>
-          </section>
-        ) : (
-          <ProposalCTA slug={slug} />
-        ))}
     </main>
   );
 }

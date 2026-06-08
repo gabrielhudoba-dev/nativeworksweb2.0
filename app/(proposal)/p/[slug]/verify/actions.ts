@@ -47,5 +47,5 @@ export async function verifyAction(formData: FormData): Promise<void> {
 
   await updateProposal(proposal.notionPageId, { status: "verified" });
 
-  redirect(`/p/${slug}/sign`);
+  redirect(`/p/${slug}/documents`);
 }

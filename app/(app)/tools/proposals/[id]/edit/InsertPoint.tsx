@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { Icon } from "@/app/components/atoms";
 import { OPTIONAL_BLOCK_TYPES, BLOCK_LABELS, type BlockType } from "../../../blocks/types";
 
 const TYPE_HINT: Record<string, string> = {
   description: "A heading and a paragraph of detail",
-  benefits: "A checked list of outcomes",
-  scope: "A checked list of deliverables",
-  process: "Numbered stage cards",
+  scope:       "A checked list of deliverables",
+  process:     "Numbered stage cards",
 };
 
 /** The "+" affordance between blocks — opens a picker of optional block types. */
@@ -16,17 +16,18 @@ export function InsertPoint({ onInsert }: { onInsert: (type: BlockType) => void 
 
   return (
     <div className="relative group/insert h-s4 flex items-center justify-center">
-      {/* Hover line */}
-      <span className="absolute inset-x-0 top-1/2 h-px bg-brand/30 opacity-0 group-hover/insert:opacity-100 transition-opacity" />
+      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-brand/25 opacity-0 group-hover/insert:opacity-100 transition-opacity" />
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label="Insert block"
-        className={`relative z-10 grid place-items-center size-s4 rounded-pill bg-white border border-prim/15 text-prim/50 hover:border-brand hover:text-brand shadow-sm transition-all ${
-          open ? "opacity-100 border-brand text-brand" : "opacity-0 group-hover/insert:opacity-100"
+        className={`relative z-10 inline-flex items-center gap-s1 font-body text-l2 text-brand hover:opacity-70 transition-opacity cursor-pointer ${
+          open ? "opacity-100" : "opacity-0 group-hover/insert:opacity-100"
         }`}
       >
-        <span className="text-[18px] leading-none">+</span>
+        <span className="grid place-items-center size-s3 rounded-pill bg-brand/10 text-brand">
+          <Icon name="plus" size="sm" />
+        </span>
       </button>
 
       {open && (

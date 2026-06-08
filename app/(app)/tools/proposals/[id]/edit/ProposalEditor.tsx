@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Icon } from "@/app/components/atoms";
+import { StatusBadge } from "../../../../components/StatusBadge";
 import { BlockView } from "../../../blocks/registry";
 import {
   makeBlock,
   toSaveInput,
+  PINNED_BLOCK_TYPES,
   type BlockType,
   type EditorBlock,
 } from "../../../blocks/types";
@@ -64,6 +66,8 @@ export function ProposalEditor({
       const i = prev.findIndex((b) => b.id === id);
       const j = i + dir;
       if (i < 0 || j < 0 || j >= prev.length) return prev;
+      // Never swap with a pinned block
+      if (PINNED_BLOCK_TYPES.includes(prev[j].blockType)) return prev;
       const next = prev.slice();
       [next[i], next[j]] = [next[j], next[i]];
       return next;
@@ -166,7 +170,14 @@ export function ProposalEditor({
   return (
     <div className="flex flex-col">
       <EditorToolbar
-        title={blocks.find((b) => b.blockType === "header")?.heading?.trim() || title}
+        title={(() => {
+          const h = blocks.find((b) => b.blockType === "header");
+          if (!h) return title;
+          const parts = [`#${h.subtitle || "0001"}`];
+          if (h.clientName) parts.push(h.clientName, "—");
+          if (h.heading) parts.push(h.heading);
+          return parts.join(" ");
+        })()}
         slug={slug}
         status={status}
         saveState={saveState}
@@ -174,11 +185,12 @@ export function ProposalEditor({
         proposalPageId={proposalPageId}
       />
 
-      <div className="mx-auto w-full max-w-[760px] px-s5 py-s10 flex flex-col">
+      <div className="mx-auto w-full max-w-editor px-s5 py-s10 flex flex-col">
         {blocks.map((block, i) => (
           <div key={block.id}>
             <BlockFrame
               locked={block.locked}
+              canMove={!PINNED_BLOCK_TYPES.includes(block.blockType)}
               isFirst={i === 0}
               isLast={i === blocks.length - 1}
               onMoveUp={() => moveBlock(block.id, -1)}
@@ -188,6 +200,7 @@ export function ProposalEditor({
               <BlockView
                 block={block}
                 mode="edit"
+                proposalPageId={proposalPageId}
                 onChange={(patch) => patchBlock(block.id, patch)}
               />
             </BlockFrame>
@@ -227,13 +240,13 @@ function EditorToolbar({
   proposalPageId: string;
 }) {
   return (
-    <div className="sticky top-s9 z-20 flex items-center justify-between gap-s4 h-s8 px-s4 bg-white/85 backdrop-blur border-b border-prim/8">
+    <div className="sticky top-s9 z-20 flex items-center justify-between gap-s4 h-s8 px-s4 pb-px bg-white/85 backdrop-blur border-b border-prim/8">
       <div className="flex items-center gap-s2 min-w-0">
         <a href="/tools" className="grid place-items-center size-s5 rounded-md text-prim/50 hover:bg-prim/8 hover:text-prim transition-colors">
           <Icon name="chevron-left" size="md" />
         </a>
         <span className="font-body font-medium text-l1 text-prim truncate">{title}</span>
-        <span className="font-body text-l3 text-prim/35 capitalize hidden sm:inline">· {status.replace("_", " ")}</span>
+        <StatusBadge status={status} />
       </div>
       <div className="flex items-center gap-s3">
         <button
@@ -241,7 +254,7 @@ function EditorToolbar({
           onClick={onSave}
           className={`font-body text-l2 transition-colors ${
             saveState === "error"
-              ? "text-red-500 hover:text-red-600 cursor-pointer"
+              ? "text-error hover:opacity-80 cursor-pointer"
               : "text-prim/45"
           }`}
         >
@@ -252,7 +265,7 @@ function EditorToolbar({
           href={`/p/${slug}`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center h-s6 px-s3 rounded-pill bg-prim text-white font-body font-medium text-l2 hover:opacity-85 transition-opacity"
+          className="inline-flex items-center h-s4 px-s2 rounded-pill bg-prim text-white font-body font-medium text-l2 hover:opacity-85 transition-opacity"
         >
           Preview
         </a>

@@ -27,7 +27,7 @@ export default async function LoginPage({
 
   return (
     <main className="min-h-screen flex items-center justify-center px-s4">
-      <div className="w-full max-w-[400px] flex flex-col items-center gap-s6 text-center">
+      <div className="w-full max-w-form flex flex-col items-center gap-s6 text-center">
         <Logo size="md" />
 
         <div className="flex flex-col gap-s2">
@@ -38,7 +38,7 @@ export default async function LoginPage({
         </div>
 
         {error && (
-          <Text variant="p3" className="text-red-500">
+          <Text variant="p3" className="text-error">
             {error === "access_denied"
               ? "Access was denied. Please try again."
               : "Sign in failed. Please try again."}

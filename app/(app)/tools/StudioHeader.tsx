@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Logo } from "@/app/components/atoms";
+import Image from "next/image";
+import { Logo, Icon } from "@/app/components/atoms";
 import { logout } from "./actions";
 
 const AVATAR_COLORS = [
@@ -22,7 +23,31 @@ function initials(name: string) {
     : name[0].toUpperCase();
 }
 
-export function StudioHeader({ name }: { name: string | null }) {
+function Avatar({ name, avatar, size }: { name: string; avatar: string | null; size: number }) {
+  const fontSize = size <= 24 ? 11 : 13;
+  if (avatar) {
+    return (
+      <Image
+        src={avatar}
+        alt={name}
+        width={size}
+        height={size}
+        className="rounded-full object-cover flex-shrink-0 select-none"
+        style={{ width: size, height: size }}
+      />
+    );
+  }
+  return (
+    <span
+      className="flex items-center justify-center rounded-full text-white font-body font-semibold select-none flex-shrink-0"
+      style={{ width: size, height: size, fontSize, background: avatarColor(name) }}
+    >
+      {initials(name)}
+    </span>
+  );
+}
+
+export function StudioHeader({ name, avatar }: { name: string | null; avatar: string | null }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -45,27 +70,18 @@ export function StudioHeader({ name }: { name: string | null }) {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="flex items-center gap-s2 rounded-md px-2 py-1 hover:bg-prim/5 transition-colors cursor-pointer"
+            className="flex items-center gap-s1 rounded-md px-s3 py-1 hover:bg-prim/5 transition-colors cursor-pointer"
           >
-            <span
-              className="flex items-center justify-center rounded-full text-white font-body font-semibold select-none flex-shrink-0"
-              style={{ width: 24, height: 24, fontSize: 11, background: avatarColor(name) }}
-            >
-              {initials(name)}
-            </span>
+            <Avatar name={name} avatar={avatar} size={24} />
             <span className="font-body text-l2 text-prim/70">{name}</span>
+            <Icon name="chevron-down" className="w-[14px] h-[14px] text-prim/40 ml-0.5" aria-hidden />
           </button>
 
           {open && (
             <div className="absolute right-0 top-full mt-1 w-56 rounded-xl border border-prim/10 bg-white shadow-xl overflow-hidden z-50">
               {/* Account row */}
               <div className="flex items-center gap-[10px] px-3 py-[10px]">
-                <span
-                  className="flex items-center justify-center rounded-full text-white font-body font-semibold select-none flex-shrink-0"
-                  style={{ width: 32, height: 32, fontSize: 13, background: avatarColor(name) }}
-                >
-                  {initials(name)}
-                </span>
+                <Avatar name={name} avatar={avatar} size={32} />
                 <span className="font-body text-l2 text-prim truncate">{name}</span>
               </div>
 

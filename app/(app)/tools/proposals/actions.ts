@@ -11,6 +11,7 @@ import {
   createProposal,
   deleteProposal,
   getProposal,
+  getProposalBlocks,
   saveBlocks,
   updateProposal,
   countClientProposals,
@@ -38,6 +39,19 @@ async function logEvent(
     event_type: eventType,
     payload,
   });
+}
+
+/** Fetch the catalog of reusable services from Supabase for the pricing picker. */
+export async function getCatalogServicesAction(): Promise<
+  Array<{ id: number; title: string; desc: string; price: string; duration: string }>
+> {
+  await requireCreator();
+  const { data, error } = await supabaseAdmin
+    .from("1_home_services")
+    .select("id, title, desc, price, duration")
+    .order("sort_order");
+  if (error) return [];
+  return data ?? [];
 }
 
 /** Search the Company (Clients) DB for the new-proposal client picker. */
@@ -112,13 +126,16 @@ export async function createProposalAction(input: NewProposalInput): Promise<voi
   });
   await updateProposal(proposal.notionPageId, { clientPageId });
 
-  // 3. Seed the locked blocks. Header carries the client name, and its "project
-  //    title" heading is the proposal name (the two stay linked — see saveProposalAction).
+  // 3. Seed the locked blocks. Header: clientName = company, heading = project part only.
+  //    The proposal title is "Company — Project"; strip the company prefix so heading
+  //    holds just the project name (avoids "Vanadium — Vanadium — Design System" display).
   const seed = defaultDocument();
   const header = seed.find((b) => b.blockType === "header");
   if (header) {
+    const prefix = `${companyName} — `;
+    const projectPart = title.startsWith(prefix) ? title.slice(prefix.length) : title;
     header.clientName = companyName;
-    header.heading = title;
+    header.heading = projectPart;
   }
   await saveBlocks(
     proposal.blocksDatabaseId,
@@ -133,7 +150,7 @@ export async function createProposalAction(input: NewProposalInput): Promise<voi
       clientName: b.clientName,
       subtitle: b.subtitle,
       items: b.items,
-      stagesJson: b.blockType === "process" ? JSON.stringify(b.stages) : "",
+      stagesJson: (b.blockType === "process" || b.blockType === "approach") ? JSON.stringify(b.stages) : "",
       services: b.services.map((s, j) => ({
         notionPageId: "",
         title: s.title,
@@ -145,6 +162,48 @@ export async function createProposalAction(input: NewProposalInput): Promise<voi
     }))
   );
 
+  await logEvent(proposal.notionPageId, "viewed", { kind: "created" });
+  revalidatePath("/tools");
+  redirect(`/tools/proposals/${proposal.notionPageId}/edit`);
+}
+
+/**
+ * Create a blank draft proposal instantly — no form, no client required.
+ * Client and title can be set directly inside the editor.
+ */
+export async function createBlankProposalAction(): Promise<void> {
+  const session = await requireCreator();
+  const proposal = await createProposal({
+    title: "New proposal",
+    slug: generateSlug(),
+    accessToken: generateAccessToken(),
+    createdByNotionUserId: session.notionUserId,
+  });
+  const seed = defaultDocument();
+  await saveBlocks(
+    proposal.blocksDatabaseId,
+    proposal.notionPageId,
+    seed.map((b, i) => ({
+      notionPageId: "",
+      blockType: b.blockType,
+      locked: b.locked,
+      sortOrder: i,
+      heading: b.heading,
+      body: b.body,
+      clientName: b.clientName,
+      subtitle: b.subtitle,
+      items: b.items,
+      stagesJson: (b.blockType === "process" || b.blockType === "approach") ? JSON.stringify(b.stages) : "",
+      services: b.services.map((s, j) => ({
+        notionPageId: "",
+        title: s.title,
+        desc: s.desc,
+        price: s.price,
+        duration: s.duration,
+        sortOrder: j,
+      })),
+    }))
+  );
   await logEvent(proposal.notionPageId, "viewed", { kind: "created" });
   revalidatePath("/tools");
   redirect(`/tools/proposals/${proposal.notionPageId}/edit`);
@@ -199,11 +258,13 @@ export async function saveProposalAction(
       }))
     );
 
-    // Keep the proposal name linked to the header's project title.
+    // Keep the Notion proposal Name in sync with the composed header title.
     const header = blocks.find((b) => b.blockType === "header");
-    const projectTitle = header?.heading.trim();
-    if (projectTitle) {
-      await updateProposal(proposalPageId, { title: projectTitle });
+    if (header) {
+      const parts: string[] = [`#${header.subtitle || "0001"}`];
+      if (header.clientName) parts.push(header.clientName, "—");
+      if (header.heading) parts.push(header.heading);
+      await updateProposal(proposalPageId, { title: parts.join(" ") });
     }
 
     // Zip persisted ids (input order) back onto the editor's stable client ids.
@@ -223,6 +284,15 @@ export async function saveProposalAction(
   }
 }
 
+/** Update the proposal's linked client relation (and the visible clientName in state). */
+export async function changeProposalClientAction(
+  proposalPageId: string,
+  clientPageId: string
+): Promise<void> {
+  await requireCreator();
+  await updateProposal(proposalPageId, { clientPageId });
+}
+
 /**
  * Archive (delete) a proposal in Notion. Navigation is handled client-side
  * (the caller redirects to /tools after this resolves).
@@ -231,6 +301,59 @@ export async function deleteProposalAction(proposalPageId: string): Promise<void
   await requireCreator();
   await deleteProposal(proposalPageId);
   revalidatePath("/tools");
+}
+
+export async function duplicateProposalAction(
+  proposalPageId: string
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await requireCreator();
+  try {
+    const original = await getProposal(proposalPageId);
+    if (!original) return { ok: false, error: "Proposal not found" };
+
+    const blocks = await getProposalBlocks(original.blocksDatabaseId, proposalPageId);
+
+    const copy = await createProposal({
+      title: `${original.title} (Copy)`,
+      slug: generateSlug(),
+      accessToken: generateAccessToken(),
+      createdByNotionUserId: session.notionUserId,
+    });
+
+    if (original.clientPageId) {
+      await updateProposal(copy.notionPageId, { clientPageId: original.clientPageId });
+    }
+
+    await saveBlocks(
+      copy.blocksDatabaseId,
+      copy.notionPageId,
+      blocks.map((b, i) => ({
+        notionPageId: "",
+        blockType: b.blockType,
+        locked: b.locked,
+        sortOrder: i,
+        heading: b.heading,
+        body: b.body,
+        clientName: b.clientName,
+        subtitle: b.subtitle,
+        items: b.items,
+        stagesJson: b.stagesJson,
+        services: b.services.map((s, j) => ({
+          notionPageId: "",
+          title: s.title,
+          desc: s.desc,
+          price: s.price,
+          duration: s.duration,
+          sortOrder: j,
+        })),
+      }))
+    );
+
+    revalidatePath("/tools");
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : "Duplicate failed" };
+  }
 }
 
 export async function renameProposalAction(proposalPageId: string, title: string): Promise<void> {

@@ -32,7 +32,8 @@ export type ProposalStatus =
 
 export type BlockType =
   | "header" | "intro" | "pricing"
-  | "description" | "benefits" | "scope" | "process";
+  | "description" | "benefits" | "scope" | "process"
+  | "approach" | "impact" | "cta" | "partnership" | "about" | "footer";
 
 export type ProposalService = {
   notionPageId: string;
@@ -195,6 +196,12 @@ async function createInlineBlocksDb(proposalPageId: string): Promise<string> {
           { name: "benefits",    color: "orange" },
           { name: "scope",       color: "yellow" },
           { name: "process",     color: "pink"   },
+          { name: "approach",    color: "brown"  },
+          { name: "impact",      color: "red"    },
+          { name: "cta",         color: "blue"   },
+          { name: "partnership", color: "gray"   },
+          { name: "about",       color: "green"  },
+          { name: "footer",      color: "default"},
         ]}},
         "Locked":      { checkbox: {} },
         "Sort Order":  { number: {} },
@@ -295,7 +302,10 @@ export async function createProposal(fields: {
         "Access Token": { rich_text: richText(fields.accessToken) },
         "Currency":     { select: { name: fields.currency ?? "EUR" } },
         ...(fields.dealPageId ? { "Deal": { relation: [{ id: fields.dealPageId }] } } : {}),
-        ...(fields.createdByNotionUserId ? { "Created By": { people: [{ id: fields.createdByNotionUserId }] } } : {}),
+        // Only set Created By when we have a real Notion UUID (not the dev-bypass placeholder).
+        ...(fields.createdByNotionUserId && fields.createdByNotionUserId !== "dev-user"
+          ? { "Created By": { people: [{ id: fields.createdByNotionUserId }] } }
+          : {}),
       },
     }),
   });
@@ -351,6 +361,7 @@ export async function getProposalBlocks(
 ): Promise<ProposalBlock[]> {
   if (!blocksDatabaseId) return [];
 
+  const servicesDbId = process.env.NOTION_SERVICES_DB_ID;
   const [blocksData, servicesData] = await Promise.all([
     notionFetch(`/databases/${blocksDatabaseId}/query`, {
       method: "POST",
@@ -359,14 +370,16 @@ export async function getProposalBlocks(
         page_size: 50,
       }),
     }),
-    notionFetch(`/databases/${process.env.NOTION_SERVICES_DB_ID}/query`, {
-      method: "POST",
-      body: JSON.stringify({
-        filter: { property: "Proposal", relation: { contains: proposalPageId } },
-        sorts: [{ property: "Sort Order", direction: "ascending" }],
-        page_size: 100,
-      }),
-    }),
+    servicesDbId
+      ? notionFetch(`/databases/${servicesDbId}/query`, {
+          method: "POST",
+          body: JSON.stringify({
+            filter: { property: "Proposal", relation: { contains: proposalPageId } },
+            sorts: [{ property: "Sort Order", direction: "ascending" }],
+            page_size: 100,
+          }),
+        }).catch(() => ({ results: [] }))
+      : Promise.resolve({ results: [] }),
   ]);
 
   const blocks = ((blocksData.results as Array<Record<string, unknown>>) ?? []).map(pageToBlock);
@@ -483,13 +496,19 @@ async function saveServices(
   proposalPageId: string,
   services: Array<Partial<ProposalService>>
 ): Promise<string[]> {
-  const data = await notionFetch(`/databases/${process.env.NOTION_SERVICES_DB_ID}/query`, {
-    method: "POST",
-    body: JSON.stringify({
-      filter: { property: "Proposal", relation: { contains: proposalPageId } },
-      page_size: 50,
-    }),
-  });
+  if (!process.env.NOTION_SERVICES_DB_ID) return services.map(() => "");
+  let data: Record<string, unknown>;
+  try {
+    data = await notionFetch(`/databases/${process.env.NOTION_SERVICES_DB_ID}/query`, {
+      method: "POST",
+      body: JSON.stringify({
+        filter: { property: "Proposal", relation: { contains: proposalPageId } },
+        page_size: 50,
+      }),
+    });
+  } catch {
+    return services.map(() => "");
+  }
   const existing = ((data.results as Array<Record<string, unknown>>) ?? []).map(pageToService);
   const existingIds = new Set(existing.map((s) => s.notionPageId));
   const incomingIds = new Set(services.filter((s) => s.notionPageId).map((s) => s.notionPageId));

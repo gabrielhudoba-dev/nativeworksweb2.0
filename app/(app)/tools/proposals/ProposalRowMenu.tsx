@@ -4,24 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/app/components/atoms";
-import { deleteProposalAction, renameProposalAction } from "./actions";
+import { deleteProposalAction, duplicateProposalAction } from "./actions";
 
-type Props = {
-  proposalPageId: string;
-  title: string;
-};
+type Props = { proposalPageId: string; title: string; onRename: () => void; onDuplicate?: () => void };
 
-type Mode = "menu" | "rename" | "confirm-delete";
-
-export function ProposalRowMenu({ proposalPageId, title }: Props) {
+export function ProposalRowMenu({ proposalPageId, title, onRename, onDuplicate }: Props) {
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<Mode>("menu");
-  const [renameValue, setRenameValue] = useState(title);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [duplicating, setDuplicating] = useState(false);
   const [pos, setPos] = useState({ top: 0, right: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const renameRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,11 +26,10 @@ export function ProposalRowMenu({ proposalPageId, title }: Props) {
         dropdownRef.current && !dropdownRef.current.contains(e.target as Node)
       ) {
         setOpen(false);
-        setMode("menu");
       }
     }
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") { setOpen(false); setMode("menu"); }
+      if (e.key === "Escape") setOpen(false);
     }
     document.addEventListener("pointerdown", onPointer);
     document.addEventListener("keydown", onKey);
@@ -46,37 +39,14 @@ export function ProposalRowMenu({ proposalPageId, title }: Props) {
     };
   }, [open]);
 
-  useEffect(() => {
-    if (open && mode === "rename") renameRef.current?.select();
-  }, [open, mode]);
-
   function toggle(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
     if (!open && btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
-      setPos({
-        top: rect.bottom + 4,
-        right: window.innerWidth - rect.right,
-      });
+      setPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right });
     }
     setOpen((o) => !o);
-    setMode("menu");
-    setRenameValue(title);
-  }
-
-  async function handleRename(e: React.FormEvent) {
-    e.preventDefault();
-    if (!renameValue.trim() || renameValue.trim() === title) { setOpen(false); setMode("menu"); return; }
-    setBusy(true);
-    try {
-      await renameProposalAction(proposalPageId, renameValue.trim());
-      router.refresh();
-      setOpen(false);
-      setMode("menu");
-    } finally {
-      setBusy(false);
-    }
   }
 
   async function handleDelete() {
@@ -84,9 +54,9 @@ export function ProposalRowMenu({ proposalPageId, title }: Props) {
     try {
       await deleteProposalAction(proposalPageId);
       router.refresh();
+      setConfirmDelete(false);
     } catch {
       setBusy(false);
-      setMode("menu");
     }
   }
 
@@ -96,87 +66,93 @@ export function ProposalRowMenu({ proposalPageId, title }: Props) {
       style={{ position: "fixed", top: pos.top, right: pos.right, zIndex: 9999 }}
       className="w-52 bg-white border border-prim/10 rounded-xl shadow-lg py-1"
     >
-      {mode === "menu" && (
-        <>
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); router.push(`/tools/proposals/${proposalPageId}/edit`); }}
-            className="flex items-center gap-s2 w-full text-left px-s3 py-[10px] font-body text-l2 text-prim/70 hover:bg-prim/5 hover:text-prim transition-colors"
-          >
-            <Icon name="pencil-simple" size="sm" />
-            Edit
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("rename")}
-            className="flex items-center gap-s2 w-full text-left px-s3 py-[10px] font-body text-l2 text-prim/70 hover:bg-prim/5 hover:text-prim transition-colors"
-          >
-            <Icon name="text-t" size="sm" />
-            Rename
-          </button>
-          <div className="my-1 border-t border-prim/8" />
-          <button
-            type="button"
-            onClick={() => setMode("confirm-delete")}
-            className="flex items-center gap-s2 w-full text-left px-s3 py-[10px] font-body text-l2 text-red-500 hover:bg-red-50 transition-colors"
-          >
-            <Icon name="trash" size="sm" />
-            Delete
-          </button>
-        </>
-      )}
+      <button
+        type="button"
+        onClick={() => router.push(`/tools/proposals/${proposalPageId}/edit`)}
+        className="flex items-center gap-s2 w-full text-left px-s3 py-[10px] font-body text-l2 text-prim/70 hover:bg-prim/5 hover:text-prim transition-colors"
+      >
+        <Icon name="pencil-simple" size="sm" />
+        Edit
+      </button>
+      <button
+        type="button"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(false); onRename(); }}
+        className="flex items-center gap-s2 w-full text-left px-s3 py-[10px] font-body text-l2 text-prim/70 hover:bg-prim/5 hover:text-prim transition-colors"
+      >
+        <Icon name="text-t" size="sm" />
+        Rename
+      </button>
+      <button
+        type="button"
+        disabled={duplicating}
+        onClick={async (e) => {
+          e.preventDefault(); e.stopPropagation();
+          setOpen(false);
+          setDuplicating(true);
+          try {
+            await duplicateProposalAction(proposalPageId);
+            router.refresh();
+            onDuplicate?.();
+          } finally {
+            setDuplicating(false);
+          }
+        }}
+        className="flex items-center gap-s2 w-full text-left px-s3 py-[10px] font-body text-l2 text-prim/70 hover:bg-prim/5 hover:text-prim transition-colors disabled:opacity-40"
+      >
+        <Icon name="copy" size="sm" />
+        {duplicating ? "Duplicating…" : "Duplicate"}
+      </button>
+      <div className="my-1 border-t border-prim/8" />
+      <button
+        type="button"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(false); setConfirmDelete(true); }}
+        className="flex items-center gap-s2 w-full text-left px-s3 py-[10px] font-body text-l2 text-red-500 hover:bg-red-50 transition-colors"
+      >
+        <Icon name="trash" size="sm" />
+        Delete
+      </button>
+    </div>,
+    document.body
+  ) : null;
 
-      {mode === "rename" && (
-        <form onSubmit={handleRename} className="px-s3 py-s2 flex flex-col gap-s2">
-          <input
-            ref={renameRef}
-            value={renameValue}
-            onChange={(e) => setRenameValue(e.target.value)}
-            disabled={busy}
-            className="w-full rounded-md border border-prim/15 px-s2 py-[7px] font-body text-l2 text-prim outline-none focus:border-prim/40 disabled:opacity-50"
-            placeholder="Proposal name"
-          />
-          <div className="flex gap-s2">
-            <button
-              type="submit"
-              disabled={busy || !renameValue.trim()}
-              className="flex-1 rounded-md bg-prim text-white font-body text-l3 py-[7px] hover:opacity-85 transition-opacity disabled:opacity-40"
-            >
-              {busy ? "Saving…" : "Save"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("menu")}
-              className="flex-1 rounded-md border border-prim/15 font-body text-l3 py-[7px] text-prim/60 hover:bg-prim/5 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      )}
-
-      {mode === "confirm-delete" && (
-        <div className="px-s3 py-s2 flex flex-col gap-s2">
-          <p className="font-body text-l2 text-prim/60">Delete "{title}"?</p>
-          <div className="flex gap-s2">
-            <button
-              type="button"
-              disabled={busy}
-              onClick={handleDelete}
-              className="flex-1 rounded-md bg-red-500 text-white font-body text-l3 py-[7px] hover:bg-red-600 transition-colors disabled:opacity-40"
-            >
-              {busy ? "Deleting…" : "Delete"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("menu")}
-              className="flex-1 rounded-md border border-prim/15 font-body text-l3 py-[7px] text-prim/60 hover:bg-prim/5 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
+  const deleteModal = confirmDelete && typeof document !== "undefined" ? createPortal(
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-s4"
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!busy) setConfirmDelete(false); }}
+    >
+      <div className="absolute inset-0 bg-prim/20 backdrop-blur-[2px]" />
+      <div
+        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[340px] p-s5 flex flex-col gap-s4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-center size-[40px] rounded-full bg-red-50 text-red-500">
+          <Icon name="trash" size="md" />
         </div>
-      )}
+        <div className="flex flex-col gap-[6px]">
+          <h3 className="font-display font-medium text-h5 text-prim leading-tight">Delete proposal?</h3>
+          <p className="font-body text-p2 text-prim/50 leading-snug">
+            <span className="font-medium text-prim/70">&ldquo;{title}&rdquo;</span> will be permanently deleted. This cannot be undone.
+          </p>
+        </div>
+        <div className="flex gap-s2 pt-s1">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => setConfirmDelete(false)}
+            className="flex-1 h-s7 rounded-pill border border-prim/15 font-body font-medium text-l1 text-prim/60 hover:bg-prim/5 transition-colors disabled:opacity-40"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={handleDelete}
+            className="flex-1 h-s7 rounded-pill bg-red-500 text-white font-body font-medium text-l1 hover:bg-red-600 transition-colors disabled:opacity-40"
+          >
+            {busy ? "Deleting…" : "Delete"}
+          </button>
+        </div>
+      </div>
     </div>,
     document.body
   ) : null;
@@ -188,11 +164,12 @@ export function ProposalRowMenu({ proposalPageId, title }: Props) {
         type="button"
         onClick={toggle}
         aria-label="Proposal options"
-        className="grid place-items-center size-s6 rounded-md text-prim/35 hover:bg-prim/8 hover:text-prim transition-colors"
+        className="grid place-items-center size-s6 rounded-md text-prim/60 hover:bg-prim/8 hover:text-prim transition-colors"
       >
         <Icon name="dots-three-vertical" size="md" />
       </button>
       {dropdown}
+      {deleteModal}
     </div>
   );
 }

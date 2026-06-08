@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/app/components/atoms";
+import { Field, Input } from "@/app/(app)/components/FormField";
+import { AppButton } from "@/app/(app)/components/AppButton";
 import {
   createProposalAction,
   searchClientsAction,
@@ -119,12 +121,12 @@ export function NewProposalForm() {
 
         {!selected && (
           <div className="relative flex flex-col gap-s1">
-            <input
+            <Input
               autoFocus
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={setQuery}
               placeholder="Search clients…"
-              className="h-s7 px-s3 rounded-md border border-prim/15 bg-white font-body text-p2 text-prim outline-none focus:border-brand transition-colors"
+              size="md"
             />
             {query.trim().length > 0 && (
               <div className="flex flex-col rounded-md border border-prim/10 overflow-hidden">
@@ -147,7 +149,7 @@ export function NewProposalForm() {
                   className="flex items-center gap-s1 text-left px-s3 py-s2 font-body text-p3 text-brand hover:bg-brand/5 border-t border-prim/8 transition-colors cursor-pointer"
                 >
                   <span className="grid place-items-center size-s3 rounded-pill bg-brand/10 text-[16px] leading-none">+</span>
-                  Create new client “{query.trim()}”
+                  Create new client "{query.trim()}"
                 </button>
               </div>
             )}
@@ -171,19 +173,24 @@ export function NewProposalForm() {
                 Change
               </button>
             </div>
-            <label className="flex flex-col gap-s1">
-              <span className="font-body text-l3 text-prim/55">Company name *</span>
-              <input
+            <Field label="Company name" required>
+              <Input
                 value={selected.companyName}
-                onChange={(e) => setNewCompany(e.target.value)}
+                onChange={setNewCompany}
                 placeholder="Company s.r.o."
-                className="h-s6 px-s2 rounded-md border border-prim/15 bg-white font-body text-p3 text-prim outline-none focus:border-brand transition-colors"
+                size="sm"
               />
-            </label>
+            </Field>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-s1">
-              <NewField label="POC name" value={selected.pocName} onChange={(v) => setSelected({ ...selected, pocName: v })} />
-              <NewField label="POC email" type="email" value={selected.pocEmail} onChange={(v) => setSelected({ ...selected, pocEmail: v })} />
-              <NewField label="POC phone" type="tel" value={selected.pocPhone} onChange={(v) => setSelected({ ...selected, pocPhone: v })} />
+              <Field label="POC name">
+                <Input value={selected.pocName} onChange={(v) => setSelected({ ...selected, pocName: v })} size="sm" />
+              </Field>
+              <Field label="POC email">
+                <Input type="email" value={selected.pocEmail} onChange={(v) => setSelected({ ...selected, pocEmail: v })} size="sm" />
+              </Field>
+              <Field label="POC phone">
+                <Input type="tel" value={selected.pocPhone} onChange={(v) => setSelected({ ...selected, pocPhone: v })} size="sm" />
+              </Field>
             </div>
             <span className="font-body text-l3 text-prim/40">
               Only the company name is required. The POC is saved to People; the rest is filled in when the client confirms.
@@ -195,63 +202,39 @@ export function NewProposalForm() {
       {/* ── Proposal name ──────────────────────────────────────────────────── */}
       {selected && (
         <section className="flex flex-col gap-s1">
-          <span className="font-body font-medium text-l2 text-prim/70">Proposal name</span>
-          <input
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              setTitleTouched(true);
-            }}
-            placeholder={`Company ${DASH} 1`}
-            className="h-s7 px-s3 rounded-md border border-prim/15 bg-white font-body text-p2 text-prim outline-none focus:border-brand transition-colors"
-          />
-          <span className="font-body text-l3 text-prim/40">
-            Defaults to “{DASH} number” — replace the number with a project name if you like.
-          </span>
+          <Field
+            label="Proposal name"
+            hint={`Defaults to "Company ${DASH} number" - replace with a project name if you like.`}
+          >
+            <Input
+              value={title}
+              onChange={(v) => { setTitle(v); setTitleTouched(true); }}
+              placeholder={`Company ${DASH} 1`}
+              size="md"
+            />
+          </Field>
         </section>
       )}
 
-      {error && <span className="font-body text-l2 text-red-500">{error}</span>}
+      {error && <span className="font-body text-l2 text-error">{error}</span>}
 
       {/* ── Actions ────────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-s3">
-        <button
-          type="button"
+        <AppButton
+          variant="primary"
+          size="md"
+          disabled={!canCreate}
+          loading={creating}
+          loadingText="Creating…"
           onClick={submit}
-          disabled={!canCreate || creating}
-          className="inline-flex items-center gap-s1 h-s7 px-s4 rounded-pill bg-prim text-white font-body font-medium text-l1 hover:opacity-85 disabled:opacity-40 disabled:cursor-default transition-opacity cursor-pointer"
         >
-          {creating ? "Creating…" : "Create & edit"}
-          {!creating && <Icon name="arrow-right" size="sm" />}
-        </button>
+          Create &amp; edit
+          <Icon name="arrow-right" size="sm" />
+        </AppButton>
         <Link href="/tools" className="font-body text-l1 text-prim/50 hover:text-prim transition-colors">
           Cancel
         </Link>
       </div>
     </div>
-  );
-}
-
-function NewField({
-  label,
-  value,
-  onChange,
-  type = "text",
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  type?: string;
-}) {
-  return (
-    <label className="flex flex-col gap-s1">
-      <span className="font-body text-l3 text-prim/55">{label}</span>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-s6 px-s2 rounded-md border border-prim/15 bg-white font-body text-p3 text-prim outline-none focus:border-brand transition-colors"
-      />
-    </label>
   );
 }

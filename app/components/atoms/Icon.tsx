@@ -2,17 +2,27 @@ import type { ComponentType, SVGProps } from "react";
 import type { IconProps as PhosphorIconProps, IconWeight } from "@phosphor-icons/react";
 import {
   ArrowRight,
+  ArrowSquareOut,
   BracketsCurly,
+  CalendarBlank,
+  CaretDown,
   CaretLeft,
   CaretRight,
   Check,
+  CheckCircle,
   Copy,
   DotsThreeVertical,
+  Eye,
+  FileText,
+  MagnifyingGlass,
   Microscope,
+  PaperPlaneRight,
   PencilSimple,
   PersonSimpleRun,
+  Plus,
   TextT,
   Trash,
+  Warning,
   X,
 } from "@phosphor-icons/react/ssr";
 
@@ -34,6 +44,14 @@ function ChevronRight({ className, role, "aria-label": ariaLabel, "aria-hidden":
   );
 }
 
+function ChevronDown({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
+      <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function Menu({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
@@ -44,29 +62,41 @@ function Menu({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHid
 }
 
 const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
-  "arrow-right": ArrowRight,
-  "brackets-curly": BracketsCurly,
-  "caret-left": CaretLeft,
-  "caret-right": CaretRight,
-  check: Check,
-  close: X,
-  copy: Copy,
-  "chevron-left": ChevronLeft,
-  "chevron-right": ChevronRight,
+  "arrow-right":       ArrowRight,
+  "arrow-square-out":  ArrowSquareOut,
+  "brackets-curly":    BracketsCurly,
+  calendar:            CalendarBlank,
+  "caret-down":        CaretDown,
+  "caret-left":        CaretLeft,
+  "caret-right":       CaretRight,
+  check:               Check,
+  "check-circle":      CheckCircle,
+  close:               X,
+  copy:                Copy,
+  "chevron-down":      ChevronDown,
+  "chevron-left":      ChevronLeft,
+  "chevron-right":     ChevronRight,
   "dots-three-vertical": DotsThreeVertical,
-  menu: Menu,
-  microscope: Microscope,
-  "pencil-simple": PencilSimple,
+  eye:                 Eye,
+  "file-text":         FileText,
+  "magnifying-glass":  MagnifyingGlass,
+  menu:                Menu,
+  microscope:          Microscope,
+  "paper-plane":       PaperPlaneRight,
+  "pencil-simple":     PencilSimple,
   "person-simple-run": PersonSimpleRun,
-  "text-t": TextT,
-  trash: Trash,
+  plus:                Plus,
+  "text-t":            TextT,
+  trash:               Trash,
+  warning:             Warning,
 };
 
 export type IconName = keyof typeof registry;
 
-type IconSize = "sm" | "md" | "lg";
+type IconSize = "xs" | "sm" | "md" | "lg";
 
 const sizeClass: Record<IconSize, string> = {
+  xs: "size-[12px]",
   sm: "size-s2",
   md: "size-s3",
   lg: "size-s4",
