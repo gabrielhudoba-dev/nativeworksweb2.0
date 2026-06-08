@@ -150,9 +150,31 @@ function pageToProposal(page: Record<string, unknown>): Proposal {
 function pageToBlock(page: Record<string, unknown>): ProposalBlock {
   const p = page.properties as Record<string, unknown>;
   const itemsRaw = plainText(p["Items"] as never);
+  const blockType = ((p["Block Type"] as { select?: { name: string } })?.select?.name ?? "description") as BlockType;
+  const stagesJson = plainText(p["Stages JSON"] as never);
+
+  let services: ProposalService[] = [];
+  if (blockType === "pricing" && stagesJson) {
+    try {
+      const parsed = JSON.parse(stagesJson);
+      if (Array.isArray(parsed)) {
+        services = parsed
+          .filter((s) => s && typeof s === "object")
+          .map((s, i) => ({
+            notionPageId: String(s.notionPageId ?? ""),
+            title: String(s.title ?? ""),
+            desc: String(s.desc ?? ""),
+            price: String(s.price ?? ""),
+            duration: String(s.duration ?? ""),
+            sortOrder: i,
+          }));
+      }
+    } catch { /* invalid JSON */ }
+  }
+
   return {
     notionPageId: page.id as string,
-    blockType:    ((p["Block Type"] as { select?: { name: string } })?.select?.name ?? "description") as BlockType,
+    blockType,
     locked:       (p["Locked"] as { checkbox?: boolean })?.checkbox ?? false,
     sortOrder:    (p["Sort Order"] as { number?: number })?.number ?? 0,
     heading:      plainText(p["Heading"] as never),
@@ -160,8 +182,8 @@ function pageToBlock(page: Record<string, unknown>): ProposalBlock {
     clientName:   plainText(p["Client Name"] as never),
     subtitle:     plainText(p["Subtitle"] as never),
     items:        itemsRaw ? itemsRaw.split("\n").filter(Boolean) : [],
-    stagesJson:   plainText(p["Stages JSON"] as never),
-    services:     [],
+    stagesJson,
+    services,
   };
 }
 
@@ -357,43 +379,21 @@ export async function updateProposal(
  */
 export async function getProposalBlocks(
   blocksDatabaseId: string,
-  proposalPageId: string
+  _proposalPageId: string
 ): Promise<ProposalBlock[]> {
   if (!blocksDatabaseId) return [];
 
-  const servicesDbId = process.env.NOTION_SERVICES_DB_ID;
-  const [blocksData, servicesData] = await Promise.all([
-    notionFetch(`/databases/${blocksDatabaseId}/query`, {
-      method: "POST",
-      body: JSON.stringify({
-        sorts: [{ property: "Sort Order", direction: "ascending" }],
-        page_size: 50,
-      }),
+  const blocksData = await notionFetch(`/databases/${blocksDatabaseId}/query`, {
+    method: "POST",
+    body: JSON.stringify({
+      sorts: [{ property: "Sort Order", direction: "ascending" }],
+      page_size: 50,
     }),
-    servicesDbId
-      ? notionFetch(`/databases/${servicesDbId}/query`, {
-          method: "POST",
-          body: JSON.stringify({
-            filter: { property: "Proposal", relation: { contains: proposalPageId } },
-            sorts: [{ property: "Sort Order", direction: "ascending" }],
-            page_size: 100,
-          }),
-        }).catch(() => ({ results: [] }))
-      : Promise.resolve({ results: [] }),
-  ]);
+  });
 
-  const blocks = ((blocksData.results as Array<Record<string, unknown>>) ?? []).map(pageToBlock);
-  const services = ((servicesData.results as Array<Record<string, unknown>>) ?? []).map(pageToService);
-
-  // Attach all services to the pricing block (at most one per proposal)
-  for (const block of blocks) {
-    if (block.blockType === "pricing") {
-      block.services = services;
-      break;
-    }
-  }
-
-  return blocks;
+  // Services are stored as JSON inside the pricing block's "Stages JSON" field
+  // and parsed directly in pageToBlock — no separate DB query needed.
+  return ((blocksData.results as Array<Record<string, unknown>>) ?? []).map(pageToBlock);
 }
 
 /** Persisted id mapping returned by saveBlocks, in input order. */
@@ -441,7 +441,12 @@ export async function saveBlocks(
       "Client Name": { rich_text: richText(b.clientName ?? "") },
       "Subtitle":    { rich_text: richText(b.subtitle ?? "") },
       "Items":       { rich_text: richText((b.items ?? []).join("\n")) },
-      "Stages JSON": { rich_text: richText(b.stagesJson ?? "") },
+      // Pricing services are stored as JSON in "Stages JSON" (process/approach use the same field for stages)
+      "Stages JSON": { rich_text: richText(
+        b.blockType === "pricing"
+          ? JSON.stringify(b.services ?? [])
+          : (b.stagesJson ?? "")
+      ) },
     };
 
     let blockId = b.notionPageId;
@@ -465,12 +470,7 @@ export async function saveBlocks(
       blockId = created.id as string;
     }
 
-    const serviceIds =
-      b.blockType === "pricing" && b.services
-        ? await saveServices(proposalPageId, b.services)
-        : [];
-
-    refs.push({ notionPageId: blockId, serviceIds });
+    refs.push({ notionPageId: blockId, serviceIds: [] });
   }
 
   return refs;
