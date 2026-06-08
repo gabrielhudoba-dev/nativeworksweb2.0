@@ -11,3 +11,4 @@ export { StatColumn } from "./StatColumn";
 export { StatsSlider } from "./StatsSlider";
 export { DotsNav } from "./DotsNav";
 export { Slider } from "./Slider";
+export { LogoMarquee } from "./LogoMarquee";

@@ -1,5 +1,5 @@
 import { Heading, ImageBlock, Text } from "@/app/components/atoms";
-import { Refer, StatColumn } from "@/app/components/molecules";
+import { LogoMarquee, Refer, StatColumn } from "@/app/components/molecules";
 import { CaseStudyCard } from "@/app/components/organisms";
 import { getContent, getCaseStudiesItems } from "@/lib/content";
 import { DOT_BG } from "@/app/styles/patterns";
@@ -72,6 +72,10 @@ export default async function CaseStudiesPage() {
             );
           })}
         </div>
+      </section>
+
+      <section className="pt-s7 sm:pt-s9 pb-s12 lg:pb-[288px]">
+        <LogoMarquee />
       </section>
     </main>
   );
