@@ -42,7 +42,7 @@ export function DeleteButton({ proposalPageId }: { proposalPageId: string }) {
         type="button"
         onClick={() => { setOpen((o) => !o); setConfirming(false); }}
         aria-label="Proposal options"
-        className="grid place-items-center size-s6 rounded-pill text-prim/60 hover:bg-prim/8 hover:text-prim transition-colors"
+        className="grid place-items-center size-s5 rounded-pill text-prim/60 hover:bg-prim/8 hover:text-prim transition-colors"
       >
         <Icon name="dots-three-vertical" size="md" />
       </button>
