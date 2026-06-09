@@ -90,7 +90,7 @@ export function DealPicker({
             className="grid place-items-center size-s4 rounded-pill text-prim/30 hover:text-prim/60 hover:bg-prim/8 transition-colors cursor-pointer"
             title="Unlink deal"
           >
-            <Icon name="x" size="sm" />
+            <Icon name="close" size="sm" />
           </button>
         </div>
       ) : (
