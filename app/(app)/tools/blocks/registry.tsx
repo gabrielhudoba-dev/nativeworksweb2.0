@@ -555,7 +555,7 @@ function ServiceNameCell({
   }
 
   return (
-    <span className="relative flex-1 min-w-0">
+    <span className="relative flex-1 min-w-0 max-w-[200px]">
       <span className="flex items-center gap-s1 group/name">
         <input
           ref={inputRef}
@@ -658,7 +658,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
           value={block.heading}
           onChange={(v) => onChange?.({ heading: v })}
           placeholder="Services"
-          className="flex-1 font-body font-medium text-[10px] text-prim uppercase tracking-widest"
+          className="flex-1 min-w-0 max-w-[200px] font-body font-medium text-[10px] text-prim uppercase tracking-widest"
         />
         <span className="w-[96px] text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Duration</span>
         <span className="w-[80px] text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Allocation</span>
@@ -676,7 +676,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
               {mode === "edit" ? (
                 <ServiceNameCell value={s.title} onCommit={(patch) => setService(i, patch)} />
               ) : (
-                <span className="flex-1 font-body font-medium text-l1 text-prim">{s.title}</span>
+                <span className="flex-1 min-w-0 max-w-[200px] font-body font-medium text-l1 text-prim truncate">{s.title}</span>
               )}
               {/* Duration — time period; retainer tag sits right after it */}
               <span className="w-[96px] flex items-center gap-[5px]">
