@@ -660,8 +660,8 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
           placeholder="Services"
           className="flex-1 font-body font-medium text-[10px] text-prim uppercase tracking-widest"
         />
-        <span className="w-[72px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Duration</span>
-        <span className="w-[72px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Allocation</span>
+        <span className="w-[96px] text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Duration</span>
+        <span className="w-[80px] text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Allocation</span>
         <span className="w-[80px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Price</span>
       </div>
 
@@ -676,48 +676,47 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
               {mode === "edit" ? (
                 <ServiceNameCell value={s.title} onCommit={(patch) => setService(i, patch)} />
               ) : (
-                <span className="flex-1 flex items-center gap-s2 font-body font-medium text-l1 text-prim">
-                  {s.title}
-                  {s.isRetainer && (
-                    <span className="inline-flex items-center h-s3 px-[6px] rounded bg-brand/8 text-brand text-[10px] font-body font-medium uppercase tracking-wide">Retainer</span>
-                  )}
-                </span>
+                <span className="flex-1 font-body font-medium text-l1 text-prim">{s.title}</span>
               )}
-              {/* Retainer toggle — edit only */}
-              {mode === "edit" && (
-                <button
-                  type="button"
-                  onClick={() => setService(i, { isRetainer: !s.isRetainer })}
-                  className={`shrink-0 inline-flex items-center h-s3 px-[6px] rounded text-[10px] font-body font-medium uppercase tracking-wide transition-colors cursor-pointer ${
-                    s.isRetainer
-                      ? "bg-brand/10 text-brand"
-                      : "bg-prim/5 text-prim/20 opacity-0 group-hover/row:opacity-100"
-                  }`}
-                >
-                  Retainer
-                </button>
-              )}
-              {/* Duration — time period, used for retainer price calculation */}
-              {mode === "edit" ? (
-                <input
-                  value={s.duration}
-                  onChange={(e) => setService(i, { duration: e.target.value })}
-                  placeholder={s.isRetainer ? "0 months" : "—"}
-                  className="w-[72px] text-right font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
-                />
-              ) : (
-                <span className="w-[72px] text-right font-body text-l1 text-prim/50">{s.duration || "—"}</span>
-              )}
+              {/* Duration — time period; retainer tag sits right after it */}
+              <span className="w-[96px] flex items-center gap-[5px]">
+                {mode === "edit" ? (
+                  <input
+                    value={s.duration}
+                    onChange={(e) => setService(i, { duration: e.target.value })}
+                    placeholder="—"
+                    className="min-w-0 flex-1 font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
+                  />
+                ) : (
+                  <span className="font-body text-l1 text-prim/50">{s.duration || "—"}</span>
+                )}
+                {/* Retainer toggle (edit) / badge (view) */}
+                {mode === "edit" ? (
+                  <button
+                    type="button"
+                    onClick={() => setService(i, { isRetainer: !s.isRetainer })}
+                    className={`shrink-0 inline-flex items-center h-s3 px-[6px] rounded text-[10px] font-body font-medium uppercase tracking-wide transition-colors cursor-pointer ${
+                      s.isRetainer
+                        ? "bg-brand/10 text-brand"
+                        : "bg-prim/5 text-prim/20 opacity-0 group-hover/row:opacity-100"
+                    }`}
+                  >
+                    /mo
+                  </button>
+                ) : s.isRetainer ? (
+                  <span className="shrink-0 inline-flex items-center h-s3 px-[6px] rounded bg-brand/8 text-brand text-[10px] font-body font-medium uppercase tracking-wide">Retainer</span>
+                ) : null}
+              </span>
               {/* Allocation — FTE */}
               {mode === "edit" ? (
                 <input
                   value={s.allocation}
                   onChange={(e) => setService(i, { allocation: e.target.value })}
                   placeholder="1 FTE"
-                  className="w-[72px] text-right font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
+                  className="w-[80px] font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
                 />
               ) : (
-                <span className="w-[72px] text-right font-body text-l1 text-prim/50">{s.allocation || "—"}</span>
+                <span className="w-[80px] font-body text-l1 text-prim/50">{s.allocation || "—"}</span>
               )}
               {/* Price */}
               {mode === "edit" ? (
