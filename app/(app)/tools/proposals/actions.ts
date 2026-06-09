@@ -158,6 +158,7 @@ export async function createProposalAction(input: NewProposalInput): Promise<voi
         desc: s.desc,
         price: s.price,
         duration: s.duration,
+        allocation: s.allocation ?? "",
         sortOrder: j,
       })),
     }))
@@ -201,6 +202,7 @@ export async function createBlankProposalAction(): Promise<void> {
         desc: s.desc,
         price: s.price,
         duration: s.duration,
+        allocation: s.allocation ?? "",
         sortOrder: j,
       })),
     }))
@@ -254,6 +256,7 @@ export async function saveProposalAction(
           desc: s.desc,
           price: s.price,
           duration: s.duration,
+          allocation: s.allocation ?? "",
           sortOrder: i,
         })),
       }))
@@ -345,6 +348,7 @@ export async function duplicateProposalAction(
           desc: s.desc,
           price: s.price,
           duration: s.duration,
+          allocation: (s as unknown as { allocation?: string }).allocation ?? "",
           sortOrder: j,
         })),
       }))

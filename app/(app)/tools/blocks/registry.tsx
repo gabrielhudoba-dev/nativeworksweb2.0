@@ -620,7 +620,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
     onChange?.({
       services: [
         ...services,
-        { id: `tmp-${Date.now()}`, notionPageId: "", isRetainer: false, title: "", desc: "", price: "", duration: "" },
+        { id: `tmp-${Date.now()}`, notionPageId: "", isRetainer: false, title: "", desc: "", price: "", duration: "", allocation: "" },
       ],
     });
 
@@ -660,7 +660,8 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
           placeholder="Services"
           className="flex-1 font-body font-medium text-[10px] text-prim uppercase tracking-widest"
         />
-        <span className="w-[88px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Allocation</span>
+        <span className="w-[72px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Duration</span>
+        <span className="w-[72px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Allocation</span>
         <span className="w-[80px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Price</span>
       </div>
 
@@ -696,16 +697,27 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                   Retainer
                 </button>
               )}
-              {/* Duration */}
+              {/* Duration — time period, used for retainer price calculation */}
               {mode === "edit" ? (
                 <input
                   value={s.duration}
                   onChange={(e) => setService(i, { duration: e.target.value })}
-                  placeholder={s.isRetainer ? "0 months" : "1 FTE"}
-                  className="w-[88px] text-right font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
+                  placeholder={s.isRetainer ? "0 months" : "—"}
+                  className="w-[72px] text-right font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
                 />
               ) : (
-                <span className="w-[88px] text-right font-body text-l1 text-prim/50">{s.duration || "—"}</span>
+                <span className="w-[72px] text-right font-body text-l1 text-prim/50">{s.duration || "—"}</span>
+              )}
+              {/* Allocation — FTE */}
+              {mode === "edit" ? (
+                <input
+                  value={s.allocation}
+                  onChange={(e) => setService(i, { allocation: e.target.value })}
+                  placeholder="1 FTE"
+                  className="w-[72px] text-right font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
+                />
+              ) : (
+                <span className="w-[72px] text-right font-body text-l1 text-prim/50">{s.allocation || "—"}</span>
               )}
               {/* Price */}
               {mode === "edit" ? (

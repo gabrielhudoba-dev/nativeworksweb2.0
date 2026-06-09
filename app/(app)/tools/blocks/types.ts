@@ -16,7 +16,8 @@ export type EditorService = {
   title: string;
   desc: string;
   price: string;
-  duration: string;
+  duration: string;      // time period ("2 weeks", "3 months") — retainer uses this for price calc
+  allocation: string;    // FTE allocation ("0.5 FTE", "1 FTE") — display only
 };
 
 export type EditorStage = {
@@ -215,6 +216,7 @@ export function fromNotionBlock(b: ProposalBlock): EditorBlock {
       desc: s.desc === "__retainer__" ? "" : s.desc,
       price: s.price,
       duration: s.duration,
+      allocation: (s as unknown as { allocation?: string }).allocation ?? "",
     })),
   };
 }
@@ -240,6 +242,7 @@ export type SaveBlockInput = {
     desc: string;
     price: string;
     duration: string;
+    allocation: string;
   }>;
 };
 
@@ -262,6 +265,7 @@ export function toSaveInput(blocks: EditorBlock[]): SaveBlockInput[] {
       desc: s.isRetainer ? "__retainer__" : (s.desc || ""),
       price: s.price,
       duration: s.duration,
+      allocation: s.allocation || "",
     })),
   }));
 }

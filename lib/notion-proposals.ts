@@ -41,6 +41,7 @@ export type ProposalService = {
   desc: string;
   price: string;
   duration: string;
+  allocation: string;
   sortOrder: number;
 };
 
@@ -166,6 +167,7 @@ function pageToBlock(page: Record<string, unknown>): ProposalBlock {
             desc: String(s.desc ?? ""),
             price: String(s.price ?? ""),
             duration: String(s.duration ?? ""),
+            allocation: String(s.allocation ?? ""),
             sortOrder: i,
           }));
       }
@@ -195,6 +197,7 @@ function pageToService(page: Record<string, unknown>): ProposalService {
     desc:         plainText(p["Desc"] as never),
     price:        plainText(p["Price"] as never),
     duration:     plainText(p["Duration"] as never),
+    allocation:   "",
     sortOrder:    (p["Sort Order"] as { number?: number })?.number ?? 0,
   };
 }
