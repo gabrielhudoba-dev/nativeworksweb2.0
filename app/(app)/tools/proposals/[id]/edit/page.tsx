@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getProposal, getProposalBlocks } from "@/lib/notion-proposals";
+import { getProposal, getProposalBlocks, getDealTitle } from "@/lib/notion-proposals";
 import { fromNotionBlock, defaultDocument } from "../../../blocks/types";
 import { ProposalEditor } from "./ProposalEditor";
 
@@ -14,9 +14,12 @@ export default async function EditProposalPage({
   const proposal = await getProposal(id);
   if (!proposal) notFound();
 
-  const notionBlocks = proposal.blocksDatabaseId
-    ? await getProposalBlocks(proposal.blocksDatabaseId, proposal.notionPageId)
-    : [];
+  const [notionBlocks, dealTitle] = await Promise.all([
+    proposal.blocksDatabaseId
+      ? getProposalBlocks(proposal.blocksDatabaseId, proposal.notionPageId)
+      : Promise.resolve([]),
+    proposal.dealPageId ? getDealTitle(proposal.dealPageId) : Promise.resolve(null),
+  ]);
 
   // Seed the three locked blocks for a brand-new proposal that has none yet.
   const initialBlocks =
@@ -30,6 +33,8 @@ export default async function EditProposalPage({
       slug={proposal.slug}
       status={proposal.status}
       initialBlocks={initialBlocks}
+      dealPageId={proposal.dealPageId}
+      dealTitle={dealTitle}
     />
   );
 }

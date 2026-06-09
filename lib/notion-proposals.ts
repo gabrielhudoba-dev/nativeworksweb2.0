@@ -498,6 +498,69 @@ export async function deleteProposal(pageId: string): Promise<void> {
   });
 }
 
+// ─── Deals ────────────────────────────────────────────────────────────────────
+
+export type Deal = { notionPageId: string; title: string };
+
+/** Search Notion pages/DB-entries that match query — used to pick a deal. */
+export async function searchDeals(query: string): Promise<Deal[]> {
+  // If a dedicated deals DB is configured, query it directly (faster, more precise).
+  if (process.env.NOTION_DEALS_DB_ID) {
+    const data = await notionFetch(
+      `/databases/${process.env.NOTION_DEALS_DB_ID}/query`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          filter: query.trim()
+            ? { property: "Name", title: { contains: query.trim() } }
+            : undefined,
+          sorts: [{ timestamp: "last_edited_time", direction: "descending" }],
+          page_size: 10,
+        }),
+      }
+    );
+    return ((data.results as Array<Record<string, unknown>>) ?? []).map((p) => ({
+      notionPageId: p.id as string,
+      title: titleText((p.properties as Record<string, unknown>)["Name"] as never) || "Untitled",
+    }));
+  }
+
+  // Fallback: Notion search API (searches across all accessible pages).
+  const data = await notionFetch("/search", {
+    method: "POST",
+    body: JSON.stringify({
+      query: query.trim(),
+      filter: { value: "page", property: "object" },
+      sort: { direction: "descending", timestamp: "last_edited_time" },
+      page_size: 10,
+    }),
+  });
+  return ((data.results as Array<Record<string, unknown>>) ?? []).map((p) => {
+    const props = p.properties as Record<string, unknown> | undefined;
+    const titleProp = props
+      ? (props["Name"] ?? props["Title"] ?? Object.values(props).find((v) => (v as Record<string, unknown>).type === "title"))
+      : undefined;
+    const name = titleProp
+      ? titleText(titleProp as never) || "Untitled"
+      : "Untitled";
+    return { notionPageId: p.id as string, title: name };
+  });
+}
+
+/** Fetch title of a single Notion page by ID (for displaying the linked deal name). */
+export async function getDealTitle(pageId: string): Promise<string> {
+  try {
+    const page = await notionFetch(`/pages/${pageId}`);
+    const props = page.properties as Record<string, unknown> | undefined;
+    const titleProp = props
+      ? (props["Name"] ?? props["Title"] ?? Object.values(props).find((v) => (v as Record<string, unknown>)?.type === "title"))
+      : undefined;
+    return titleProp ? titleText(titleProp as never) || "Deal" : "Deal";
+  } catch {
+    return "Deal";
+  }
+}
+
 // ─── Services ─────────────────────────────────────────────────────────────────
 
 /** Returns the persisted service ids in input order. */

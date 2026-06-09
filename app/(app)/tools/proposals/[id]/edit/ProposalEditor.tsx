@@ -17,6 +17,7 @@ import { BlockFrame } from "./BlockFrame";
 import { InsertPoint } from "./InsertPoint";
 import { ShareButton } from "./ShareButton";
 import { DeleteButton } from "./DeleteButton";
+import { DealPicker } from "./DealPicker";
 
 type SaveState = "idle" | "pending" | "saving" | "saved" | "error";
 
@@ -27,6 +28,8 @@ type Props = {
   slug: string;
   status: ProposalStatus;
   initialBlocks: EditorBlock[];
+  dealPageId?: string | null;
+  dealTitle?: string | null;
 };
 
 const AUTOSAVE_MS = 1500;
@@ -38,6 +41,8 @@ export function ProposalEditor({
   slug,
   status,
   initialBlocks,
+  dealPageId = null,
+  dealTitle = null,
 }: Props) {
   const [blocks, setBlocks] = useState<EditorBlock[]>(initialBlocks);
   const [saveState, setSaveState] = useState<SaveState>("idle");
@@ -183,6 +188,8 @@ export function ProposalEditor({
         saveState={saveState}
         onSave={doSave}
         proposalPageId={proposalPageId}
+        dealPageId={dealPageId}
+        dealTitle={dealTitle}
       />
 
       <div className="mx-auto w-full max-w-editor px-s5 py-s10 flex flex-col">
@@ -231,6 +238,8 @@ function EditorToolbar({
   saveState,
   onSave,
   proposalPageId,
+  dealPageId,
+  dealTitle,
 }: {
   title: string;
   slug: string;
@@ -238,38 +247,51 @@ function EditorToolbar({
   saveState: SaveState;
   onSave: () => void;
   proposalPageId: string;
+  dealPageId: string | null;
+  dealTitle: string | null;
 }) {
   return (
-    <div className="sticky top-s9 z-20 flex items-center justify-between gap-s4 h-s8 px-s4 pb-px bg-white/85 backdrop-blur border-b border-prim/8">
-      <div className="flex items-center gap-s2 min-w-0">
-        <a href="/tools" className="grid place-items-center size-s5 rounded-pill text-prim/50 hover:bg-prim/8 hover:text-prim transition-colors">
-          <Icon name="chevron-left" size="md" />
-        </a>
-        <span className="font-body font-medium text-l1 text-prim truncate">{title}</span>
-        <StatusBadge status={status} />
+    <div className="sticky top-s9 z-20 flex flex-col bg-white/85 backdrop-blur border-b border-prim/8">
+      <div className="flex items-center justify-between gap-s4 h-s8 px-s4">
+        <div className="flex items-center gap-s2 min-w-0">
+          <a href="/tools" className="grid place-items-center size-s5 rounded-pill text-prim/50 hover:bg-prim/8 hover:text-prim transition-colors">
+            <Icon name="chevron-left" size="md" />
+          </a>
+          <span className="font-body font-medium text-l1 text-prim truncate">{title}</span>
+          <StatusBadge status={status} />
+        </div>
+        <div className="flex items-center gap-s1">
+          <button
+            type="button"
+            onClick={onSave}
+            className={`inline-flex items-center h-s5 px-s2 font-body text-l1 transition-colors ${
+              saveState === "error"
+                ? "text-error hover:opacity-80 cursor-pointer"
+                : "text-prim/45"
+            }`}
+          >
+            {SAVE_LABEL[saveState]}
+          </button>
+          <ShareButton proposalPageId={proposalPageId} />
+          <a
+            href={`/p/${slug}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center pb-px h-s5 px-s3 rounded-pill bg-prim text-white font-body font-medium text-l1 hover:opacity-85 transition-opacity"
+          >
+            Preview
+          </a>
+          <DeleteButton proposalPageId={proposalPageId} />
+        </div>
       </div>
-      <div className="flex items-center gap-s1">
-        <button
-          type="button"
-          onClick={onSave}
-          className={`inline-flex items-center h-s5 px-s2 font-body text-l1 transition-colors ${
-            saveState === "error"
-              ? "text-error hover:opacity-80 cursor-pointer"
-              : "text-prim/45"
-          }`}
-        >
-          {SAVE_LABEL[saveState]}
-        </button>
-        <ShareButton proposalPageId={proposalPageId} />
-        <a
-          href={`/p/${slug}`}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center pb-px h-s5 px-s3 rounded-pill bg-prim text-white font-body font-medium text-l1 hover:opacity-85 transition-opacity"
-        >
-          Preview
-        </a>
-        <DeleteButton proposalPageId={proposalPageId} />
+      {/* Deal link — internal only, never shown in public preview */}
+      <div className="flex items-center gap-s2 px-s4 h-s5 border-t border-prim/5">
+        <span className="font-body text-l2 text-prim/30">Deal</span>
+        <DealPicker
+          proposalPageId={proposalPageId}
+          initialDealPageId={dealPageId}
+          initialDealTitle={dealTitle}
+        />
       </div>
     </div>
   );

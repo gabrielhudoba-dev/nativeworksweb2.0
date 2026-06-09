@@ -13,6 +13,7 @@ import {
   getProposal,
   getProposalBlocks,
   saveBlocks,
+  searchDeals,
   updateProposal,
   countClientProposals,
   type ProposalStatus,
@@ -475,3 +476,39 @@ export async function shareProposalAction(
   revalidatePath("/tools");
   return { shareUrl };
 }
+
+// ─── Deal linking ─────────────────────────────────────────────────────────────
+
+/** Search Notion for deals matching the query (internal, editor-only). */
+export async function searchDealsAction(
+  query: string
+): Promise<Array<{ pageId: string; title: string }>> {
+  await requireCreator();
+  const deals = await searchDeals(query);
+  return deals.map((d) => ({ pageId: d.notionPageId, title: d.title }));
+}
+
+/** Link or unlink a deal from a proposal (dealPageId = null to unlink). */
+export async function linkDealAction(
+  proposalPageId: string,
+  dealPageId: string | null
+): Promise<void> {
+  await requireCreator();
+  // updateProposal only sets the relation when dealPageId is truthy — clear it via direct fetch.
+  const res = await fetch(`https://api.notion.com/v1/pages/${proposalPageId}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${process.env.NOTION_TOKEN}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      properties: {
+        Deal: { relation: dealPageId ? [{ id: dealPageId }] : [] },
+      },
+    }),
+  });
+  if (!res.ok) throw new Error(`Notion ${res.status}: ${await res.text()}`);
+  revalidatePath(`/tools/proposals/${proposalPageId}/edit`);
+}
+
