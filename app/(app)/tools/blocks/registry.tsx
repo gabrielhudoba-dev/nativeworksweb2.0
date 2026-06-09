@@ -701,7 +701,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                         : "bg-prim/5 text-prim/20 opacity-0 group-hover/row:opacity-100"
                     }`}
                   >
-                    /mo
+                    Retainer
                   </button>
                 ) : s.isRetainer ? (
                   <span className="shrink-0 inline-flex items-center h-s3 px-[6px] rounded bg-brand/8 text-brand text-[10px] font-body font-medium uppercase tracking-wide">Retainer</span>
