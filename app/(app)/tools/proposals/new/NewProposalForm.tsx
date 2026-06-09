@@ -20,13 +20,28 @@ type Selected =
   | { mode: "existing"; pageId: string; companyName: string }
   | { mode: "new"; companyName: string; pocName: string; pocEmail: string; pocPhone: string };
 
-export function NewProposalForm() {
+export function NewProposalForm({
+  initialClientId,
+  initialClientName,
+  initialTitle,
+}: {
+  initialClientId?: string;
+  initialClientName?: string;
+  initialTitle?: string;
+} = {}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<ClientResult[]>([]);
   const [searching, setSearching] = useState(false);
 
-  const [selected, setSelected] = useState<Selected | null>(null);
-  const [title, setTitle] = useState("");
+  const [selected, setSelected] = useState<Selected | null>(
+    initialClientId && initialClientName
+      ? { mode: "existing", pageId: initialClientId, companyName: initialClientName }
+      : null
+  );
+  const [title, setTitle] = useState(
+    initialTitle ??
+    (initialClientName ? `${initialClientName} ${DASH} 1` : "")
+  );
   const [titleTouched, setTitleTouched] = useState(false);
 
   const [creating, setCreating] = useState(false);

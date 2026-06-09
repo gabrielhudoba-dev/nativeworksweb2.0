@@ -4,7 +4,16 @@ import { NewProposalForm } from "./NewProposalForm";
 
 export const dynamic = "force-dynamic";
 
-export default function NewProposalPage() {
+export default async function NewProposalPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const clientId   = typeof sp.clientId   === "string" ? sp.clientId   : undefined;
+  const clientName = typeof sp.clientName === "string" ? decodeURIComponent(sp.clientName) : undefined;
+  const title      = typeof sp.title      === "string" ? decodeURIComponent(sp.title)      : undefined;
+
   return (
     <PageShell width="form">
       <div className="flex flex-col gap-s1">
@@ -13,7 +22,11 @@ export default function NewProposalPage() {
           Pick the client first, then name the proposal.
         </Text>
       </div>
-      <NewProposalForm />
+      <NewProposalForm
+        initialClientId={clientId}
+        initialClientName={clientName}
+        initialTitle={title}
+      />
     </PageShell>
   );
 }
