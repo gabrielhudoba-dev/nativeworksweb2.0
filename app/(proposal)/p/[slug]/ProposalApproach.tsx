@@ -110,7 +110,7 @@ export function ProposalApproach({
       {/* Totals */}
       {services.length > 0 && (
         <div className="flex flex-col gap-[2px] pt-s2">
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <span className="font-body text-l2 text-prim/60">Subtotal excl. VAT</span>
             <span className="font-body text-l2 text-prim/60">{currency}{subtotal.toLocaleString("en-US")}</span>
           </div>
@@ -119,7 +119,7 @@ export function ProposalApproach({
               <span className="font-body text-l2 text-prim/60">VAT · {vatRate}%</span>
               <span className="font-body text-l2 text-prim/60">{currency}{vatAmount.toLocaleString("en-US")}</span>
             </div>
-          )}
+          )} */}
           <div className="flex justify-between pt-s2 mt-s1 border-t-2 border-prim">
             <span className="font-body font-medium text-l1 text-prim">Total</span>
             <span className="font-body font-medium text-l1 text-prim">{currency}{grandTotal.toLocaleString("en-US")}</span>
