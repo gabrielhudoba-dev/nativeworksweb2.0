@@ -127,7 +127,7 @@ export default async function PublicProposalPage({
 
   return (
     <>
-      <main id="main-content" className="mx-auto w-full max-w-[760px] px-s5 py-s12 flex flex-col gap-s12">
+      <main id="main-content" className="mx-auto w-full max-w-[760px] px-s3 sm:px-s5 py-s12 flex flex-col gap-s12">
         <ViewTracker slug={slug} />
         {blocks.length === 0 ? (
           <p className="font-body text-p2 text-prim/40 text-center py-s16">
@@ -138,7 +138,7 @@ export default async function PublicProposalPage({
 
       {afterCta.length > 0 && (
         <div className="w-full bg-prim/[0.025] pt-s12 pb-s8">
-          <div className="mx-auto w-full max-w-[760px] px-s5 flex flex-col gap-s12">
+          <div className="mx-auto w-full max-w-[760px] px-s3 sm:px-s5 flex flex-col gap-s12">
             {afterCta}
           </div>
         </div>

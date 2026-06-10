@@ -73,7 +73,7 @@ export function ProposalApproach({
                     )}
                   </span>
                   <span
-                    className="flex items-center gap-s3 sm:shrink-0"
+                    className="flex items-center gap-s3 w-full sm:w-auto sm:shrink-0"
                     aria-label={
                       [
                         svc.duration,
@@ -93,7 +93,7 @@ export function ProposalApproach({
                       <span aria-hidden="true" className="font-body text-l2 text-prim/60 whitespace-nowrap">{svc.allocation}</span>
                     )}
                     {displayPrice && (
-                      <span aria-hidden="true" className="font-body font-medium text-l2 text-prim whitespace-nowrap">
+                      <span aria-hidden="true" className="font-body font-medium text-l2 text-prim whitespace-nowrap ml-auto sm:ml-0">
                         {months !== null
                           ? <>{displayPrice}<span className="font-normal text-prim/60 ml-[6px]">€{(priceNum * months).toLocaleString("en-US")}</span></>
                           : displayPrice}

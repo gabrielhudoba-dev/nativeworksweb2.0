@@ -587,7 +587,7 @@ function FooterBlock({ block }: RenderProps) {
   return (
     <footer className="grain bg-brand/10 rounded-xl px-s6 py-s6 flex flex-col gap-s3">
       <Logo size="md" />
-      <div className="flex items-center justify-between gap-s4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[2px] sm:gap-s4">
         <span className="font-body text-p3 text-prim/50">{tagline}</span>
         <a href="mailto:hello@nativeworks.com" className="font-body text-p3 text-prim/50 hover:text-prim transition-colors">hello@nativeworks.com</a>
       </div>
