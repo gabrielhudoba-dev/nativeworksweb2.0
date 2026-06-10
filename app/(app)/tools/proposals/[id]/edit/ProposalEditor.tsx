@@ -188,8 +188,6 @@ export function ProposalEditor({
         saveState={saveState}
         onSave={doSave}
         proposalPageId={proposalPageId}
-        dealPageId={dealPageId}
-        dealTitle={dealTitle}
       />
 
       <div className="mx-auto w-full max-w-editor px-s5 py-s10 flex flex-col">
@@ -210,6 +208,15 @@ export function ProposalEditor({
                 proposalPageId={proposalPageId}
                 onChange={(patch) => patchBlock(block.id, patch)}
               />
+              {i === 0 && (
+                <div className="mt-0">
+                  <DealPicker
+                    proposalPageId={proposalPageId}
+                    initialDealPageId={dealPageId}
+                    initialDealTitle={dealTitle}
+                  />
+                </div>
+              )}
             </BlockFrame>
             {/* Insert points only between/after non-locked regions and never make
                 the locked header/intro/pricing movable into the middle. */}
@@ -238,8 +245,6 @@ function EditorToolbar({
   saveState,
   onSave,
   proposalPageId,
-  dealPageId,
-  dealTitle,
 }: {
   title: string;
   slug: string;
@@ -247,8 +252,6 @@ function EditorToolbar({
   saveState: SaveState;
   onSave: () => void;
   proposalPageId: string;
-  dealPageId: string | null;
-  dealTitle: string | null;
 }) {
   return (
     <div className="sticky top-s9 z-20 flex flex-col bg-white/85 backdrop-blur border-b border-prim/8">
@@ -283,15 +286,6 @@ function EditorToolbar({
           </a>
           <DeleteButton proposalPageId={proposalPageId} />
         </div>
-      </div>
-      {/* Deal link — internal only, never shown in public preview */}
-      <div className="flex items-center gap-s2 px-s4 h-s5 border-t border-prim/5">
-        <span className="font-body text-l2 text-prim/30">Deal</span>
-        <DealPicker
-          proposalPageId={proposalPageId}
-          initialDealPageId={dealPageId}
-          initialDealTitle={dealTitle}
-        />
       </div>
     </div>
   );

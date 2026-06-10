@@ -77,10 +77,9 @@ export function DealPicker({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-[5px] h-s4 px-s2 rounded-pill bg-prim/6 hover:bg-prim/10 transition-colors cursor-pointer"
+            className="inline-flex items-center h-s5 px-s2 rounded-pill bg-prim/6 hover:bg-prim/10 transition-colors cursor-pointer"
           >
-            <Icon name="link" size="sm" className="text-prim/40" />
-            <span className="font-body text-l2 text-prim/60 max-w-[160px] truncate">
+            <span className="font-body text-l2 text-prim/60">
               {isPending ? "Saving…" : linked.title}
             </span>
           </button>
@@ -97,10 +96,10 @@ export function DealPicker({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-[5px] h-s4 px-s2 rounded-pill text-prim/35 hover:text-prim/60 hover:bg-prim/8 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-[5px] h-s5 px-s2 rounded-pill bg-prim/5 text-prim/35 hover:text-prim/60 hover:bg-prim/10 transition-colors cursor-pointer"
         >
-          <Icon name="link" size="sm" />
-          <span className="font-body text-l2">Link deal</span>
+          <span className="font-body text-l2">Related deal</span>
+          <Icon name="chevron-down" size="sm" />
         </button>
       )}
 
