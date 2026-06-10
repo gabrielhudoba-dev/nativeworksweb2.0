@@ -95,8 +95,15 @@ export function ProposalApproachEdit({ approachBlock, pricingBlock, onChangeAppr
     });
   };
 
-  const setService = (i: number, patch: Partial<EditorService>) =>
-    onChangePricing({ services: services.map((s, j) => (j === i ? { ...s, ...patch } : s)) });
+  const setService = (i: number, patch: Partial<EditorService>) => {
+    const updated = [...services];
+    if (updated[i]) {
+      updated[i] = { ...updated[i], ...patch };
+    } else {
+      updated[i] = { id: `tmp-${i}`, notionPageId: "", isRetainer: false, title: "", desc: "", price: "", duration: "", allocation: "", ...patch };
+    }
+    onChangePricing({ services: updated });
+  };
   const removeService = (i: number) =>
     onChangePricing({ services: services.filter((_, j) => j !== i) });
 
@@ -126,9 +133,9 @@ export function ProposalApproachEdit({ approachBlock, pricingBlock, onChangeAppr
 
       <div className="flex flex-col gap-s6">
         {stages.map((stage, i) => {
-          const svc = services[i];
-          const months = svc?.isRetainer ? parseMonths(svc.duration) : null;
-          const priceNum = svc ? parseFloat(svc.price.replace(/[^0-9.]/g, "")) : NaN;
+          const svc = services[i] ?? { id: `tmp-${i}`, notionPageId: "", isRetainer: false, title: "", desc: "", price: "", duration: "", allocation: "" };
+          const months = svc.isRetainer ? parseMonths(svc.duration) : null;
+          const priceNum = parseFloat(svc.price.replace(/[^0-9.]/g, ""));
 
           return (
             <div key={i} className="relative flex flex-col gap-s1">
@@ -163,77 +170,75 @@ export function ProposalApproachEdit({ approachBlock, pricingBlock, onChangeAppr
                 className="font-body font-normal text-p1 text-prim/70 leading-[1.5] whitespace-pre-wrap"
               />
 
-              {svc && (
-                <div className="mt-s2 py-s2 border-y border-prim/15 flex flex-col sm:flex-row sm:items-end gap-[3px] sm:gap-s3 group/svc">
-                  {/* Service name column */}
-                  <span className="flex-1 min-w-0 flex flex-col gap-[3px]">
-                    <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest">Service</span>
-                    <span className="flex items-center gap-[6px] group/name">
-                      <input
-                        value={svc.title}
-                        onChange={(e) => setService(i, { title: e.target.value })}
-                        placeholder="Service name"
-                        className="font-body font-medium text-l2 text-prim/60 bg-transparent outline-none placeholder:text-prim/20 min-w-0 w-full"
-                      />
-                      <CatalogPicker onPick={(patch) => setService(i, patch)} />
-                      <button
-                        type="button"
-                        onClick={() => setService(i, { isRetainer: !svc.isRetainer })}
-                        className={`shrink-0 inline-flex items-center h-s3 px-[6px] rounded text-[10px] font-body font-medium uppercase tracking-wide transition-colors cursor-pointer ${
-                          svc.isRetainer
-                            ? "bg-brand/10 text-brand"
-                            : "bg-prim/5 text-prim/20 opacity-0 group-hover/svc:opacity-100"
-                        }`}
-                      >
-                        Retainer
-                      </button>
-                    </span>
+              <div className="mt-s2 py-s2 border-y border-prim/15 flex flex-col sm:flex-row sm:items-end gap-[3px] sm:gap-s3 group/svc">
+                {/* Service name column */}
+                <span className="flex-1 min-w-0 flex flex-col gap-[3px]">
+                  <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest">Service</span>
+                  <span className="flex items-center gap-[6px] group/name">
+                    <input
+                      value={svc.title}
+                      onChange={(e) => setService(i, { title: e.target.value })}
+                      placeholder="Service name"
+                      className="font-body font-medium text-l2 text-prim/60 bg-transparent outline-none placeholder:text-prim/20 min-w-0 w-full"
+                    />
+                    <CatalogPicker onPick={(patch) => setService(i, patch)} />
+                    <button
+                      type="button"
+                      onClick={() => setService(i, { isRetainer: !svc.isRetainer })}
+                      className={`shrink-0 inline-flex items-center h-s3 px-[6px] rounded text-[10px] font-body font-medium uppercase tracking-wide transition-colors cursor-pointer ${
+                        svc.isRetainer
+                          ? "bg-brand/10 text-brand"
+                          : "bg-prim/5 text-prim/20 opacity-0 group-hover/svc:opacity-100"
+                      }`}
+                    >
+                      Retainer
+                    </button>
                   </span>
+                </span>
 
-                  {/* Duration, Allocation, Price columns */}
-                  <span className="flex items-end gap-s3 sm:shrink-0">
-                    <span className="flex flex-col gap-[3px]">
-                      <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest">Duration</span>
+                {/* Duration, Allocation, Price columns */}
+                <span className="flex items-end gap-s3 sm:shrink-0">
+                  <span className="flex flex-col gap-[3px]">
+                    <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest">Duration</span>
+                    <input
+                      value={svc.duration}
+                      onChange={(e) => setService(i, { duration: e.target.value })}
+                      placeholder="—"
+                      className="w-[72px] font-body text-l2 text-prim/60 bg-transparent outline-none placeholder:text-prim/20"
+                    />
+                  </span>
+                  <span className="flex flex-col gap-[3px]">
+                    <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest">Allocation</span>
+                    <input
+                      value={svc.allocation}
+                      onChange={(e) => setService(i, { allocation: e.target.value })}
+                      placeholder="—"
+                      className="w-[60px] font-body text-l2 text-prim/60 bg-transparent outline-none placeholder:text-prim/20"
+                    />
+                  </span>
+                  <span className="flex flex-col gap-[3px]">
+                    <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest text-right">Price</span>
+                    <span className="flex items-center gap-[4px]">
                       <input
-                        value={svc.duration}
-                        onChange={(e) => setService(i, { duration: e.target.value })}
-                        placeholder="—"
-                        className="w-[72px] font-body text-l2 text-prim/60 bg-transparent outline-none placeholder:text-prim/20"
+                        value={svc.price}
+                        onChange={(e) => setService(i, { price: e.target.value })}
+                        placeholder="€0"
+                        className={`font-body font-medium text-l2 text-prim bg-transparent outline-none text-right placeholder:text-prim/20 ${svc.isRetainer ? "w-[56px]" : "w-[80px]"}`}
                       />
-                    </span>
-                    <span className="flex flex-col gap-[3px]">
-                      <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest">Allocation</span>
-                      <input
-                        value={svc.allocation}
-                        onChange={(e) => setService(i, { allocation: e.target.value })}
-                        placeholder="—"
-                        className="w-[60px] font-body text-l2 text-prim/60 bg-transparent outline-none placeholder:text-prim/20"
-                      />
-                    </span>
-                    <span className="flex flex-col gap-[3px]">
-                      <span className="font-body text-[9px] text-prim/30 uppercase tracking-widest text-right">Price</span>
-                      <span className="flex items-center gap-[4px]">
-                        <input
-                          value={svc.price}
-                          onChange={(e) => setService(i, { price: e.target.value })}
-                          placeholder="€0"
-                          className={`font-body font-medium text-l2 text-prim bg-transparent outline-none text-right placeholder:text-prim/20 ${svc.isRetainer ? "w-[56px]" : "w-[80px]"}`}
-                        />
-                        {svc.isRetainer && (
-                          <>
-                            <span className="font-normal text-l2 text-prim/60">/mo</span>
-                            {months !== null && !isNaN(priceNum) && (
-                              <span className="font-normal text-l2 text-prim/60">
-                                {currency}{(priceNum * months).toLocaleString("en-US")}
-                              </span>
-                            )}
-                          </>
-                        )}
-                      </span>
+                      {svc.isRetainer && (
+                        <>
+                          <span className="font-normal text-l2 text-prim/60">/mo</span>
+                          {months !== null && !isNaN(priceNum) && (
+                            <span className="font-normal text-l2 text-prim/60">
+                              {currency}{(priceNum * months).toLocaleString("en-US")}
+                            </span>
+                          )}
+                        </>
+                      )}
                     </span>
                   </span>
-                </div>
-              )}
+                </span>
+              </div>
             </div>
           );
         })}
@@ -296,7 +301,7 @@ export function ProposalApproachEdit({ approachBlock, pricingBlock, onChangeAppr
 
       {services.length > 0 && (
         <div className="flex flex-col gap-[2px] pt-s2">
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <span className="font-body text-l2 text-prim/60">Subtotal excl. VAT</span>
             <span className="font-body text-l2 text-prim/60">{currency}{subtotal.toLocaleString("en-US")}</span>
           </div>
@@ -316,7 +321,7 @@ export function ProposalApproachEdit({ approachBlock, pricingBlock, onChangeAppr
             <span className="font-body text-l2 text-prim/60">
               {hasVat ? `${currency}${vatAmount.toLocaleString("en-US")}` : "—"}
             </span>
-          </div>
+          </div> */}
           <div className="flex justify-between pt-s2 mt-s1 border-t-2 border-prim">
             <span className="font-body font-medium text-l1 text-prim">Total</span>
             <span className="font-body font-medium text-l1 text-prim">

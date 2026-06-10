@@ -372,7 +372,7 @@ function EditorToolbar({
           >
             Preview
           </a>
-          <DeleteButton proposalPageId={proposalPageId} />
+          <DeleteButton proposalPageId={proposalPageId} title={title} />
         </div>
       </div>
     </div>

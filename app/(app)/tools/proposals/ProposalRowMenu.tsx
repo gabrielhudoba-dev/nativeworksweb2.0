@@ -125,9 +125,6 @@ export function ProposalRowMenu({ proposalPageId, title, onRename, onDuplicate }
         className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[340px] p-s5 flex flex-col gap-s4"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-center size-[40px] rounded-full bg-red-50 text-red-500">
-          <Icon name="trash" size="md" />
-        </div>
         <div className="flex flex-col gap-[6px]">
           <h3 className="font-display font-medium text-h5 text-prim leading-tight">Delete proposal?</h3>
           <p className="font-body text-p2 text-prim/50 leading-snug">
