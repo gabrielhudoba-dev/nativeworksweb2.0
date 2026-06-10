@@ -80,7 +80,7 @@ export function ProposalCTA({
           <span className="grid place-items-center size-s6 rounded-pill bg-white/15">
             <Icon name="check" size="md" />
           </span>
-          <span className="flex flex-col gap-s1">
+          <span className="flex flex-col gap-0">
             <span className="font-display font-medium text-h4">Agree with proposal</span>
             <span className="font-body text-l2 text-white/60">Send us a message to get started</span>
           </span>
@@ -97,7 +97,7 @@ export function ProposalCTA({
           <span className="grid place-items-center size-s6 rounded-pill bg-prim/5 text-prim/60">
             <Icon name="question" size="md" />
           </span>
-          <span className="flex flex-col gap-s1">
+          <span className="flex flex-col gap-0">
             <span className="font-display font-medium text-h4 text-prim">I have questions</span>
             <span className="font-body text-l2 text-prim/65">Let&apos;s jump on a quick call</span>
           </span>
