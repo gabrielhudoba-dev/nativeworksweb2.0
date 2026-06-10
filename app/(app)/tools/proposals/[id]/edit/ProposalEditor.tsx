@@ -18,6 +18,7 @@ import { InsertPoint } from "./InsertPoint";
 import { ShareButton } from "./ShareButton";
 import { DeleteButton } from "./DeleteButton";
 import { DealPicker } from "./DealPicker";
+import { ProposalApproachEdit } from "./ProposalApproachEdit";
 
 type SaveState = "idle" | "pending" | "saving" | "saved" | "error";
 
@@ -34,6 +35,28 @@ type Props = {
 
 const AUTOSAVE_MS = 1500;
 
+function reorderForDisplay(arr: EditorBlock[]): EditorBlock[] {
+  // pricing immediately follows approach (mirrors public page.tsx reordering)
+  const approachIdx = arr.findIndex((b) => b.blockType === "approach");
+  const pricingIdx = arr.findIndex((b) => b.blockType === "pricing");
+  if (approachIdx !== -1 && pricingIdx !== -1 && pricingIdx !== approachIdx + 1) {
+    const pricing = arr[pricingIdx];
+    const without = arr.filter((_, i) => i !== pricingIdx);
+    const insertAt = without.findIndex((b) => b.blockType === "approach") + 1;
+    arr = [...without.slice(0, insertAt), pricing, ...without.slice(insertAt)];
+  }
+  // partnership immediately before process
+  const partnershipIdx = arr.findIndex((b) => b.blockType === "partnership");
+  const processIdx = arr.findIndex((b) => b.blockType === "process");
+  if (partnershipIdx !== -1 && processIdx !== -1 && partnershipIdx !== processIdx - 1) {
+    const partnership = arr[partnershipIdx];
+    const without = arr.filter((_, i) => i !== partnershipIdx);
+    const insertAt = without.findIndex((b) => b.blockType === "process");
+    arr = [...without.slice(0, insertAt), partnership, ...without.slice(insertAt)];
+  }
+  return arr;
+}
+
 export function ProposalEditor({
   proposalPageId,
   blocksDatabaseId,
@@ -44,7 +67,7 @@ export function ProposalEditor({
   dealPageId = null,
   dealTitle = null,
 }: Props) {
-  const [blocks, setBlocks] = useState<EditorBlock[]>(initialBlocks);
+  const [blocks, setBlocks] = useState<EditorBlock[]>(() => reorderForDisplay(initialBlocks));
   const [saveState, setSaveState] = useState<SaveState>("idle");
 
   const blocksRef = useRef(blocks);
@@ -190,40 +213,105 @@ export function ProposalEditor({
         proposalPageId={proposalPageId}
       />
 
-      <div className="mx-auto w-full max-w-editor px-s5 py-s10 flex flex-col">
-        {blocks.map((block, i) => (
-          <div key={block.id}>
-            <BlockFrame
-              locked={block.locked}
-              canMove={!PINNED_BLOCK_TYPES.includes(block.blockType)}
-              isFirst={i === 0}
-              isLast={i === blocks.length - 1}
-              onMoveUp={() => moveBlock(block.id, -1)}
-              onMoveDown={() => moveBlock(block.id, 1)}
-              onDelete={() => removeBlock(block.id)}
-            >
-              <BlockView
-                block={block}
-                mode="edit"
-                proposalPageId={proposalPageId}
-                onChange={(patch) => patchBlock(block.id, patch)}
-              />
-              {i === 0 && (
-                <div className="mt-0">
+      {(() => {
+        const beforeCta: React.ReactNode[] = [];
+        const afterCta: React.ReactNode[] = [];
+        let pastCta = false;
+        let i = 0;
+
+        while (i < blocks.length) {
+          const block = blocks[i];
+          const next = blocks[i + 1];
+          const target = pastCta ? afterCta : beforeCta;
+
+          if (block.blockType === "approach" && next?.blockType === "pricing") {
+            const approachIdx = i;
+            target.push(
+              <div key={block.id}>
+                <BlockFrame
+                  locked={true}
+                  canMove={false}
+                  isFirst={i === 0}
+                  isLast={i + 1 === blocks.length - 1}
+                  onMoveUp={() => {}}
+                  onMoveDown={() => {}}
+                  onDelete={() => {}}
+                >
+                  <ProposalApproachEdit
+                    approachBlock={block}
+                    pricingBlock={next}
+                    onChangeApproach={(patch) => patchBlock(block.id, patch)}
+                    onChangePricing={(patch) => patchBlock(next.id, patch)}
+                  />
+                </BlockFrame>
+                <InsertPoint onInsert={(type) => insertAfter(approachIdx + 1, type)} />
+              </div>
+            );
+            i += 2;
+            continue;
+          }
+
+          if (block.blockType === "cta") {
+            pastCta = true;
+          }
+
+          const blockIdx = i;
+          target.push(
+            <div key={block.id}>
+              <BlockFrame
+                locked={block.locked}
+                canMove={!PINNED_BLOCK_TYPES.includes(block.blockType)}
+                isFirst={i === 0}
+                isLast={i === blocks.length - 1}
+                onMoveUp={() => moveBlock(block.id, -1)}
+                onMoveDown={() => moveBlock(block.id, 1)}
+                onDelete={() => removeBlock(block.id)}
+              >
+                <BlockView
+                  block={block}
+                  mode="edit"
+                  proposalPageId={proposalPageId}
+                  onChange={(patch) => patchBlock(block.id, patch)}
+                />
+                {block.blockType === "header" && (
                   <DealPicker
                     proposalPageId={proposalPageId}
                     initialDealPageId={dealPageId}
                     initialDealTitle={dealTitle}
                   />
+                )}
+              </BlockFrame>
+              {block.blockType !== "footer" && <InsertPoint onInsert={(type) => insertAfter(blockIdx, type)} />}
+            </div>
+          );
+          if (block.blockType === "partnership" && pastCta) {
+            target.push(
+              <img
+                key={`${block.id}-team`}
+                src="/images/teamImageNarrow.png"
+                alt="Native Works team"
+                className="w-full rounded-xl object-cover max-h-[320px] mt-s2 mb-s6"
+              />
+            );
+          }
+          i++;
+        }
+
+        return (
+          <>
+            <div className="mx-auto w-full max-w-editor px-s5 py-s12 flex flex-col gap-s4">
+              {beforeCta}
+            </div>
+            {afterCta.length > 0 && (
+              <div className="w-full bg-prim/[0.025] pt-s12 pb-s4">
+                <div className="mx-auto w-full max-w-editor px-s5 flex flex-col gap-s4">
+                  {afterCta}
                 </div>
-              )}
-            </BlockFrame>
-            {/* Insert points only between/after non-locked regions and never make
-                the locked header/intro/pricing movable into the middle. */}
-            <InsertPoint onInsert={(type) => insertAfter(i, type)} />
-          </div>
-        ))}
-      </div>
+              </div>
+            )}
+          </>
+        );
+      })()}
     </div>
   );
 }

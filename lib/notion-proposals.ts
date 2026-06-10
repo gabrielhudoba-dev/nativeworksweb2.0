@@ -33,7 +33,8 @@ export type ProposalStatus =
 export type BlockType =
   | "header" | "intro" | "pricing"
   | "description" | "benefits" | "scope" | "process"
-  | "approach" | "impact" | "cta" | "partnership" | "about" | "footer";
+  | "approach" | "impact" | "cta" | "partnership" | "about" | "footer"
+  | "photo";
 
 export type ProposalService = {
   notionPageId: string;

@@ -56,6 +56,7 @@ export const BLOCK_LABELS: Record<BlockType, string> = {
   partnership: "Partnership & Governance",
   about:       "About",
   footer:      "Footer",
+  photo:       "Image",
 };
 
 /** Which optional blocks the picker offers (locked ones are seeded, not inserted). */
@@ -63,6 +64,7 @@ export const OPTIONAL_BLOCK_TYPES: BlockType[] = [
   "description",
   "scope",
   "process",
+  "photo",
 ];
 
 /** Blocks that cannot be deleted (shown as "Locked" in the editor). */
@@ -115,7 +117,7 @@ export function makeBlock(blockType: BlockType): EditorBlock {
         ],
       };
     case "impact":
-      return { ...b, heading: "Impact", body: "Describe the measurable outcomes and business value this engagement will deliver." };
+      return { ...b, heading: "Impact", subtitle: "", body: "Describe the measurable outcomes and business value this engagement will deliver." };
     case "pricing":
       return { ...b, heading: "Services", body: "19", services: [] };
     case "cta":
@@ -155,6 +157,8 @@ export function makeBlock(blockType: BlockType): EditorBlock {
       return { ...b, heading: "Benefits", items: ["First benefit", "Second benefit"] };
     case "scope":
       return { ...b, heading: "Scope of work", items: ["First deliverable", "Second deliverable"] };
+    case "photo":
+      return { ...b };
   }
 }
 

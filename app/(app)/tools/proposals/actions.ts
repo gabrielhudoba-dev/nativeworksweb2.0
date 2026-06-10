@@ -516,3 +516,37 @@ export async function linkDealAction(
   revalidatePath(`/tools/proposals/${proposalPageId}/edit`);
 }
 
+export async function uploadProposalImageAction(
+  formData: FormData
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  await requireCreator();
+  const file = formData.get("file") as File | null;
+  if (!file || !file.type.startsWith("image/")) return { ok: false, error: "Invalid file" };
+
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+  // Ensure bucket exists (no-op if already created)
+  await supabaseAdmin.storage.createBucket("proposal-images", { public: true }).catch(() => {});
+
+  const bytes = await file.arrayBuffer();
+  const { error } = await supabaseAdmin.storage
+    .from("proposal-images")
+    .upload(path, bytes, { contentType: file.type, upsert: false });
+
+  if (error) return { ok: false, error: error.message };
+
+  const { data } = supabaseAdmin.storage.from("proposal-images").getPublicUrl(path);
+  return { ok: true, url: data.publicUrl };
+}
+
+export async function getHeroTaglineAction(): Promise<string> {
+  const { data } = await supabaseAdmin
+    .from("1_home")
+    .select("value")
+    .eq("section", "hero")
+    .eq("key", "title")
+    .single();
+  return data?.value ?? "New era of digital product design.";
+}
+

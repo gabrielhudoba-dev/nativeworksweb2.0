@@ -10,7 +10,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Text, Icon, Logo } from "@/app/components/atoms";
 import { EditableText } from "@/app/components/atoms/EditableText";
-import { searchClientsAction, changeProposalClientAction, getCatalogServicesAction } from "@/app/(app)/tools/proposals/actions";
+import { searchClientsAction, changeProposalClientAction, getCatalogServicesAction, uploadProposalImageAction, getHeroTaglineAction } from "@/app/(app)/tools/proposals/actions";
 import type { BlockType, EditorBlock, EditorService, EditorStage } from "./types";
 
 export type BlockMode = "edit" | "view";
@@ -190,14 +190,14 @@ function HeaderBlock({ block, mode, onChange, proposalPageId }: RenderProps) {
 
 function TextBlock({ block, mode, onChange }: RenderProps) {
   return (
-    <section className="flex flex-col gap-s3">
+    <section className="flex flex-col gap-s2">
       <EditableText
         mode={mode}
         as="h2"
         value={block.heading}
         onChange={(v) => onChange?.({ heading: v })}
         placeholder="Heading"
-        className="font-body font-medium text-[10px] text-prim uppercase tracking-widest"
+        className="font-display font-medium text-h3 text-prim tracking-[-0.02em] leading-tight"
       />
       <EditableText
         mode={mode}
@@ -211,10 +211,200 @@ function TextBlock({ block, mode, onChange }: RenderProps) {
   );
 }
 
+function ImpactBlock({ block, mode, onChange }: RenderProps) {
+  return (
+    <section className="flex flex-col gap-s2">
+      <EditableText
+        mode={mode}
+        as="span"
+        value={block.heading}
+        onChange={(v) => onChange?.({ heading: v })}
+        placeholder="Impact"
+        className="font-body font-medium text-[10px] text-prim uppercase tracking-widest"
+      />
+      <div className="flex flex-col gap-s1">
+        <EditableText
+          mode={mode}
+          as="h2"
+          value={block.subtitle}
+          onChange={(v) => onChange?.({ subtitle: v })}
+          placeholder="Headline"
+          className="font-display font-medium text-[24px] leading-tight text-prim tracking-[-0.02em]"
+        />
+        <EditableText
+          mode={mode}
+          as="p"
+          value={block.body}
+          onChange={(v) => onChange?.({ body: v })}
+          placeholder="Write something…"
+          className="font-body font-normal text-p1 text-prim/70 leading-[1.5] whitespace-pre-wrap"
+        />
+      </div>
+    </section>
+  );
+}
+
+function PhotoBlock({ block, mode, onChange }: RenderProps) {
+  const src = block.body || "";
+  const [tempSrc, setTempSrc] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [repositioning, setRepositioning] = useState(false);
+  const [livePos, setLivePos] = useState<{ x: number; y: number } | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ mouseX: number; mouseY: number; posX: number; posY: number } | null>(null);
+
+  function parsePos(s: string) {
+    const m = (s || "").match(/^([\d.]+)%\s+([\d.]+)%$/);
+    return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 50, y: 50 };
+  }
+
+  const savedPos = parsePos(block.subtitle);
+  const pos = livePos ?? savedPos;
+  const objectPosition = `${pos.x.toFixed(1)}% ${pos.y.toFixed(1)}%`;
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith("image/")) return;
+    setUploading(true);
+    const temp = URL.createObjectURL(file);
+    setTempSrc(temp);
+    const fd = new FormData();
+    fd.append("file", file);
+    try {
+      const res = await uploadProposalImageAction(fd);
+      if (res.ok) onChange?.({ body: res.url });
+    } finally {
+      setUploading(false);
+      setTempSrc("");
+      URL.revokeObjectURL(temp);
+    }
+  }
+
+  function startDrag(e: React.MouseEvent) {
+    if (!repositioning) return;
+    e.preventDefault();
+    const start = parsePos(block.subtitle);
+    dragRef.current = { mouseX: e.clientX, mouseY: e.clientY, posX: start.x, posY: start.y };
+
+    function onMove(ev: MouseEvent) {
+      if (!dragRef.current || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const newX = Math.max(0, Math.min(100, dragRef.current.posX - ((ev.clientX - dragRef.current.mouseX) / rect.width) * 150));
+      const newY = Math.max(0, Math.min(100, dragRef.current.posY - ((ev.clientY - dragRef.current.mouseY) / rect.height) * 150));
+      setLivePos({ x: newX, y: newY });
+    }
+
+    function onUp(ev: MouseEvent) {
+      if (!dragRef.current || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const newX = Math.max(0, Math.min(100, dragRef.current.posX - ((ev.clientX - dragRef.current.mouseX) / rect.width) * 150));
+      const newY = Math.max(0, Math.min(100, dragRef.current.posY - ((ev.clientY - dragRef.current.mouseY) / rect.height) * 150));
+      onChange?.({ subtitle: `${newX.toFixed(1)}% ${newY.toFixed(1)}%` });
+      setLivePos(null);
+      dragRef.current = null;
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    }
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  }
+
+  const displaySrc = tempSrc || src;
+
+  if (mode === "view") {
+    return displaySrc ? (
+      <img
+        src={displaySrc}
+        alt=""
+        className="w-full rounded-xl object-cover max-h-[320px]"
+        style={{ objectPosition: `${savedPos.x}% ${savedPos.y}%` }}
+      />
+    ) : null;
+  }
+
+  if (displaySrc) {
+    return (
+      <div ref={containerRef} className="relative group/photo">
+        <img
+          src={displaySrc}
+          alt=""
+          className={`w-full rounded-xl object-cover max-h-[320px] transition-opacity select-none${uploading ? " opacity-60" : ""}${repositioning ? " cursor-grab" : ""}`}
+          style={{ objectPosition }}
+          onMouseDown={startDrag}
+          draggable={false}
+        />
+        {uploading && (
+          <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/10">
+            <span className="font-body text-l2 text-white/80">Uploading…</span>
+          </div>
+        )}
+        {!uploading && (
+          <div className={`absolute bottom-s2 right-s2 flex gap-s1 transition-opacity${repositioning ? "" : " opacity-0 group-hover/photo:opacity-100"}`}>
+            <button
+              type="button"
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={() => setRepositioning((v) => !v)}
+              aria-label="Reposition image"
+              className={`grid place-items-center size-s4 rounded-pill shadow-sm transition-colors cursor-pointer${repositioning ? " bg-brand text-white" : " bg-white/90 text-prim hover:bg-white"}`}
+            >
+              <Icon name="arrows-move" size="sm" />
+            </button>
+            <button
+              type="button"
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={() => inputRef.current?.click()}
+              aria-label="Replace image"
+              className="grid place-items-center size-s4 rounded-pill bg-white/90 text-prim hover:bg-white transition-colors cursor-pointer shadow-sm"
+            >
+              <Icon name="pencil-simple" size="sm" />
+            </button>
+          </div>
+        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="sr-only"
+          onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      onClick={() => inputRef.current?.click()}
+      onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragOver(false);
+        const f = e.dataTransfer.files[0];
+        if (f) handleFile(f);
+      }}
+      className={`w-full rounded-xl border-2 border-dashed h-[220px] flex flex-col items-center justify-center gap-s2 cursor-pointer transition-colors ${
+        dragOver ? "border-brand/50 bg-brand/5" : "border-prim/15 hover:border-prim/30 hover:bg-prim/[0.02]"
+      }`}
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
+      />
+      <Icon name="image" size="lg" className="text-prim/25" />
+      <span className="font-body text-l2 text-prim/40">Browse or drop an image</span>
+    </div>
+  );
+}
+
 /** Executive Summary — small label + large 24px paragraph body. */
 function ExecutiveSummaryBlock({ block, mode, onChange }: RenderProps) {
   return (
-    <section className="flex flex-col gap-s3">
+    <section className="flex flex-col gap-s2">
       <EditableText
         mode={mode}
         as="span"
@@ -260,7 +450,7 @@ function ApproachBlock({ block, mode, onChange }: RenderProps) {
       />
       <div className="flex flex-col gap-s6">
         {stages.map((stage, i) => (
-          <div key={i} className="relative flex flex-col gap-s1 -ml-s3 pl-s3 border-l-2 border-prim/10">
+          <div key={i} className="relative flex flex-col gap-s1">
             {mode === "edit" && (
               <div className="absolute top-0 right-0">
                 <RemoveButton onClick={() => removeStage(i)} label="Remove phase" />
@@ -275,14 +465,16 @@ function ApproachBlock({ block, mode, onChange }: RenderProps) {
                 placeholder="Phase title"
                 className="font-display font-medium text-[24px] leading-tight text-prim tracking-[-0.02em]"
               />
-              <EditableText
-                mode={mode}
-                as="span"
-                value={stage.duration ?? ""}
-                onChange={(v) => setStage(i, { duration: v })}
-                placeholder="Duration"
-                className="inline-flex items-center h-s3 px-[6px] rounded bg-prim/8 font-body text-[10px] text-prim/50 font-medium uppercase tracking-wide"
-              />
+              {mode === "edit" && (
+                <EditableText
+                  mode={mode}
+                  as="span"
+                  value={stage.duration ?? ""}
+                  onChange={(v) => setStage(i, { duration: v })}
+                  placeholder="Duration"
+                  className="inline-flex items-center h-s3 px-[6px] rounded bg-prim/8 font-body text-[10px] text-prim/50 font-medium uppercase tracking-wide"
+                />
+              )}
             </div>
             <EditableText
               mode={mode}
@@ -304,49 +496,35 @@ function ApproachBlock({ block, mode, onChange }: RenderProps) {
 function CtaBlock({ block, mode, onChange }: RenderProps) {
   void block; void onChange;
 
-  if (mode === "edit") {
-    return (
-      <section className="flex flex-col gap-s4">
-        <h2 className="font-display font-medium text-h3 text-prim tracking-[-0.02em]">
-          Ready to move forward?
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-s2">
-          <div className="rounded-lg bg-prim/[0.04] min-h-[100px] flex items-center justify-center">
-            <span className="font-body text-l3 text-prim/25 uppercase tracking-widest">Accept proposal</span>
-          </div>
-          <div className="rounded-lg bg-prim/[0.04] min-h-[100px] flex items-center justify-center">
-            <span className="font-body text-l3 text-prim/25 uppercase tracking-widest">I have questions</span>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const ctaCards = (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-s2">
+      <div className="grain bg-prim text-white rounded-lg flex flex-col justify-between gap-s8 p-s4 min-h-[180px]">
+        <span className="grid place-items-center size-s6 rounded-pill bg-white/15 w-fit">
+          <Icon name="check" size="md" />
+        </span>
+        <span className="flex flex-col gap-s1">
+          <span className="font-display font-medium text-h4">Agree with proposal</span>
+          <span className="font-body text-l2 text-white/60">Send us a message to get started</span>
+        </span>
+      </div>
+      <div className="grain bg-surface rounded-lg flex flex-col justify-between gap-s8 p-s4 min-h-[180px]">
+        <span className="grid place-items-center size-s6 rounded-pill bg-prim/5 text-prim/60 w-fit">
+          <Icon name="question" size="md" />
+        </span>
+        <span className="flex flex-col gap-s1">
+          <span className="font-display font-medium text-h4 text-prim">I have questions</span>
+          <span className="font-body text-l2 text-prim/65">Let&apos;s jump on a quick call</span>
+        </span>
+      </div>
+    </div>
+  );
 
   return (
     <section className="flex flex-col gap-s4">
       <h2 className="font-display font-medium text-h3 text-prim tracking-[-0.02em]">
         Ready to move forward?
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-s2">
-        <div className="grain bg-prim text-white rounded-lg flex flex-col justify-between gap-s8 p-s5 min-h-[160px]">
-          <span className="grid place-items-center size-s6 rounded-pill bg-white/15 w-fit">
-            <Icon name="check" size="md" />
-          </span>
-          <span className="flex flex-col gap-s1">
-            <span className="font-display font-medium text-h4">Accept proposal</span>
-            <span className="font-body text-l2 text-white/60">Send us a message to get started</span>
-          </span>
-        </div>
-        <div className="grain bg-surface rounded-lg flex flex-col justify-between gap-s8 p-s5 min-h-[160px]">
-          <span className="grid place-items-center size-s6 rounded-pill bg-prim/5 text-prim/60 w-fit">
-            <Icon name="person-simple-run" size="md" />
-          </span>
-          <span className="flex flex-col gap-s1">
-            <span className="font-display font-medium text-h4 text-prim">I have questions</span>
-            <span className="font-body text-l2 text-prim/50">Let&apos;s jump on a quick call</span>
-          </span>
-        </div>
-      </div>
+      {ctaCards}
     </section>
   );
 }
@@ -402,16 +580,16 @@ function AboutBlock({ block, mode, onChange }: RenderProps) {
 /** Footer — locked, non-editable in the rendered proposal. */
 function FooterBlock({ block }: RenderProps) {
   void block;
+  const [tagline, setTagline] = useState("New era of digital product design.");
+  useEffect(() => {
+    getHeroTaglineAction().then(setTagline).catch(() => {});
+  }, []);
   return (
-    <footer className="grain bg-brand/10 rounded-xl px-s6 py-s6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-s4">
-      <div className="flex flex-col gap-s3">
-        <Logo size="md" />
-        <span className="font-body text-p3 text-prim/50">New era of digital product design.</span>
-      </div>
-      <div className="flex flex-col gap-s1 text-right">
-        <span className="font-body text-l3 text-prim/50">hello@nativeworks.com</span>
-        <span className="font-body text-l3 text-prim/50">nativeworks.com</span>
-        <span className="font-body text-l3 text-prim/35">© 2025 Native Works</span>
+    <footer className="grain bg-brand/10 rounded-xl px-s6 py-s6 flex flex-col gap-s3">
+      <Logo size="md" />
+      <div className="flex items-center justify-between gap-s4">
+        <span className="font-body text-p3 text-prim/50">{tagline}</span>
+        <a href="mailto:hello@nativeworks.com" className="font-body text-p3 text-prim/50 hover:text-prim transition-colors">hello@nativeworks.com</a>
       </div>
     </footer>
   );
@@ -555,7 +733,7 @@ function ServiceNameCell({
   }
 
   return (
-    <span className="relative flex-1 min-w-0 max-w-[200px]">
+    <span className="relative flex-1 min-w-0">
       <span className="flex items-center gap-s1 group/name">
         <input
           ref={inputRef}
@@ -658,11 +836,11 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
           value={block.heading}
           onChange={(v) => onChange?.({ heading: v })}
           placeholder="Services"
-          className="flex-1 min-w-0 max-w-[200px] font-body font-medium text-[10px] text-prim uppercase tracking-widest"
+          className="flex-1 min-w-0 font-body font-medium text-[10px] text-prim uppercase tracking-widest"
         />
-        <span className="w-[96px] text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Duration</span>
-        <span className="w-[80px] text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Allocation</span>
-        <span className="w-[80px] text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Price</span>
+        <span className="w-[148px] shrink-0 text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Duration</span>
+        <span className="w-[64px] shrink-0 text-left font-body font-medium text-[10px] text-prim uppercase tracking-widest">Allocation</span>
+        <span className="w-[80px] shrink-0 text-right font-body font-medium text-[10px] text-prim uppercase tracking-widest">Price</span>
       </div>
 
       {/* Service rows */}
@@ -676,21 +854,20 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
               {mode === "edit" ? (
                 <ServiceNameCell value={s.title} onCommit={(patch) => setService(i, patch)} />
               ) : (
-                <span className="flex-1 min-w-0 max-w-[200px] font-body font-medium text-l1 text-prim truncate">{s.title}</span>
+                <span className="flex-1 min-w-0 font-body font-medium text-l1 text-prim truncate">{s.title}</span>
               )}
-              {/* Duration — time period; retainer tag sits right after it */}
-              <span className="w-[96px] flex items-center gap-[5px]">
+              {/* Duration + Retainer tag — single fixed cell, always one line */}
+              <span className="w-[148px] shrink-0 flex items-center gap-[6px]">
                 {mode === "edit" ? (
                   <input
                     value={s.duration}
                     onChange={(e) => setService(i, { duration: e.target.value })}
                     placeholder="—"
-                    className="min-w-0 flex-1 font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
+                    className="min-w-0 w-[80px] font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
                   />
                 ) : (
-                  <span className="font-body text-l1 text-prim/50">{s.duration || "—"}</span>
+                  <span className="font-body text-l1 text-prim/50 whitespace-nowrap">{s.duration || "—"}</span>
                 )}
-                {/* Retainer toggle (edit) / badge (view) */}
                 {mode === "edit" ? (
                   <button
                     type="button"
@@ -704,7 +881,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                     Retainer
                   </button>
                 ) : s.isRetainer ? (
-                  <span className="shrink-0 inline-flex items-center h-s3 px-[6px] rounded bg-brand/8 text-brand text-[10px] font-body font-medium uppercase tracking-wide">Retainer</span>
+                  <span className="shrink-0 inline-flex items-center h-s3 px-[6px] rounded bg-brand/8 text-brand text-[10px] font-body font-medium uppercase tracking-wide whitespace-nowrap">Retainer</span>
                 ) : null}
               </span>
               {/* Allocation — FTE */}
@@ -713,10 +890,10 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                   value={s.allocation}
                   onChange={(e) => setService(i, { allocation: e.target.value })}
                   placeholder="1 FTE"
-                  className="w-[80px] font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
+                  className="w-[64px] shrink-0 font-body font-medium text-l1 text-prim/40 bg-transparent outline-none placeholder:text-prim/20"
                 />
               ) : (
-                <span className="w-[80px] font-body text-l1 text-prim/50">{s.allocation || "—"}</span>
+                <span className="w-[64px] shrink-0 font-body text-l1 text-prim/50 whitespace-nowrap">{s.allocation || "—"}</span>
               )}
               {/* Price */}
               {mode === "edit" ? (
@@ -731,7 +908,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
                   {s.isRetainer && <span className="font-body font-medium text-l1 text-prim/40 shrink-0">/mo</span>}
                 </span>
               ) : (
-                <span className="w-[80px] flex items-center justify-end gap-[2px] font-body font-medium text-l1 text-prim">
+                <span className="w-[80px] shrink-0 flex items-center justify-end gap-[2px] font-body font-medium text-l1 text-prim">
                   {s.price || "—"}
                   {s.isRetainer && <span className="font-medium text-prim/40">/mo</span>}
                 </span>
@@ -808,13 +985,14 @@ export const BLOCK_REGISTRY: Record<BlockType, BlockEntry> = {
   header:      { label: "Header",                  locked: true,  Render: HeaderBlock },
   intro:       { label: "Executive Summary",        locked: true,  Render: ExecutiveSummaryBlock },
   approach:    { label: "Approach",                 locked: false, Render: ApproachBlock },
-  impact:      { label: "Impact",                   locked: false, Render: TextBlock },
+  impact:      { label: "Impact",                   locked: false, Render: ImpactBlock },
   pricing:     { label: "Pricing",                  locked: true,  Render: PricingBlock },
   cta:         { label: "CTA",                      locked: false, Render: CtaBlock },
   process:     { label: "Process",                  locked: false, Render: ProcessBlock },
   partnership: { label: "Partnership & Governance", locked: false, Render: PartnershipBlock },
   about:       { label: "About",                    locked: false, Render: AboutBlock },
   footer:      { label: "Footer",                   locked: true,  Render: FooterBlock },
+  photo:       { label: "Image",                    locked: false, Render: PhotoBlock },
   description: { label: "Description",              locked: false, Render: TextBlock },
   benefits:    { label: "Benefits",                 locked: false, Render: ListBlock },
   scope:       { label: "Scope",                    locked: false, Render: ListBlock },

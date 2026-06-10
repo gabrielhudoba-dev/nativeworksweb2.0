@@ -75,13 +75,13 @@ export function ProposalCTA({
         {/* Accept — opens pre-filled email */}
         <a
           href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Accepting proposal — ${proposalTitle}`)}&body=${encodeURIComponent(`Hi,\n\nI'd like to accept the proposal "${proposalTitle}" and kindly request the contract documents for signing.\n\nBest regards,`)}`}
-          className="group grain bg-prim text-white rounded-lg flex flex-col justify-between gap-s8 p-s5 min-h-[180px] text-left hover:opacity-95 transition-opacity"
+          className="group grain bg-prim text-white rounded-lg flex flex-col justify-between gap-s8 p-s4 min-h-[180px] text-left hover:opacity-95 transition-opacity"
         >
           <span className="grid place-items-center size-s6 rounded-pill bg-white/15">
             <Icon name="check" size="md" />
           </span>
           <span className="flex flex-col gap-s1">
-            <span className="font-display font-medium text-h4">Accept proposal</span>
+            <span className="font-display font-medium text-h4">Agree with proposal</span>
             <span className="font-body text-l2 text-white/60">Send us a message to get started</span>
           </span>
         </a>
@@ -92,14 +92,14 @@ export function ProposalCTA({
           data-cal-link={calLink}
           data-cal-namespace={namespace}
           data-cal-config={calConfig}
-          className="group grain bg-surface rounded-lg flex flex-col justify-between gap-s8 p-s5 min-h-[180px] text-left hover:bg-surface/70 transition-colors cursor-pointer"
+          className="group grain bg-surface rounded-lg flex flex-col justify-between gap-s8 p-s4 min-h-[180px] text-left hover:bg-surface/70 transition-colors cursor-pointer"
         >
           <span className="grid place-items-center size-s6 rounded-pill bg-prim/5 text-prim/60">
-            <Icon name="person-simple-run" size="md" />
+            <Icon name="question" size="md" />
           </span>
           <span className="flex flex-col gap-s1">
             <span className="font-display font-medium text-h4 text-prim">I have questions</span>
-            <span className="font-body text-l2 text-prim/50">Let&apos;s jump on a quick call</span>
+            <span className="font-body text-l2 text-prim/65">Let&apos;s jump on a quick call</span>
           </span>
         </button>
       </div>

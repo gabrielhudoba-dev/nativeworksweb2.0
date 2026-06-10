@@ -14,6 +14,7 @@ import {
   DotsThreeVertical,
   Eye,
   FileText,
+  Image,
   Link,
   MagnifyingGlass,
   Microscope,
@@ -24,6 +25,7 @@ import {
   ShareNetwork,
   TextT,
   Trash,
+  UploadSimple,
   Warning,
   X,
 } from "@phosphor-icons/react/ssr";
@@ -54,6 +56,26 @@ function ChevronDown({ className, role, "aria-label": ariaLabel, "aria-hidden": 
   );
 }
 
+function QuestionMark({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
+      <path d="M9 9C9 6.79 10.79 5 13 5C15.21 5 17 6.79 17 9C17 10.5 16.17 11.79 14.95 12.49C13.94 13.1 13 13.97 13 15.17V15.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+      <circle cx="13" cy="19" r="1" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function ArrowsMove({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
+      <path d="M12 4L9 8H11V11H13V8H15L12 4Z" fill="currentColor" />
+      <path d="M12 20L9 16H11V13H13V16H15L12 20Z" fill="currentColor" />
+      <path d="M4 12L8 9V11H11V13H8V15L4 12Z" fill="currentColor" />
+      <path d="M20 12L16 9V11H13V13H16V15L20 12Z" fill="currentColor" />
+    </svg>
+  );
+}
+
 function Menu({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHidden }: SvgProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} role={role} aria-label={ariaLabel} aria-hidden={ariaHidden}>
@@ -65,6 +87,7 @@ function Menu({ className, role, "aria-label": ariaLabel, "aria-hidden": ariaHid
 
 const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
   "arrow-right":       ArrowRight,
+  "arrows-move":       ArrowsMove,
   "arrow-square-out":  ArrowSquareOut,
   "brackets-curly":    BracketsCurly,
   calendar:            CalendarBlank,
@@ -81,6 +104,7 @@ const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
   "dots-three-vertical": DotsThreeVertical,
   eye:                 Eye,
   "file-text":         FileText,
+  image:               Image,
   link:                Link,
   "magnifying-glass":  MagnifyingGlass,
   menu:                Menu,
@@ -89,9 +113,11 @@ const registry: Record<string, ComponentType<PhosphorIconProps | SvgProps>> = {
   "pencil-simple":     PencilSimple,
   "person-simple-run": PersonSimpleRun,
   plus:                Plus,
+  question:            QuestionMark,
   share:               ShareNetwork,
   "text-t":            TextT,
   trash:               Trash,
+  upload:              UploadSimple,
   warning:             Warning,
 };
 

@@ -4,12 +4,6 @@ import { useState } from "react";
 import { Icon } from "@/app/components/atoms";
 import { OPTIONAL_BLOCK_TYPES, BLOCK_LABELS, type BlockType } from "../../../blocks/types";
 
-const TYPE_HINT: Record<string, string> = {
-  description: "A heading and a paragraph of detail",
-  scope:       "A checked list of deliverables",
-  process:     "Numbered stage cards",
-};
-
 /** The "+" affordance between blocks — opens a picker of optional block types. */
 export function InsertPoint({ onInsert }: { onInsert: (type: BlockType) => void }) {
   const [open, setOpen] = useState(false);
@@ -42,10 +36,9 @@ export function InsertPoint({ onInsert }: { onInsert: (type: BlockType) => void 
                   onInsert(type);
                   setOpen(false);
                 }}
-                className="flex flex-col gap-[2px] items-start text-left px-s2 py-s2 rounded-md hover:bg-surface transition-colors cursor-pointer"
+                className="flex items-center px-s2 py-s2 rounded-md hover:bg-surface transition-colors cursor-pointer"
               >
                 <span className="font-body font-medium text-l1 text-prim">{BLOCK_LABELS[type]}</span>
-                <span className="font-body text-l3 text-prim/45">{TYPE_HINT[type]}</span>
               </button>
             ))}
           </div>
