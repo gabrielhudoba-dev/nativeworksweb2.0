@@ -978,7 +978,7 @@ function PricingBlock({ block, mode, onChange }: RenderProps) {
 export type BlockEntry = {
   label: string;
   locked: boolean;
-  Render: (props: RenderProps) => React.ReactElement;
+  Render: (props: RenderProps) => React.ReactElement | null;
 };
 
 export const BLOCK_REGISTRY: Record<BlockType, BlockEntry> = {
