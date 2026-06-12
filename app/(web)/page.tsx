@@ -1,27 +1,47 @@
 import {
   HeroSection,
+  StatsSection,
   InterveningSection,
   ServicesSection,
-  StatsSection,
+  SelectedWorkSection,
+  CtaSection,
 } from "@/app/components/organisms";
-import { getContent, getServices, getStages, getStats } from "@/lib/content";
+import { LogoMarquee } from "@/app/components/molecules";
+import {
+  getContent,
+  getServices,
+  getStages,
+  getStats,
+  getCaseStudiesItems,
+} from "@/lib/content";
 
 export const revalidate = 60; // ISR — obsah sa aktualizuje každú minútu
 
 export default async function Home() {
-  const [content, services, stages, stats] = await Promise.all([
+  const [content, services, stages, stats, caseItems] = await Promise.all([
     getContent("home"),
     getServices(),
     getStages(),
     getStats(),
+    getCaseStudiesItems(),
   ]);
 
+  // Section order follows the Apple-inspired wireframe:
+  // Hero → Clients → Stats → Process → Services → Selected work → CTA
+  // (nav + footer are rendered globally by the (web) layout)
   return (
     <main className="bg-white">
       <HeroSection content={content} />
+
+      <section className="max-w-page mx-auto pt-s1 pb-s9 sm:pb-s12">
+        <LogoMarquee />
+      </section>
+
       <StatsSection content={content} stats={stats} />
       <InterveningSection content={content} stages={stages} />
       <ServicesSection content={content} services={services} />
+      <SelectedWorkSection content={content} items={caseItems} />
+      <CtaSection content={content} />
     </main>
   );
 }

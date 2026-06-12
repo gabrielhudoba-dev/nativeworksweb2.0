@@ -2,36 +2,41 @@
 
 import Link from "next/link";
 import { GlassCard } from "@developer-hub/liquid-glass";
-import { IconButton, Logo } from "@/app/components/atoms";
+import { Logo } from "@/app/components/atoms";
+
+export type NavItem = { label: string; href: string };
 
 type Props = {
-  open: boolean;
-  onToggle: () => void;
-  onLogoClick?: () => void;
+  items: NavItem[];
   /** Renders inline without fixed positioning — for catalog/preview use */
   static?: boolean;
 };
 
-export function NavPrimPill({ open, onToggle, onLogoClick, static: isStatic }: Props) {
+const linkCls =
+  "font-body font-medium text-[14px] leading-[16px] whitespace-nowrap transition-opacity duration-150 ease-system";
+
+export function NavPrimPill({ items, static: isStatic }: Props) {
   return (
     <div className={isStatic ? "flex justify-center" : "fixed top-0 left-0 right-0 z-50 flex justify-center pt-s3 sm:pt-s2"}>
       <div>
-      <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
-        <div className="flex items-center justify-between pl-s2 pr-s3 h-s8 w-pill bg-[#D9D9D9]/20">
-          <Link
-            href="/"
-            aria-label="Native Works – späť na úvod"
-            onClick={onLogoClick}
+        <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
+          <div
+            className="flex items-center gap-s3 sm:gap-s5 pl-s3 pr-s3 sm:pr-s4 h-s8 bg-[#D9D9D9]/20"
+            style={{ textShadow: "none" }}
           >
-            <Logo size="sm" priority />
-          </Link>
-          <IconButton
-            icon={open ? "close" : "menu"}
-            label={open ? "Zatvoriť menu" : "Otvoriť menu"}
-            onClick={onToggle}
-          />
-        </div>
-      </GlassCard>
+            <Link href="/" aria-label="Native Works – späť na úvod" className="shrink-0">
+              <Logo size="sm" priority />
+            </Link>
+
+            <nav className="flex items-center gap-s3 sm:gap-s4">
+              {items.map((it) => (
+                <a key={it.href} href={it.href} className={`${linkCls} text-[#090E3A] hover:opacity-70`}>
+                  {it.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </GlassCard>
       </div>
     </div>
   );

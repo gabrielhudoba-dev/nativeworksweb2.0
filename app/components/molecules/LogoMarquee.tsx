@@ -17,11 +17,11 @@ const LOGOS: { name: string; maxH: number }[] = [
 export function LogoMarquee() {
   return (
     <div className="overflow-hidden">
-      <div className="flex animate-marquee" style={{ gap: "6px" }}>
+      <div className="flex animate-marquee" style={{ gap: "48px" }}>
         {[...LOGOS, ...LOGOS].map((logo, i) => (
           <div
             key={i}
-            className="bg-surface rounded-xl flex items-center justify-center px-s4 h-[88px] shrink-0 w-[160px]"
+            className="flex items-center justify-center px-s4 h-[88px] shrink-0 w-[160px]"
           >
             <Image
               src={`/companies/${logo.name}.svg`}
@@ -29,7 +29,7 @@ export function LogoMarquee() {
               width={120}
               height={logo.maxH}
               style={{ maxHeight: logo.maxH, width: "auto" }}
-              className="object-contain"
+              className="object-contain grayscale opacity-60"
             />
           </div>
         ))}

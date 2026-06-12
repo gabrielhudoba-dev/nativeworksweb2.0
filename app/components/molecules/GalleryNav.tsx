@@ -17,9 +17,9 @@ type Props = {
 export function GalleryNav({ count, firstVisible, visibleCount, onPrev, onNext, onDotClick, variant = "dots" }: Props) {
   return (
     <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
-      <div className="flex items-center justify-between px-s3 h-s7 w-pill bg-[#D9D9D9]/20">
+      <div className="inline-flex items-center justify-center gap-s2 px-s3 h-s7 bg-[#D9D9D9]/20">
         <IconButton icon="chevron-left" label="Predchádzajúci" onClick={onPrev} />
-        <div className="flex items-center justify-center gap-s1 flex-1 mx-s1 h-s1">
+        <div className="flex items-center justify-center gap-s1 h-s1">
           {Array.from({ length: count }).map((_, i) => {
             const active = i >= firstVisible && i < firstVisible + visibleCount;
             return (

@@ -29,17 +29,17 @@ interface SliderProps {
 }
 
 /*
-  Card width per breakpoint. Each card fills an equal fraction of the content
-  width minus the inter-card gaps (gap-s1 = var(--spacing-s1) = 8px).
-  N cards + (N-1) gaps === 100% of the content box, so the slider always starts
-  and ends flush with the layout padding.
+  Card width per breakpoint. At the largest breakpoint the cards fill an equal
+  fraction of the content width (N cards + (N-1) gaps === 100%, flush). Below
+  that — where the cards overflow — we subtract a peek (--slider-peek = 48px) so
+  a sliver of the next card stays visible, signalling there's more to scroll.
 
   Full literal strings so Tailwind can statically detect every class.
 */
 const COL_CLASSES: Record<SliderCols, string> = {
-  2: "w-full sm:w-[calc((100%_-_1*var(--spacing-s1))/2)]",
-  3: "w-full sm:w-[calc((100%_-_1*var(--spacing-s1))/2)] lg:w-[calc((100%_-_2*var(--spacing-s1))/3)]",
-  4: "w-full sm:w-[calc((100%_-_1*var(--spacing-s1))/2)] md:w-[calc((100%_-_2*var(--spacing-s1))/3)] lg:w-[calc((100%_-_3*var(--spacing-s1))/4)]",
+  2: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1))/2)]",
+  3: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] lg:w-[calc((100%_-_2*var(--spacing-s1))/3)]",
+  4: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] md:w-[calc((100%_-_2*var(--spacing-s1)_-_48px)/3)] lg:w-[calc((100%_-_3*var(--spacing-s1))/4)]",
 };
 
 export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(

@@ -29,7 +29,7 @@ export function ServicesSection({ content, services }: Props) {
   ];
 
   return (
-    <section className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
+    <section id="services" className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
@@ -39,12 +39,15 @@ export function ServicesSection({ content, services }: Props) {
         {content.services_desc ?? "We work closely in to your product focusing on specific problem."}
       </Text>
 
-      {/* py-s3 -my-s3 gives the active card's 2px ring room before the scroll container clips it */}
+      {/* py-s3 -my-s3 gives the active card's 2px ring room before the scroll container clips it.
+          -mx/px/scroll-px [gutter] lets the track fill the full max-w-page width (peek reaches the
+          container edge instead of being clipped at the page gutter) while the first card stays
+          aligned with the heading. */}
       <div ref={containerRef}>
         <Slider
           ref={sliderRef}
           cols={3}
-          containerClassName="py-s3 -my-s3"
+          containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
           onViewChange={onViewChange}
         >
           {services.map((card, i) => (

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Heading, Text } from "@/app/components/atoms";
+import { Heading, Text, Dispersion } from "@/app/components/atoms";
 import { Refer } from "@/app/components/molecules";
 import { useNavOpen } from "./NavigationProvider";
 import { useSquircle } from "@/app/hooks/useSquircle";
@@ -50,11 +50,26 @@ export function HeroSection({ content }: Props) {
     return () => clearInterval(id);
   }, [paused]);
 
+  // Author per gallery slide — the Refer reflects whoever is behind the visible image.
+  const galleryAuthors = [
+    { name: content.hero_refer_name ?? "Martin Mroc", role: content.hero_refer_role ?? "CDO, Vibe Studio", avatar: content.hero_refer_avatar ?? "/images/martin.png" },
+    { name: content.hero_refer2_name ?? "Head of Product", role: content.hero_refer2_role ?? "Payrly (name withheld by request)", avatar: content.hero_refer2_avatar },
+    { name: content.hero_refer3_name ?? "VP Product", role: content.hero_refer3_role ?? "Clarify (name withheld by request)", avatar: content.hero_refer3_avatar },
+    { name: content.hero_refer4_name ?? "CEO", role: content.hero_refer4_role ?? "Volba (name withheld by request)", avatar: content.hero_refer4_avatar },
+  ];
+  const refer = galleryAuthors[slide] ?? galleryAuthors[0];
+
   return (
-    <section className="px-page pb-s9 sm:pb-s12 max-w-page mx-auto" style={{ paddingTop: "var(--hero-section-pt)" }}>
+    <section className="px-page max-w-page mx-auto" style={{ paddingTop: "var(--hero-section-pt)" }}>
       <div className="hero-in pt-s18 sm:pt-s15 lg:pt-s18 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
         <Heading variant="h1" className="max-w-[800px]">
-          {content.hero_title ?? "New era of digital product design."}
+          <Dispersion dynamic softBlur={0.8}>
+            {(content.hero_title ?? "New era of digital\nproduct design.")
+              .split("\n")
+              .map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
+          </Dispersion>
         </Heading>
         <div className="max-w-[544px] pb-[80px]">
           <Text
@@ -75,9 +90,9 @@ export function HeroSection({ content }: Props) {
           {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
         </Text>
         <Refer
-          name={content.hero_refer_name ?? "Martin Mroc"}
-          role={content.hero_refer_role ?? "CDO, Vibe Studio"}
-          avatar={content.hero_refer_avatar ?? "/images/martin.png"}
+          name={refer.name}
+          role={refer.role}
+          avatar={refer.avatar}
           className="hidden sm:flex sm:pr-s1"
         />
       </div>
@@ -111,11 +126,7 @@ export function HeroSection({ content }: Props) {
       </div>
 
       <div className="sm:hidden pt-s3">
-        <Refer
-          name={content.hero_refer_name ?? "Martin Mroc"}
-          role={content.hero_refer_role ?? "CDO, Vibe Studio"}
-          avatar={content.hero_refer_avatar ?? "/images/martin.png"}
-        />
+        <Refer name={refer.name} role={refer.role} avatar={refer.avatar} />
       </div>
     </section>
   );

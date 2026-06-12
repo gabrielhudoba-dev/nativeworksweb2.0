@@ -18,8 +18,16 @@ import { Button, PrimTextBlock, GalleryNav, NavPrimPill, Refer, ServiceCard, Soc
 import { CaseStudyCard } from "@/app/components/organisms";
 
 function NavPrimPillPreview() {
-  const [open, setOpen] = useState(false);
-  return <NavPrimPill static open={open} onToggle={() => setOpen(o => !o)} />;
+  return (
+    <NavPrimPill
+      static
+      items={[
+        { label: "Work", href: "/#work" },
+        { label: "Services", href: "/#services" },
+        { label: "Process", href: "/#stages" },
+      ]}
+    />
+  );
 }
 
 function GalleryNavPreview() {
@@ -279,7 +287,7 @@ const entries: Entry[] = [
   {
     level: "molecules",
     label: "NavPrimPill",
-    copy: "<NavPrimPill open={open} onToggle={() => setOpen(o => !o)} />",
+    copy: "<NavPrimPill items={items} />",
     variants: [{ label: "default", preview: <NavPrimPillPreview /> }],
   },
   {

@@ -12,6 +12,8 @@ const LINKS = [
 
 export function PageLinksSection() {
   const pathname = usePathname();
+  // Homepage has its own closing sections (Selected work + CTA) — skip here.
+  if (pathname === "/") return null;
   const links = LINKS.filter((l) => l.href !== pathname);
 
   return (

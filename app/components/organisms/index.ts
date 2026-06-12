@@ -8,5 +8,7 @@ export { Navigation } from "./Navigation";
 export { NavigationProvider, useNavOpen } from "./NavigationProvider";
 export { PageLinksSection } from "./PageLinksSection";
 export { ServicesSection } from "./ServicesSection";
+export { SelectedWorkSection } from "./SelectedWorkSection";
+export { CtaSection } from "./CtaSection";
 export { StatsSection } from "./StatsSection";
 export { StageSlider } from "./StageSlider";
