@@ -64,7 +64,7 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
         >
           {title}
         </Heading>
-        <Text variant="p1" style={dark ? { color: "rgba(255,255,255,0.6)" } : undefined}>
+        <Text variant="p2" style={dark ? { color: "rgba(255,255,255,0.6)" } : undefined}>
           {desc}
         </Text>
       </div>
