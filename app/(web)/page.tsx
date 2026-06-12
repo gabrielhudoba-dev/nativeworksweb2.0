@@ -4,7 +4,6 @@ import {
   InterveningSection,
   ServicesSection,
   SelectedWorkSection,
-  CtaSection,
 } from "@/app/components/organisms";
 import { LogoMarquee } from "@/app/components/molecules";
 import {
@@ -27,21 +26,21 @@ export default async function Home() {
   ]);
 
   // Section order follows the Apple-inspired wireframe:
-  // Hero → Clients → Stats → Process → Services → Selected work → CTA
+  // Hero → Stats → Clients → Process → Services → Selected work → CTA
   // (nav + footer are rendered globally by the (web) layout)
   return (
     <main className="bg-white">
       <HeroSection content={content} />
 
+      <StatsSection content={content} stats={stats} />
+
       <section className="pt-s6 sm:pt-s9 pb-s6 sm:pb-s9">
         <LogoMarquee />
       </section>
 
-      <StatsSection content={content} stats={stats} />
       <InterveningSection content={content} stages={stages} />
       <ServicesSection content={content} services={services} />
       <SelectedWorkSection content={content} items={caseItems} />
-      <CtaSection content={content} />
     </main>
   );
 }

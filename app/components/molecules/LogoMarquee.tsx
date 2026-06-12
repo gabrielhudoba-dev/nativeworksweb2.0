@@ -14,10 +14,13 @@ const LOGOS: { name: string; maxH: number }[] = [
   { name: "swivel",      maxH: 22 }, // wordmark — text fills ~78% viewBox height
 ];
 
+// +10% logo size, +15% gap vs. the original 120px / 48px baseline.
+const LOGO_SCALE = 1.1;
+
 export function LogoMarquee() {
   return (
     <div className="overflow-hidden">
-      <div className="flex animate-marquee" style={{ gap: "48px" }}>
+      <div className="flex animate-marquee" style={{ gap: "55px" }}>
         {[...LOGOS, ...LOGOS].map((logo, i) => (
           <div
             key={i}
@@ -26,9 +29,9 @@ export function LogoMarquee() {
             <Image
               src={`/companies/${logo.name}.svg`}
               alt={logo.name}
-              width={120}
-              height={logo.maxH}
-              style={{ maxHeight: logo.maxH, width: "auto" }}
+              width={Math.round(120 * LOGO_SCALE)}
+              height={Math.round(logo.maxH * LOGO_SCALE)}
+              style={{ maxHeight: logo.maxH * LOGO_SCALE, width: "auto" }}
               className="object-contain brightness-0"
             />
           </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Text, Heading } from "@/app/components/atoms";
 import { Button } from "./Button";
 
@@ -16,7 +15,11 @@ type Props = {
 };
 
 export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, features }: Props) {
-  const [expanded, setExpanded] = useState(false);
+  // `desc` may carry an "Outcome:" tail — split it out so the outcome renders
+  // as its own small label + text block below the main description.
+  const outcomeIdx = desc.indexOf("Outcome:");
+  const mainText = (outcomeIdx >= 0 ? desc.slice(0, outcomeIdx) : desc).trim();
+  const outcomeText = outcomeIdx >= 0 ? desc.slice(outcomeIdx + "Outcome:".length).trim() : "";
 
   return (
     <div className="flex flex-col h-full cursor-pointer" onClick={onClick}>
@@ -42,16 +45,29 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
           </Button>
         </div>
       </div>
-      <div
-        className="flex-1 flex flex-col"
-        onClick={(e) => { e.stopPropagation(); setExpanded(v => !v); }}
-      >
-        <Text
-          variant="p2"
-          className={`pl-s2 pr-s2 mt-s5 mb-s6 cursor-pointer ${expanded ? "" : "line-clamp-4"}`}
-        >
-          {desc}
-        </Text>
+      <div className="flex-1 flex flex-col gap-s4 pl-s2 pr-s2 mt-s5 mb-s6">
+        <div className="flex flex-col gap-s1">
+          <Text
+            variant="p3"
+            className="uppercase tracking-[0.08em] !text-[13px] !leading-none"
+            style={{ color: "rgba(18,19,25,0.5)" }}
+          >
+            Overview
+          </Text>
+          <Text variant="p2">{mainText}</Text>
+        </div>
+        {outcomeText && (
+          <div className="flex flex-col gap-s1">
+            <Text
+              variant="p3"
+              className="uppercase tracking-[0.08em] !text-[13px] !leading-none"
+              style={{ color: "rgba(18,19,25,0.5)" }}
+            >
+              Outcome
+            </Text>
+            <Text variant="p2">{outcomeText}</Text>
+          </div>
+        )}
       </div>
     </div>
   );

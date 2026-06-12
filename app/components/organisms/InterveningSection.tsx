@@ -13,7 +13,11 @@ export function InterveningSection({ content, stages }: Props) {
   if (!lead) return null;
 
   const eyebrow = content.intervening_eyebrow ?? "Stage";
-  const stageLabel = (i: number) => `${eyebrow} ${String(i + 1).padStart(2, "0")}`;
+  const stageLabel = (n: number) => `${eyebrow} ${String(n).padStart(2, "0")}`;
+  // Numbering follows the bento's reading order so the stages run 01 → 02 → 03
+  // down the product lifecycle: top-left side card = 01, dark focal card = 02,
+  // bottom-left side card = 03.
+  const restNums = [1, 3];
 
   // Lead card spans the height of the stacked right column (both literal classes
   // kept so Tailwind detects them).
@@ -21,8 +25,8 @@ export function InterveningSection({ content, stages }: Props) {
 
   return (
     <section id="stages" className="-mt-s6">
-      <div className="pt-s12 sm:pt-s15 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
-        <Heading variant="h2" className="mb-s6 sm:mb-s9">
+      <div className="pt-s9 sm:pt-s12 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
+        <Heading variant="h2" className="mb-s4 sm:mb-s6">
           {(content.intervening_title ?? "Intervening\nat any stage.").split("\n").map((line, i, arr) => (
             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
           ))}
@@ -30,18 +34,19 @@ export function InterveningSection({ content, stages }: Props) {
 
         <div className="grid grid-cols-1 gap-s1 md:grid-cols-2">
           <StageCard
-            eyebrow={stageLabel(0)}
+            eyebrow={stageLabel(2)}
             title={lead.title}
             desc={lead.desc}
-            className={`h-full min-h-[488px] ${leadSpan}`}
+            dark
+            bgImage="/images/disp3.png"
+            className={`h-full min-h-[488px] md:col-start-2 md:row-start-1 ${leadSpan}`}
           />
           {rest.map((s, i) => (
             <StageCard
               key={s.id}
-              eyebrow={stageLabel(i + 1)}
+              eyebrow={stageLabel(restNums[i] ?? i + 2)}
               title={s.title}
               desc={s.desc}
-              dark={i === rest.length - 1}
               className="h-full min-h-[240px]"
             />
           ))}

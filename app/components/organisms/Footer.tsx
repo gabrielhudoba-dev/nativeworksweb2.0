@@ -27,9 +27,17 @@ export function Footer({ content }: Props) {
             <Text variant="p3">
               {content.footer_tagline ?? "New era of digital product design."}
             </Text>
-            <Text variant="p3" className="text-right">
-              © {new Date().getFullYear()}–3025 Native Works
-            </Text>
+            <div className="flex items-center gap-s4">
+              <a
+                href={`mailto:${content.footer_email ?? "hello@nativeworks.eu"}`}
+                className="transition-opacity hover:opacity-70"
+              >
+                <Text variant="p3">{content.footer_email ?? "hello@nativeworks.eu"}</Text>
+              </a>
+              <Text variant="p3" className="text-right">
+                © {new Date().getFullYear()}–3025
+              </Text>
+            </div>
           </div>
         </div>
 

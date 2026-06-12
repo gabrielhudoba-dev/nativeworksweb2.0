@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Heading, Text, Dispersion } from "@/app/components/atoms";
+import { Heading, Text } from "@/app/components/atoms";
 import { Refer } from "@/app/components/molecules";
 import { useNavOpen } from "./NavigationProvider";
 import { useSquircle } from "@/app/hooks/useSquircle";
@@ -23,7 +23,6 @@ type Props = { content: SiteContent };
 export function HeroSection({ content }: Props) {
   const [slide, setSlide] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const navOpen = useNavOpen();
   const galleryRef = useRef<HTMLDivElement>(null);
   const { ref: gallerySquircleRef, style: gallerySquircleStyle } = useSquircle(21, 0.6);
@@ -52,31 +51,24 @@ export function HeroSection({ content }: Props) {
 
   // Author per gallery slide — the Refer reflects whoever is behind the visible image.
   const galleryAuthors = [
-    { name: content.hero_refer_name ?? "Martin Mroc", role: content.hero_refer_role ?? "CDO, Vibe Studio", avatar: content.hero_refer_avatar ?? "/images/martin.png" },
-    { name: content.hero_refer2_name ?? "Milan Tibensky", role: content.hero_refer2_role ?? "Growth", avatar: content.hero_refer2_avatar ?? "/images/milan.png" },
+    { name: content.hero_refer_name ?? "Gabriel Hudoba", role: content.hero_refer_role ?? "Brand, Design", avatar: content.hero_refer_avatar ?? "/images/gabo.png" },
+    { name: content.hero_refer2_name ?? "Milan Tibensky", role: content.hero_refer2_role ?? "Data, Growth", avatar: content.hero_refer2_avatar ?? "/images/milan.png" },
     { name: content.hero_refer3_name ?? "Maria Susteka", role: content.hero_refer3_role ?? "Design", avatar: content.hero_refer3_avatar },
-    { name: content.hero_refer4_name ?? "Gabriel Hudoba", role: content.hero_refer4_role ?? "Brand", avatar: content.hero_refer4_avatar ?? "/images/gabriel.png" },
+    { name: content.hero_refer4_name ?? "Martin Mroc", role: content.hero_refer4_role ?? "Design", avatar: content.hero_refer4_avatar ?? "/images/martin.png" },
   ];
   const refer = galleryAuthors[slide] ?? galleryAuthors[0];
 
   return (
-    <section className="px-page max-w-page mx-auto" style={{ paddingTop: "var(--hero-section-pt)" }}>
+    <section className="px-page max-w-page mx-auto pb-s9 sm:pb-0" style={{ paddingTop: "var(--hero-section-pt)" }}>
       <div className="hero-in pt-s18 sm:pt-s15 lg:pt-s18 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
-        <Heading variant="h1" className="max-w-[1000px]">
-          <Dispersion dynamic softBlur={0}>
-            {(content.hero_title ?? "Human decisions.\nBetter digital products.")
-              .split("\n")
-              .map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-          </Dispersion>
+        {/* max-width in em (not px) so it scales with the responsive h1 font
+            (96/72/48px) — keeps the same 3-line composition at every breakpoint
+            without hard line breaks. 8em ≈ the old 760px at 96px. */}
+        <Heading variant="h1" className="max-w-[8em]">
+          {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
         </Heading>
-        <div className="max-w-[544px] pb-[80px]">
-          <Text
-            variant="p2"
-            className={`text-prim sm:!line-clamp-none cursor-pointer select-none transition-all duration-300 ${expanded ? "" : "line-clamp-3"}`}
-            onClick={() => setExpanded((v) => !v)}
-          >
+        <div className="max-w-[608px] pb-[80px]">
+          <Text variant="p1" className="text-prim">
             {content.hero_desc ?? "A curated group of product specialists working on your system. Inside your team. Solving product problems from early concepts to product friction. With a level of speed previously impossible. Delivered through to production-ready output."}
           </Text>
         </div>
@@ -89,11 +81,14 @@ export function HeroSection({ content }: Props) {
         <Text variant="p1" className="max-w-[320px] text-prim text-left">
           {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
         </Text>
+        {/* Fixed width = widest author block ("Gabriel Hudoba", 48 avatar + 16 gap
+            + 111 text) + 8px reserve so no name wraps, + 8px pr-s1 → the avatar
+            stays put as the author rotates. */}
         <Refer
           name={refer.name}
           role={refer.role}
           avatar={refer.avatar}
-          className="hidden sm:flex sm:pr-s1"
+          className="hidden sm:flex sm:pr-s1 sm:w-[192px]"
         />
       </div>
 

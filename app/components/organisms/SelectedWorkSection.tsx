@@ -8,8 +8,9 @@ function renderTitle(title: string) {
   ));
 }
 
-/** One case: full-width visual on top, then title + description + author below. */
-function CaseCard({ item, imgClass, textClassName = "" }: { item: CaseStudyDbItem; imgClass: string; textClassName?: string }) {
+/** One case: full-width visual on top, then title + description + author below.
+ *  `split` lays the text out as two columns (title | description + authors). */
+function CaseCard({ item, imgClass, textClassName = "", split = false }: { item: CaseStudyDbItem; imgClass: string; textClassName?: string; split?: boolean }) {
   return (
     <div className="flex flex-col">
       <CaseStudyImage
@@ -20,8 +21,9 @@ function CaseCard({ item, imgClass, textClassName = "" }: { item: CaseStudyDbIte
       <PrimTextBlock
         title={renderTitle(item.title!)}
         description={item.description!}
-        className={`!mt-s4 ${textClassName}`}
+        className={`!mt-s5 sm:!mt-s4 ${textClassName}`}
         authors={item.authors}
+        split={split}
       />
     </div>
   );
@@ -39,14 +41,14 @@ export function SelectedWorkSection({ content, items }: Props) {
   const [hero, ...rest] = cases;
 
   return (
-    <section id="work" className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
+    <section id="work" className="pt-s7 sm:pt-s9 pb-s18 sm:pb-[192px] px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s6 sm:mb-s9">{content.work_title ?? "Selected work."}</Heading>
 
-      <div className="flex flex-col gap-s9 sm:gap-s12">
-        <CaseCard item={hero} imgClass="!h-[420px] sm:!h-[600px]" textClassName="sm:max-w-[calc(50%-16px)]" />
+      <div className="flex flex-col gap-s12">
+        <CaseCard item={hero} imgClass="!h-[420px] sm:!h-[600px]" split />
 
         {rest.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s4 gap-y-s9">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s12 sm:gap-y-s9">
             {rest.map((item) => (
               <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[460px]" />
             ))}

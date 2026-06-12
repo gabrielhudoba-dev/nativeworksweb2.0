@@ -15,6 +15,9 @@ type Props = {
   showName?: boolean;
   logos?: string[];
   image?: string;
+  /** Two-column layout: title in column 1, description + authors in column 2
+   *  (column 2 aligns with the right column of a grid-cols-2 gap-x-s8 row below). */
+  split?: boolean;
   className?: string;
 };
 
@@ -25,12 +28,13 @@ function emphasizeTrademarks(text: string): React.ReactNode[] {
   );
 }
 
-export function PrimTextBlock({ title, description, author, authors, showName = true, logos, image, className = "" }: Props) {
+export function PrimTextBlock({ title, description, author, authors, showName = true, logos, image, split = false, className = "" }: Props) {
   const people = authors && authors.length > 0 ? authors : author ? [author] : [];
-  return (
-    <article className={`flex flex-col mt-s9 ${className}`}>
-      <Heading variant="h3" style={{ fontSize: "40px" }}>{title}</Heading>
-      <Text variant="p2">{emphasizeTrademarks(description)}</Text>
+
+  const heading = <Heading variant="h3" style={{ fontSize: "40px" }}>{title}</Heading>;
+  const body = (
+    <>
+      <Text variant="p2" className="pr-s2">{emphasizeTrademarks(description)}</Text>
       {logos && logos.length > 0 && (
         <div className="flex items-center gap-s3 mt-s3">
           {logos.slice(0, 3).map((src, i) => (
@@ -39,13 +43,29 @@ export function PrimTextBlock({ title, description, author, authors, showName = 
         </div>
       )}
       {people.length > 0 && (
-        <div className="flex flex-wrap items-start gap-x-s9 gap-y-s4 mt-s3">
+        <div className="flex flex-wrap items-start gap-x-s4 gap-y-s3 sm:gap-x-s6 sm:gap-y-s4 mt-s3">
           {people.map((p, i) => (
             <Refer key={i} name={p.name} role={p.role} avatar={p.avatar} showName={showName} />
           ))}
         </div>
       )}
       {image && <Avatar src={image} alt={String(title)} size={128} className="mt-s3" />}
+    </>
+  );
+
+  if (split) {
+    return (
+      <article className={`grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s4 mt-s9 ${className}`}>
+        {heading}
+        <div className="flex flex-col">{body}</div>
+      </article>
+    );
+  }
+
+  return (
+    <article className={`flex flex-col mt-s9 ${className}`}>
+      {heading}
+      {body}
     </article>
   );
 }
