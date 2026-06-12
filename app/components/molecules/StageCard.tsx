@@ -28,22 +28,20 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
       {bgImage && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-[-135px] left-1/2 h-[270px] w-[473px] -translate-x-1/2"
+          className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center"
           style={{
-            // Radial mask dissolves the image's black rectangular edges into the
-            // card so only the central sphere shows — `.grain`'s isolation breaks
-            // the screen blend's composite against bg-prim, so we fade via alpha.
-            WebkitMaskImage:
-              "radial-gradient(ellipse 46% 72% at 50% 50%, #000 34%, transparent 74%)",
-            maskImage:
-              "radial-gradient(ellipse 46% 72% at 50% 50%, #000 34%, transparent 74%)",
+            // Loop sits at the card's lower edge and dissolves into the dark card
+            // toward the top — its black background blends straight into bg-prim,
+            // so the iridescent ring stays fully visible (no dark vignette).
+            WebkitMaskImage: "linear-gradient(to top, #000 72%, transparent)",
+            maskImage: "linear-gradient(to top, #000 72%, transparent)",
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={bgImage}
             alt=""
-            className="absolute left-1/2 top-1/2 h-[270px] w-[473px] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
+            className="w-[408px] max-w-none object-contain translate-y-1/2"
           />
         </div>
       )}

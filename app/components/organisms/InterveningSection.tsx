@@ -32,7 +32,7 @@ export function InterveningSection({ content, stages }: Props) {
           ))}
         </Heading>
 
-        <div className="grid grid-cols-1 gap-s1 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-s3 md:grid-cols-2">
           <StageCard
             eyebrow={stageLabel(2)}
             title={lead.title}
