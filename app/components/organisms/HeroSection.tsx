@@ -53,18 +53,18 @@ export function HeroSection({ content }: Props) {
   // Author per gallery slide — the Refer reflects whoever is behind the visible image.
   const galleryAuthors = [
     { name: content.hero_refer_name ?? "Martin Mroc", role: content.hero_refer_role ?? "CDO, Vibe Studio", avatar: content.hero_refer_avatar ?? "/images/martin.png" },
-    { name: content.hero_refer2_name ?? "Head of Product", role: content.hero_refer2_role ?? "Payrly (name withheld by request)", avatar: content.hero_refer2_avatar },
-    { name: content.hero_refer3_name ?? "VP Product", role: content.hero_refer3_role ?? "Clarify (name withheld by request)", avatar: content.hero_refer3_avatar },
-    { name: content.hero_refer4_name ?? "CEO", role: content.hero_refer4_role ?? "Volba (name withheld by request)", avatar: content.hero_refer4_avatar },
+    { name: content.hero_refer2_name ?? "Milan Tibensky", role: content.hero_refer2_role ?? "Growth", avatar: content.hero_refer2_avatar ?? "/images/milan.png" },
+    { name: content.hero_refer3_name ?? "Maria Susteka", role: content.hero_refer3_role ?? "Design", avatar: content.hero_refer3_avatar },
+    { name: content.hero_refer4_name ?? "Gabriel Hudoba", role: content.hero_refer4_role ?? "Brand", avatar: content.hero_refer4_avatar ?? "/images/gabriel.png" },
   ];
   const refer = galleryAuthors[slide] ?? galleryAuthors[0];
 
   return (
     <section className="px-page max-w-page mx-auto" style={{ paddingTop: "var(--hero-section-pt)" }}>
       <div className="hero-in pt-s18 sm:pt-s15 lg:pt-s18 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
-        <Heading variant="h1" className="max-w-[800px]">
-          <Dispersion dynamic softBlur={0.8}>
-            {(content.hero_title ?? "New era of digital\nproduct design.")
+        <Heading variant="h1" className="max-w-[1000px]">
+          <Dispersion dynamic softBlur={0}>
+            {(content.hero_title ?? "Human decisions.\nBetter digital products.")
               .split("\n")
               .map((line, i, arr) => (
                 <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
@@ -77,7 +77,7 @@ export function HeroSection({ content }: Props) {
             className={`text-prim sm:!line-clamp-none cursor-pointer select-none transition-all duration-300 ${expanded ? "" : "line-clamp-3"}`}
             onClick={() => setExpanded((v) => !v)}
           >
-            {content.hero_desc ?? "A curated group of product specialists working on your mobile app or web system."}
+            {content.hero_desc ?? "A curated group of product specialists working on your system. Inside your team. Solving product problems from early concepts to product friction. With a level of speed previously impossible. Delivered through to production-ready output."}
           </Text>
         </div>
       </div>
@@ -86,7 +86,7 @@ export function HeroSection({ content }: Props) {
         className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between sm:pt-s18 pb-[24px] gap-s4 sm:gap-0"
         style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
       >
-        <Text variant="p1" className="max-w-[336px] text-prim text-left">
+        <Text variant="p1" className="max-w-[320px] text-prim text-left">
           {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
         </Text>
         <Refer

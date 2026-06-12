@@ -51,7 +51,7 @@ export default async function CaseStudiesPage() {
                     image={{ src: item.image_src!, alt: item.image_alt! }}
                     title={renderTitle(item.title!)}
                     description={item.description!}
-                    author={{ name: item.author_name!, role: item.author_role!, avatar: item.author_avatar! }}
+                    authors={item.authors}
                   />
                 </div>
               );
@@ -67,7 +67,9 @@ export default async function CaseStudiesPage() {
               <article key={item.id} className={`flex flex-col${prevItem?.type === "text" ? " mt-s6 sm:mt-0" : ""}`}>
                 <Heading variant="h3" style={{ fontSize: "40px" }}>{renderTitle(item.title!)}</Heading>
                 <Text variant="p2">{item.description}</Text>
-                <Refer name={item.author_name!} role={item.author_role!} avatar={item.author_avatar!} className="mt-s3" />
+                {item.authors[0] && (
+                  <Refer name={item.authors[0].name} role={item.authors[0].role} avatar={item.authors[0].avatar} className="mt-s3" />
+                )}
               </article>
             );
           })}

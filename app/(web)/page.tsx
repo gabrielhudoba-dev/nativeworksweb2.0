@@ -33,7 +33,7 @@ export default async function Home() {
     <main className="bg-white">
       <HeroSection content={content} />
 
-      <section className="max-w-page mx-auto pt-s1 pb-s9 sm:pb-s12">
+      <section className="pt-s6 sm:pt-s9 pb-s6 sm:pb-s9">
         <LogoMarquee />
       </section>
 

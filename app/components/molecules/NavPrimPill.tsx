@@ -21,7 +21,7 @@ export function NavPrimPill({ items, static: isStatic }: Props) {
       <div>
         <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
           <div
-            className="flex items-center gap-s3 sm:gap-s5 pl-s3 pr-s3 sm:pr-s4 h-s8 bg-[#D9D9D9]/20"
+            className="flex items-center gap-s3 sm:gap-s5 pl-s3 pr-s4 sm:pr-s5 h-s8 bg-[#D9D9D9]/20"
             style={{ textShadow: "none" }}
           >
             <Link href="/" aria-label="Native Works – späť na úvod" className="shrink-0">

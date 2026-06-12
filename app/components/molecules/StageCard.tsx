@@ -26,7 +26,7 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
       {eyebrow && (
         <Text
           variant="p3"
-          className="uppercase tracking-[0.08em]"
+          className="uppercase tracking-[0.08em] !text-[13px]"
           style={{ color: dark ? "rgba(255,255,255,0.5)" : "rgba(18,19,25,0.5)" }}
         >
           {eyebrow}

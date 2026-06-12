@@ -20,20 +20,20 @@ export function InterveningSection({ content, stages }: Props) {
   const leadSpan = rest.length >= 3 ? "md:row-span-3" : "md:row-span-2";
 
   return (
-    <section id="stages">
-      <div className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
+    <section id="stages" className="-mt-s6">
+      <div className="pt-s12 sm:pt-s15 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
         <Heading variant="h2" className="mb-s6 sm:mb-s9">
           {(content.intervening_title ?? "Intervening\nat any stage.").split("\n").map((line, i, arr) => (
             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
           ))}
         </Heading>
 
-        <div className="grid grid-cols-1 gap-s1 md:grid-cols-[1.6fr_1fr]">
+        <div className="grid grid-cols-1 gap-s1 md:grid-cols-2">
           <StageCard
             eyebrow={stageLabel(0)}
             title={lead.title}
             desc={lead.desc}
-            className={`h-full min-h-[240px] ${leadSpan}`}
+            className={`h-full min-h-[488px] ${leadSpan}`}
           />
           {rest.map((s, i) => (
             <StageCard
@@ -42,7 +42,7 @@ export function InterveningSection({ content, stages }: Props) {
               title={s.title}
               desc={s.desc}
               dark={i === rest.length - 1}
-              className="h-full min-h-[120px]"
+              className="h-full min-h-[240px]"
             />
           ))}
         </div>

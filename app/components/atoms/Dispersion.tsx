@@ -35,17 +35,17 @@ export function DispersionDefs() {
           <feColorMatrix in="SourceAlpha" type="matrix"
             values="0 0 0 0 0.50  0 0 0 0 0.50  0 0 0 0 0.50  0 0 0 0.55 0" result="c1" />
           <feOffset in="c1" dx="-1.5" dy="0.75" result="o1" />
-          <feGaussianBlur in="o1" stdDeviation="0.85" result="f1" />
+          <feGaussianBlur in="o1" stdDeviation="0.4" result="f1" />
           {/* band 2 · mid gray */}
           <feColorMatrix in="SourceAlpha" type="matrix"
             values="0 0 0 0 0.34  0 0 0 0 0.34  0 0 0 0 0.34  0 0 0 0.55 0" result="c2" />
           <feOffset in="c2" dx="1.5" dy="-0.75" result="o2" />
-          <feGaussianBlur in="o2" stdDeviation="0.9" result="f2" />
+          <feGaussianBlur in="o2" stdDeviation="0.45" result="f2" />
           {/* band 3 · dark gray */}
           <feColorMatrix in="SourceAlpha" type="matrix"
             values="0 0 0 0 0.20  0 0 0 0 0.20  0 0 0 0 0.20  0 0 0 0.42 0" result="c3" />
           <feOffset in="c3" dx="0.28" dy="1.5" result="o3" />
-          <feGaussianBlur in="o3" stdDeviation="0.95" result="f3" />
+          <feGaussianBlur in="o3" stdDeviation="0.5" result="f3" />
           <feMerge>
             <feMergeNode in="f1" />
             <feMergeNode in="f2" />

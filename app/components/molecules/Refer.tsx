@@ -13,7 +13,7 @@ export function Refer({ name, role, avatar, showName = true, className }: Props)
   const centered = !showName;
   return (
     <div className={`flex ${centered ? "items-center" : "items-start"} gap-s2${className ? ` ${className}` : ""}`}>
-      {avatar ? (
+      {avatar && (avatar.startsWith("/") || avatar.startsWith("http")) ? (
         <Avatar src={avatar} alt={name} size={48} className={centered ? "" : "translate-y-[5.5px]"} />
       ) : (
         <span className={`size-s7 rounded-pill bg-surface shrink-0 inline-block${centered ? "" : " translate-y-[5.5px]"}`} />

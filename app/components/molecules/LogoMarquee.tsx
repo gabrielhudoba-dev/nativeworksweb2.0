@@ -29,7 +29,7 @@ export function LogoMarquee() {
               width={120}
               height={logo.maxH}
               style={{ maxHeight: logo.maxH, width: "auto" }}
-              className="object-contain grayscale opacity-60"
+              className="object-contain brightness-0"
             />
           </div>
         ))}

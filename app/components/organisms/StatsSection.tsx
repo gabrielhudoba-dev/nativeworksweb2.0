@@ -16,7 +16,7 @@ export function StatsSection({ content, stats }: Props) {
               <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
             ))}
           </Heading>
-          <Text variant="p2">
+          <Text variant="p1">
             {content.stats_desc ?? "Fewer steps. Higher quality. AI-accelerated."}
           </Text>
         </div>

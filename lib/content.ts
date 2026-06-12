@@ -61,6 +61,8 @@ export type CaseStudyItemStat = {
   label: string;
 };
 
+export type CaseStudyAuthor = { name: string; role: string; avatar?: string };
+
 export type CaseStudyDbItem = {
   id: number;
   type: "case_study" | "stats" | "text" | "image";
@@ -73,6 +75,10 @@ export type CaseStudyDbItem = {
   author_name: string | null;
   author_role: string | null;
   author_avatar: string | null;
+  /** Parsed authors — supports several per item via a "|" delimiter in the
+   *  author_name/role/avatar columns (e.g. "A|B"), since the table has no
+   *  second-author columns. Single author = one entry. */
+  authors: CaseStudyAuthor[];
   stats: CaseStudyItemStat[];
 };
 
@@ -205,6 +211,22 @@ export async function getCaseStudiesItems(): Promise<CaseStudyDbItem[]> {
 
   return (itemRows ?? []).map((item) => ({
     ...item,
+    authors: parseAuthors(item),
     stats: (statRows ?? []).filter((s) => s.item_id === item.id),
   }));
+}
+
+/** Split the author_name/role/avatar columns on "|" into one or more authors. */
+function parseAuthors(item: {
+  author_name: string | null;
+  author_role: string | null;
+  author_avatar: string | null;
+}): CaseStudyAuthor[] {
+  if (!item.author_name) return [];
+  const names = item.author_name.split("|").map((s) => s.trim());
+  const roles = (item.author_role ?? "").split("|").map((s) => s.trim());
+  const avatars = (item.author_avatar ?? "").split("|").map((s) => s.trim());
+  return names
+    .map((name, i) => ({ name, role: roles[i] ?? "", avatar: avatars[i] || undefined }))
+    .filter((a) => a.name);
 }

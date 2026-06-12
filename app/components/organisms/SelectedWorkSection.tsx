@@ -9,7 +9,7 @@ function renderTitle(title: string) {
 }
 
 /** One case: full-width visual on top, then title + description + author below. */
-function CaseCard({ item, imgClass }: { item: CaseStudyDbItem; imgClass: string }) {
+function CaseCard({ item, imgClass, textClassName = "" }: { item: CaseStudyDbItem; imgClass: string; textClassName?: string }) {
   return (
     <div className="flex flex-col">
       <CaseStudyImage
@@ -20,12 +20,8 @@ function CaseCard({ item, imgClass }: { item: CaseStudyDbItem; imgClass: string 
       <PrimTextBlock
         title={renderTitle(item.title!)}
         description={item.description!}
-        className="!mt-s4"
-        author={{
-          name: item.author_name!,
-          role: item.author_role!,
-          avatar: item.author_avatar ?? undefined,
-        }}
+        className={`!mt-s4 ${textClassName}`}
+        authors={item.authors}
       />
     </div>
   );
@@ -44,10 +40,10 @@ export function SelectedWorkSection({ content, items }: Props) {
 
   return (
     <section id="work" className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
-      <Heading variant="h2" className="mb-s6 sm:mb-s12">{content.work_title ?? "Selected work."}</Heading>
+      <Heading variant="h2" className="mb-s6 sm:mb-s9">{content.work_title ?? "Selected work."}</Heading>
 
       <div className="flex flex-col gap-s9 sm:gap-s12">
-        <CaseCard item={hero} imgClass="!h-[420px] sm:!h-[600px]" />
+        <CaseCard item={hero} imgClass="!h-[420px] sm:!h-[600px]" textClassName="sm:max-w-[calc(50%-16px)]" />
 
         {rest.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s4 gap-y-s9">
