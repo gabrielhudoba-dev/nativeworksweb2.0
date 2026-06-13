@@ -10,7 +10,7 @@ const variantClass: Record<HeadingVariant, string> = {
   // Values per breakpoint are derived from PP Neue Montreal ascent ratio ≈ 0.78:
   //   correction = lh − (half_leading + 0.78 × font_size)
   // where the result targets the nearest grid line below the layout box top.
-  h1:    "font-display font-medium text-h1 text-prim translate-y-[14px] max-sm:translate-y-[10.5px] lg:translate-y-[21px]",
+  h1:    "font-display font-medium text-h1 text-prim translate-y-[15.75px] max-sm:translate-y-[10.5px] lg:translate-y-[21px]",
   h2:    "font-display font-medium text-h2 text-prim translate-y-[10.5px] max-sm:translate-y-[14px] lg:translate-y-[16px]",
   page:  "font-display font-medium text-hpage text-prim -translate-y-[8px]",
   h3:    "font-display font-medium text-h3 text-prim -translate-y-[11.5px] max-sm:translate-y-[1px]",
