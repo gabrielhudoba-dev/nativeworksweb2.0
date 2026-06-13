@@ -1,7 +1,17 @@
 "use client";
 
+import type { CSSProperties } from "react";
+import { GlassCard } from "@developer-hub/liquid-glass";
 import { Text, Heading } from "@/app/components/atoms";
 import { Button } from "./Button";
+
+// Denser variant of the stats-section dot pattern. Rendered as its own inset
+// layer (see below) so the dots start/end with the card's padding instead of
+// bleeding to the edge, and don't clip the surface fill.
+const INACTIVE_DOT_BG: CSSProperties = {
+  backgroundImage: "radial-gradient(circle, rgba(9,14,58,0.08) 1.5px, transparent 1.5px)",
+  backgroundSize: "16px 16px",
+};
 
 type Props = {
   title: string;
@@ -15,15 +25,16 @@ type Props = {
 };
 
 export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, features }: Props) {
-  // `desc` may carry an "Outcome:" tail — split it out so the outcome renders
-  // as its own small label + text block below the main description.
-  const outcomeIdx = desc.indexOf("Outcome:");
-  const mainText = (outcomeIdx >= 0 ? desc.slice(0, outcomeIdx) : desc).trim();
-  const outcomeText = outcomeIdx >= 0 ? desc.slice(outcomeIdx + "Outcome:".length).trim() : "";
-
   return (
     <div className="flex flex-col h-full cursor-pointer" onClick={onClick}>
       <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[370px] pt-s6 pb-s4 px-s2">
+        {!active && (
+          <div
+            aria-hidden="true"
+            style={INACTIVE_DOT_BG}
+            className="pointer-events-none absolute inset-s2 -z-10"
+          />
+        )}
         <div className="px-[8px]">
           <Heading variant="h4" className="text-[24px] leading-[24px]">
             {title.split(' ').slice(0, -1).join(' ')}<br />{title.split(' ').at(-1)}™
@@ -34,38 +45,44 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
             <Text variant="h5" as="span">{price}</Text>
             <Text variant="h5" as="span">{duration}</Text>
           </div>
-          <Button
-            variant={active ? "dark" : "secondary"}
-            size="lg"
-            rightIcon="arrow-right"
-            className="w-full"
-            onClick={active ? onLetStart : (e) => { e.stopPropagation(); onClick(); }}
-          >
-            {"Let's Start"}
-          </Button>
+          {active ? (
+            <Button
+              variant="dark"
+              size="lg"
+              rightIcon="arrow-right"
+              className="w-full"
+              onClick={onLetStart}
+            >
+              {"Let's Start"}
+            </Button>
+          ) : (
+            // Same liquid-glass treatment as the nav pill.
+            <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80} className="cta-glass w-full">
+              <Button
+                variant="secondary"
+                size="lg"
+                rightIcon="arrow-right"
+                className="w-full bg-[#D9D9D9]/20"
+                style={{ textShadow: "none" }}
+                onClick={(e) => { e.stopPropagation(); onClick(); }}
+              >
+                {"Let's Start"}
+              </Button>
+            </GlassCard>
+          )}
         </div>
       </div>
-      <div className="flex-1 flex flex-col gap-s4 pl-s2 pr-s2 mt-s5 mb-s6">
-        <div className="flex flex-col gap-s1">
-          <Text
-            variant="p3"
-            className="uppercase tracking-[0.08em] !text-[13px] !leading-none"
-            style={{ color: "rgba(18,19,25,0.5)" }}
-          >
-            Overview
-          </Text>
-          <Text variant="p2">{mainText}</Text>
-        </div>
-        {outcomeText && (
-          <div className="flex flex-col gap-s1">
-            <Text
-              variant="p3"
-              className="uppercase tracking-[0.08em] !text-[13px] !leading-none"
-              style={{ color: "rgba(18,19,25,0.5)" }}
-            >
-              Outcome
-            </Text>
-            <Text variant="p2">{outcomeText}</Text>
+      <div className="flex-1 flex flex-col pl-s2 pr-s6 mt-s5 mb-s6">
+        <Text variant="p2" style={{ color: "rgba(18,19,25,0.5)" }} className="mb-s5">
+          {desc}
+        </Text>
+        {features && features.length > 0 && (
+          <div className="flex flex-col">
+            {features.map((f, i) => (
+              <div key={i} className="border-t border-[rgba(18,19,25,0.1)] py-s3">
+                <Text variant="p2">{f}</Text>
+              </div>
+            ))}
           </div>
         )}
       </div>

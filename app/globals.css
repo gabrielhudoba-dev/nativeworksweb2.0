@@ -249,6 +249,11 @@ button, [role="button"], a {
 }
 .editable:focus { background: color-mix(in srgb, var(--color-brand) 6%, transparent); border-radius: 4px; }
 
+/* GlassCard's inner .glass wrapper is inline-flex (shrinks to content); force
+   it full-width so the glass CTA matches the active button's width. */
+.cta-glass .glass,
+.cta-glass .glass > div { width: 100%; }
+
 /* ─── Grain texture ─── */
 .grain {
   position: relative;

@@ -22,11 +22,14 @@ export function ServicesSection({ content, services }: Props) {
   const [activeCard, setActiveCard] = useState(0);
   const { sliderRef, containerRef, onViewChange } = useSliderSection("services-slider", services.length);
 
-  const sprintFeatures = [
-    content.sprint_features_f1_title ?? "Senior-led execution",
-    content.sprint_features_f2_title ?? "Fast delivery cycle",
-    content.sprint_features_f3_title ?? "Designed in code",
-  ];
+  function parseFeatures(desc: string): { text: string; features: string[] } {
+    const idx = desc.indexOf("\n\nFeatures:");
+    if (idx < 0) return { text: desc, features: [] };
+    return {
+      text: desc.slice(0, idx).trim(),
+      features: desc.slice(idx + "\n\nFeatures:".length).trim().split("|").map(f => f.trim()),
+    };
+  }
 
   return (
     <section id="services" className="pt-s7 sm:pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
@@ -50,19 +53,22 @@ export function ServicesSection({ content, services }: Props) {
           containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
           onViewChange={onViewChange}
         >
-          {services.map((card, i) => (
-            <ServiceCard
-              key={card.title}
-              title={card.title}
-              desc={card.desc}
-              price={card.price}
-              duration={card.duration}
-              active={activeCard === i}
-              onClick={() => setActiveCard(i)}
-              onLetStart={(e) => handleLetStart(e, { name: card.title, detail: `${card.price} / ${card.duration}` })}
-              features={sprintFeatures}
-            />
-          ))}
+          {services.map((card, i) => {
+            const { text, features } = parseFeatures(card.desc);
+            return (
+              <ServiceCard
+                key={card.title}
+                title={card.title}
+                desc={text}
+                price={card.price}
+                duration={card.duration}
+                active={activeCard === i}
+                onClick={() => setActiveCard(i)}
+                onLetStart={(e) => handleLetStart(e, { name: card.title, detail: `${card.price} / ${card.duration}` })}
+                features={features}
+              />
+            );
+          })}
         </Slider>
       </div>
     </section>
