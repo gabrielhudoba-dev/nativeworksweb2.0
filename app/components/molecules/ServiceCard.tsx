@@ -27,7 +27,7 @@ type Props = {
 export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, features }: Props) {
   return (
     <div className="flex flex-col h-full cursor-pointer" onClick={onClick}>
-      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[360px] pt-s6 pb-s6 px-s2">
+      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[360px] max-sm:pt-s3 sm:pt-s6 pb-s6 px-s2">
         {!active && (
           <div
             aria-hidden="true"
@@ -73,17 +73,22 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
           )}
         </div>
       </div>
-      <div className="flex-1 flex flex-col pl-s2 pr-s6 mt-s6 mb-s6">
-        <Text variant="p2" style={{ color: "rgba(18,19,25,0.5)" }} className="mb-s6">
+      <div className="flex-1 flex flex-col mt-s6">
+        <Text variant="p2" className="mb-s6 max-sm:pr-[16px]">
           {desc}
         </Text>
         {features && features.length > 0 && (
           <div className="flex flex-col">
-            {features.map((f, i) => (
-              <div key={i} className="shadow-[inset_0_1px_0_rgba(18,19,25,0.1)] py-s3">
-                <Text variant="p2">{f}</Text>
-              </div>
-            ))}
+            <div className="flex items-center justify-between shadow-[inset_0_1px_0_rgba(18,19,25,0.1)] py-s3">
+              <Text variant="p2" as="span">Outputs</Text>
+            </div>
+            <div className="flex flex-col">
+              {features.map((f, i) => (
+                <div key={i} className="shadow-[inset_0_1px_0_rgba(18,19,25,0.1)] py-s3">
+                  <Text variant="p2">{f}</Text>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

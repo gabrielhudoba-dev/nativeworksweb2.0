@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Badge, Heading, Icon, Text } from "@/app/components/atoms";
 import { ServiceCard } from "@/app/components/molecules/ServiceCard";
 import { Slider } from "@/app/components/molecules/Slider";
@@ -22,6 +22,11 @@ export function ServicesSection({ content, services }: Props) {
   const [activeCard, setActiveCard] = useState(0);
   const { sliderRef, containerRef, onViewChange } = useSliderSection("services-slider", services.length);
 
+  const handleViewChange = useCallback((view: Parameters<typeof onViewChange>[0]) => {
+    setActiveCard(view.firstVisible);
+    onViewChange(view);
+  }, [onViewChange]);
+
   function parseFeatures(desc: string): { text: string; features: string[] } {
     const idx = desc.indexOf("\n\nFeatures:");
     if (idx < 0) return { text: desc, features: [] };
@@ -32,7 +37,7 @@ export function ServicesSection({ content, services }: Props) {
   }
 
   return (
-    <section id="services" className="pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
+    <section id="services" className="max-sm:pt-s6 sm:pt-s9 max-sm:pb-s6 sm:pb-s12 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
@@ -49,9 +54,9 @@ export function ServicesSection({ content, services }: Props) {
       <div ref={containerRef}>
         <Slider
           ref={sliderRef}
-          cols={3}
+          cols={1}
           containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
-          onViewChange={onViewChange}
+          onViewChange={handleViewChange}
         >
           {services.map((card, i) => {
             const { text, features } = parseFeatures(card.desc);

@@ -14,42 +14,47 @@ export function InterveningSection({ content, stages }: Props) {
 
   const eyebrow = content.intervening_eyebrow ?? "Stage";
   const stageLabel = (n: number) => `${eyebrow} ${String(n).padStart(2, "0")}`;
-  // Numbering follows the bento's reading order so the stages run 01 → 02 → 03
-  // down the product lifecycle: top-left side card = 01, dark focal card = 02,
-  // bottom-left side card = 03.
-  const restNums = [1, 3];
 
-  // Lead card spans the height of the stacked right column (both literal classes
-  // kept so Tailwind detects them).
   const leadSpan = rest.length >= 3 ? "md:row-span-3" : "md:row-span-2";
 
   return (
     <section id="stages" className="-mt-s6">
-      <div className="pt-s9 sm:pt-s12 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
+      <div className="pt-s9 sm:pt-s12 max-sm:pb-s6 sm:pb-s12 px-page max-w-page mx-auto">
         <Heading variant="h2" className="mb-s6">
           {(content.intervening_title ?? "Intervening\nat any stage.").split("\n").map((line, i, arr) => (
             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
           ))}
         </Heading>
 
+        {/* DOM order 01→02→03 so mobile reads in stage order.
+            Desktop bento preserved via explicit md:col-start / md:row-start. */}
         <div className="grid grid-cols-1 gap-s3 md:grid-cols-2">
+          {rest[0] && (
+            <StageCard
+              key={rest[0].id}
+              eyebrow={stageLabel(1)}
+              title={rest[0].title}
+              desc={rest[0].desc}
+              className="h-full min-h-[240px] md:col-start-1 md:row-start-1"
+            />
+          )}
           <StageCard
             eyebrow={stageLabel(2)}
             title={lead.title}
             desc={lead.desc}
             dark
             bgImage="/images/disp3.png"
-            className={`h-full min-h-[480px] md:col-start-2 md:row-start-1 ${leadSpan}`}
+            className={`h-full min-h-[480px] md:col-start-2 md:row-start-1 max-sm:-mt-s6 ${leadSpan}`}
           />
-          {rest.map((s, i) => (
+          {rest[1] && (
             <StageCard
-              key={s.id}
-              eyebrow={stageLabel(restNums[i] ?? i + 2)}
-              title={s.title}
-              desc={s.desc}
-              className="h-full min-h-[240px]"
+              key={rest[1].id}
+              eyebrow={stageLabel(3)}
+              title={rest[1].title}
+              desc={rest[1].desc}
+              className="h-full min-h-[240px] md:col-span-2"
             />
-          ))}
+          )}
         </div>
       </div>
     </section>

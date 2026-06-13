@@ -21,7 +21,7 @@ export function StatsSection({ content, stats }: Props) {
 
   return (
     <section style={DOT_BG}>
-      <div className="pt-s9 pb-s9 sm:pb-s12">
+      <div className="max-sm:pt-s6 sm:pt-s9 pb-s9 sm:pb-s12">
         <div className="px-page max-w-page mx-auto mb-s9">
           <Heading variant="h2" className="max-w-[672px]">
             {(content.stats_title ?? "Better products.\nDelivered faster.").split("\n").map((line, i, arr) => (
@@ -36,7 +36,7 @@ export function StatsSection({ content, stats }: Props) {
             stats={stats}
             sliderRef={sliderRef}
             onViewChange={onViewChange}
-            containerClassName="py-s3 -my-s3"
+            containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
           />
         </div>
 

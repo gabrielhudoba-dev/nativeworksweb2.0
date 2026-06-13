@@ -24,6 +24,8 @@ export function GlobalGalleryNav() {
   const navRef = useRef(nav);
   navRef.current = nav;
   useEffect(() => {
+    // Only on pointer:fine devices (mouse) — touch devices use native drag scroll.
+    if (!window.matchMedia("(pointer: fine)").matches) return;
     const onClick = (e: MouseEvent) => {
       if (!navRef.current) return;
       const target = e.target as Element;
@@ -36,7 +38,7 @@ export function GlobalGalleryNav() {
   }, []);
 
   return (
-    <div className="fixed left-0 right-0 z-40 flex justify-center pointer-events-none" style={{ top: "var(--gallery-nav-top, 82px)" }}>
+    <div className="hidden sm:flex fixed left-0 right-0 z-40 justify-center pointer-events-none" style={{ top: "var(--gallery-nav-top, 82px)" }}>
       <div
         className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-auto ${
           visible

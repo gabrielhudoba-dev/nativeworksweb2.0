@@ -59,8 +59,8 @@ export function HeroSection({ content }: Props) {
   const refer = galleryAuthors[slide] ?? galleryAuthors[0];
 
   return (
-    <section className="px-page max-w-page mx-auto pb-s9 sm:pb-0" style={{ paddingTop: "var(--hero-section-pt)" }}>
-      <div className="hero-in pt-s18 sm:pt-s15 lg:pt-s18 sm:mt-s3 lg:mt-s6 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
+    <section className="px-page max-w-page mx-auto max-sm:pb-s6 sm:pb-0" style={{ paddingTop: "var(--hero-section-pt)" }}>
+      <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s15 lg:pt-s18 sm:mt-s3 lg:mt-s6 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
         {/* max-width in em (not px) so it scales with the responsive h1 font
             (96/72/48px) — keeps the same 3-line composition at every breakpoint
             without hard line breaks. 8em ≈ the old 760px at 96px. */}
@@ -68,7 +68,7 @@ export function HeroSection({ content }: Props) {
           {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
         </Heading>
         <div className="max-w-[608px] pb-[72px]">
-          <Text variant="p1" className="text-prim">
+          <Text variant="p1" className="text-prim max-sm:text-p2">
             {content.hero_desc ?? "A curated group of product specialists working on your system. Inside your team. Solving product problems from early concepts to product friction. With a level of speed previously impossible. Delivered through to production-ready output."}
           </Text>
         </div>

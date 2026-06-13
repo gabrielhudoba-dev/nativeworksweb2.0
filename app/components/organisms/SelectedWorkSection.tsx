@@ -1,5 +1,8 @@
+"use client";
+
 import { CaseStudyImage, Heading } from "@/app/components/atoms";
-import { PrimTextBlock } from "@/app/components/molecules";
+import { PrimTextBlock, Slider } from "@/app/components/molecules";
+import { useSliderSection } from "@/app/hooks/useSliderSection";
 import type { SiteContent, CaseStudyDbItem } from "@/lib/content";
 
 function renderTitle(title: string) {
@@ -8,8 +11,6 @@ function renderTitle(title: string) {
   ));
 }
 
-/** One case: full-width visual on top, then title + description + author below.
- *  `split` lays the text out as two columns (title | description + authors). */
 function CaseCard({ item, imgClass, textClassName = "", split = false }: { item: CaseStudyDbItem; imgClass: string; textClassName?: string; split?: boolean }) {
   return (
     <div className="flex flex-col">
@@ -21,7 +22,7 @@ function CaseCard({ item, imgClass, textClassName = "", split = false }: { item:
       <PrimTextBlock
         title={renderTitle(item.title!)}
         description={item.description!}
-        className={`!mt-s6 ${textClassName}`}
+        className={`max-sm:!mt-s3 sm:!mt-s6 ${textClassName}`}
         authors={item.authors}
         split={split}
       />
@@ -31,29 +32,44 @@ function CaseCard({ item, imgClass, textClassName = "", split = false }: { item:
 
 type Props = { content: SiteContent; items: CaseStudyDbItem[] };
 
-/**
- * Homepage "Selected work" — first case spans the full width, the remaining
- * cases sit two-up below it (wireframe: one row of one, one row of two).
- */
 export function SelectedWorkSection({ content, items }: Props) {
   const cases = items.filter((i) => i.type === "case_study");
   if (cases.length === 0) return null;
-  const [hero, ...rest] = cases;
+
+  const { sliderRef, containerRef, onViewChange } = useSliderSection("work-slider", cases.length);
 
   return (
-    <section id="work" className="pt-s9 pb-s18 sm:pb-[192px] px-page max-w-page mx-auto">
-      <Heading variant="h2" className="mb-s6 sm:mb-s9">{content.work_title ?? "Selected work."}</Heading>
+    <section id="work" className="max-sm:pt-s3 sm:pt-s9 pb-s18 sm:pb-[192px]">
+      <div className="px-page max-w-page mx-auto">
+        <Heading variant="h2" className="mb-s6 sm:mb-s9">{content.work_title ?? "Selected work."}</Heading>
+      </div>
 
-      <div className="flex flex-col gap-s12">
-        <CaseCard item={hero} imgClass="!h-[432px] sm:!h-[600px]" split />
+      {/* Mobile: swipeable slider */}
+      <div ref={containerRef} className="sm:hidden px-page max-w-page mx-auto">
+        <Slider
+          ref={sliderRef}
+          cols={1}
+          containerClassName="-mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
+          onViewChange={onViewChange}
+        >
+          {cases.map((item) => (
+            <CaseCard key={item.id} item={item} imgClass="!h-[432px]" />
+          ))}
+        </Slider>
+      </div>
 
-        {rest.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s12 sm:gap-y-s9">
-            {rest.map((item) => (
-              <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[456px]" />
-            ))}
-          </div>
-        )}
+      {/* Desktop: original stacked layout */}
+      <div className="hidden sm:block px-page max-w-page mx-auto">
+        <div className="flex flex-col gap-s12">
+          <CaseCard item={cases[0]} imgClass="!h-[432px] sm:!h-[600px]" split />
+          {cases.length > 1 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s12 sm:gap-y-s9">
+              {cases.slice(1).map((item) => (
+                <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[456px]" />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

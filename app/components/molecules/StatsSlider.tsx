@@ -13,7 +13,7 @@ type Props = {
 export function StatsSlider({ stats, sliderRef, onViewChange, containerClassName }: Props) {
   return (
     <Slider ref={sliderRef} cols={3} onViewChange={onViewChange} containerClassName={containerClassName}>
-      {stats.map((s) => (
+      {[...stats].reverse().map((s) => (
         <StatColumn
           key={s.id}
           value={s.value}
