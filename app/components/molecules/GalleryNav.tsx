@@ -17,8 +17,7 @@ type Props = {
 export function GalleryNav({ count, firstVisible, visibleCount, onPrev, onNext, onDotClick, variant = "dots" }: Props) {
   return (
     <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80}>
-      <div className="inline-flex items-center justify-center gap-s2 px-s3 h-s7 bg-[#D9D9D9]/20">
-        <IconButton icon="chevron-left" label="Predchádzajúci" onClick={onPrev} />
+      <div className="inline-flex items-center justify-center px-s3 h-s7 bg-[#D9D9D9]/20">
         <div className="flex items-center justify-center gap-s1 h-s1">
           {Array.from({ length: count }).map((_, i) => {
             const active = i >= firstVisible && i < firstVisible + visibleCount;
@@ -28,7 +27,7 @@ export function GalleryNav({ count, firstVisible, visibleCount, onPrev, onNext, 
                 type="button"
                 aria-label={`Go to slide ${i + 1}`}
                 onClick={() => onDotClick(i)}
-                className={`h-s1 rounded-pill shrink-0 transition-[width,background-color] duration-300 ease-system cursor-pointer ${
+                className={`h-s1 rounded-pill shrink-0 transition-[width,background-color] duration-300 ease-system ${
                   active
                     ? (variant === "pill" ? "w-s6 bg-prim" : "w-s1 bg-prim")
                     : "w-s1 bg-prim/20"
@@ -37,7 +36,6 @@ export function GalleryNav({ count, firstVisible, visibleCount, onPrev, onNext, 
             );
           })}
         </div>
-        <IconButton icon="chevron-right" label="Nasledujúci" onClick={onNext} />
       </div>
     </GlassCard>
   );

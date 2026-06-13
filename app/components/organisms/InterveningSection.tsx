@@ -26,7 +26,7 @@ export function InterveningSection({ content, stages }: Props) {
   return (
     <section id="stages" className="-mt-s6">
       <div className="pt-s9 sm:pt-s12 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
-        <Heading variant="h2" className="mb-s4 sm:mb-s6">
+        <Heading variant="h2" className="mb-s6">
           {(content.intervening_title ?? "Intervening\nat any stage.").split("\n").map((line, i, arr) => (
             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
           ))}
@@ -39,7 +39,7 @@ export function InterveningSection({ content, stages }: Props) {
             desc={lead.desc}
             dark
             bgImage="/images/disp3.png"
-            className={`h-full min-h-[488px] md:col-start-2 md:row-start-1 ${leadSpan}`}
+            className={`h-full min-h-[480px] md:col-start-2 md:row-start-1 ${leadSpan}`}
           />
           {rest.map((s, i) => (
             <StageCard

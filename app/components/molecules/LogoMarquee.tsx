@@ -4,14 +4,15 @@ import Image from "next/image";
 
 // alternated: icon, wordmark, icon, wordmark...
 // maxH calibrated per-logo for equal optical weight
-const LOGOS: { name: string; maxH: number }[] = [
-  { name: "jt",          maxH: 28 }, // icon  40×55
-  { name: "batanabank",  maxH: 20 }, // wordmark — text fills ~100% viewBox height
-  { name: "fingo",       maxH: 26 }, // icon  53×45
-  { name: "dazzle",      maxH: 20 }, // wordmark — text fills ~87% viewBox height
-  { name: "kot",         maxH: 26 }, // icon  51×45
-  { name: "reapp",       maxH: 25 }, // wordmark — text fills only ~55% (icon takes top 45%)
-  { name: "swivel",      maxH: 22 }, // wordmark — text fills ~78% viewBox height
+// cellPx: overrides px-s4 for wide wordmarks where padding is the binding width constraint
+const LOGOS: { name: string; maxH: number; cellPx?: string }[] = [
+  { name: "jt",          maxH: 28 },
+  { name: "batanabank",  maxH: 26, cellPx: "px-s1" }, // 135:22 ratio — needs full width
+  { name: "fingo",       maxH: 26 },
+  { name: "dazzle",      maxH: 20 },
+  { name: "kot",         maxH: 26 },
+  { name: "reapp",       maxH: 25 },
+  { name: "swivel",      maxH: 22 },
 ];
 
 // +10% logo size, +15% gap vs. the original 120px / 48px baseline.
@@ -24,7 +25,7 @@ export function LogoMarquee() {
         {[...LOGOS, ...LOGOS].map((logo, i) => (
           <div
             key={i}
-            className="flex items-center justify-center px-s4 h-[88px] shrink-0 w-[160px]"
+            className={`flex items-center justify-center ${logo.cellPx ?? "px-s4"} h-[96px] shrink-0 w-[160px]`}
           >
             <Image
               src={`/companies/${logo.name}.svg`}

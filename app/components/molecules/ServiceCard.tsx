@@ -27,7 +27,7 @@ type Props = {
 export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, features }: Props) {
   return (
     <div className="flex flex-col h-full cursor-pointer" onClick={onClick}>
-      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[370px] pt-s6 pb-s4 px-s2">
+      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[360px] pt-s6 pb-s6 px-s2">
         {!active && (
           <div
             aria-hidden="true"
@@ -36,7 +36,9 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
           />
         )}
         <div className="px-[8px]">
-          <Heading variant="h4" className="text-[24px] leading-[24px]">
+          {/* !translate-y-[5px] overrides h4 variant's -translate-y-[10px] (Tailwind v4 uses CSS
+              `translate` property; !important wins). Targets 24px/24px lh instead of h4's 28px/48px. */}
+          <Heading variant="h4" className="text-[24px] leading-[24px] !translate-y-[5px]">
             {title.split(' ').slice(0, -1).join(' ')}<br />{title.split(' ').at(-1)}™
           </Heading>
         </div>
@@ -46,11 +48,11 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
             <Text variant="h5" as="span">{duration}</Text>
           </div>
           {active ? (
+            // !h-s6: overrides dark variant's h-s8 (64px) → 48px = 2×24 so price(48)+btn(48)=96=4×24 ✓
             <Button
               variant="dark"
-              size="lg"
               rightIcon="arrow-right"
-              className="w-full"
+              className="w-full !h-s6"
               onClick={onLetStart}
             >
               {"Let's Start"}
@@ -60,7 +62,6 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
             <GlassCard cornerRadius={9999} padding="0px" blurAmount={0} displacementScale={80} className="cta-glass w-full">
               <Button
                 variant="secondary"
-                size="lg"
                 rightIcon="arrow-right"
                 className="w-full bg-[#D9D9D9]/20"
                 style={{ textShadow: "none" }}
@@ -72,14 +73,14 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
           )}
         </div>
       </div>
-      <div className="flex-1 flex flex-col pl-s2 pr-s6 mt-s5 mb-s6">
-        <Text variant="p2" style={{ color: "rgba(18,19,25,0.5)" }} className="mb-s5">
+      <div className="flex-1 flex flex-col pl-s2 pr-s6 mt-s6 mb-s6">
+        <Text variant="p2" style={{ color: "rgba(18,19,25,0.5)" }} className="mb-s6">
           {desc}
         </Text>
         {features && features.length > 0 && (
           <div className="flex flex-col">
             {features.map((f, i) => (
-              <div key={i} className="border-t border-[rgba(18,19,25,0.1)] py-s3">
+              <div key={i} className="shadow-[inset_0_1px_0_rgba(18,19,25,0.1)] py-s3">
                 <Text variant="p2">{f}</Text>
               </div>
             ))}

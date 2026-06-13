@@ -21,7 +21,7 @@ function CaseCard({ item, imgClass, textClassName = "", split = false }: { item:
       <PrimTextBlock
         title={renderTitle(item.title!)}
         description={item.description!}
-        className={`!mt-s5 sm:!mt-s4 ${textClassName}`}
+        className={`!mt-s6 ${textClassName}`}
         authors={item.authors}
         split={split}
       />
@@ -41,16 +41,16 @@ export function SelectedWorkSection({ content, items }: Props) {
   const [hero, ...rest] = cases;
 
   return (
-    <section id="work" className="pt-s7 sm:pt-s9 pb-s18 sm:pb-[192px] px-page max-w-page mx-auto">
+    <section id="work" className="pt-s9 pb-s18 sm:pb-[192px] px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s6 sm:mb-s9">{content.work_title ?? "Selected work."}</Heading>
 
       <div className="flex flex-col gap-s12">
-        <CaseCard item={hero} imgClass="!h-[420px] sm:!h-[600px]" split />
+        <CaseCard item={hero} imgClass="!h-[432px] sm:!h-[600px]" split />
 
         {rest.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s12 sm:gap-y-s9">
             {rest.map((item) => (
-              <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[460px]" />
+              <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[456px]" />
             ))}
           </div>
         )}

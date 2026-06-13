@@ -50,7 +50,7 @@ export function useRegisterSliderNav({
         const ratio = entry.intersectionRatio;
         ratioRef.current = ratio;
 
-        if (ratio <= 0) {
+        if (ratio < 0.5) {
           setSection(id, null);
           return;
         }

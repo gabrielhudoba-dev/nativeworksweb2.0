@@ -43,7 +43,7 @@ export function PrimTextBlock({ title, description, author, authors, showName = 
         </div>
       )}
       {people.length > 0 && (
-        <div className="flex flex-wrap items-start gap-x-s4 gap-y-s3 sm:gap-x-s6 sm:gap-y-s4 mt-s3">
+        <div className="flex flex-wrap items-start gap-x-s4 gap-y-s3 sm:gap-x-s6 mt-s3">
           {people.map((p, i) => (
             <Refer key={i} name={p.name} role={p.role} avatar={p.avatar} showName={showName} />
           ))}
@@ -55,7 +55,7 @@ export function PrimTextBlock({ title, description, author, authors, showName = 
 
   if (split) {
     return (
-      <article className={`grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s4 mt-s9 ${className}`}>
+      <article className={`grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s6 mt-s9 ${className}`}>
         {heading}
         <div className="flex flex-col">{body}</div>
       </article>

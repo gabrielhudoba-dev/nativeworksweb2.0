@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GalleryNav } from "@/app/components/molecules";
 import { useSliderNav } from "@/app/context/SliderNavContext";
 import { useNavOpen } from "./NavigationProvider";
@@ -18,6 +18,22 @@ export function GlobalGalleryNav() {
   }, []);
 
   const visible = nav !== null && !navOpen && scrolled;
+
+  // Global click → prev/next based on which screen half was clicked.
+  // Skips interactive elements so links, buttons, and inputs still work normally.
+  const navRef = useRef(nav);
+  navRef.current = nav;
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!navRef.current) return;
+      const target = e.target as Element;
+      if (target.closest("a, button, input, select, textarea, [role='button'], [tabindex]")) return;
+      if (e.clientX < window.innerWidth / 2) navRef.current.onPrev();
+      else navRef.current.onNext();
+    };
+    window.addEventListener("click", onClick);
+    return () => window.removeEventListener("click", onClick);
+  }, []);
 
   return (
     <div className="fixed left-0 right-0 z-40 flex justify-center pointer-events-none" style={{ top: "var(--gallery-nav-top, 82px)" }}>

@@ -1,4 +1,5 @@
 export { Avatar } from "./Avatar";
+export { CustomCursor } from "./CustomCursor";
 export { CaseStudyImage } from "./CaseStudyImage";
 export { ImageBlock } from "./ImageBlock";
 export { Logo } from "./Logo";

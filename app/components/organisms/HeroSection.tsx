@@ -60,14 +60,14 @@ export function HeroSection({ content }: Props) {
 
   return (
     <section className="px-page max-w-page mx-auto pb-s9 sm:pb-0" style={{ paddingTop: "var(--hero-section-pt)" }}>
-      <div className="hero-in pt-s18 sm:pt-s15 lg:pt-s18 sm:mt-s4 lg:mt-s6 flex flex-col items-start sm:items-center gap-s4 sm:gap-s6 text-left sm:text-center">
+      <div className="hero-in pt-s18 sm:pt-s15 lg:pt-s18 sm:mt-s3 lg:mt-s6 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
         {/* max-width in em (not px) so it scales with the responsive h1 font
             (96/72/48px) — keeps the same 3-line composition at every breakpoint
             without hard line breaks. 8em ≈ the old 760px at 96px. */}
         <Heading variant="h1" className="max-w-[8em]">
           {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
         </Heading>
-        <div className="max-w-[608px] pb-[80px]">
+        <div className="max-w-[608px] pb-[72px]">
           <Text variant="p1" className="text-prim">
             {content.hero_desc ?? "A curated group of product specialists working on your system. Inside your team. Solving product problems from early concepts to product friction. With a level of speed previously impossible. Delivered through to production-ready output."}
           </Text>
@@ -75,7 +75,7 @@ export function HeroSection({ content }: Props) {
       </div>
 
       <div
-        className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between sm:pt-s18 pb-[24px] gap-s4 sm:gap-0"
+        className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between sm:pt-s18 pb-[24px] gap-s3 sm:gap-0"
         style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
       >
         <Text variant="p1" className="max-w-[320px] text-prim text-left">
@@ -93,7 +93,7 @@ export function HeroSection({ content }: Props) {
       </div>
 
       <div className="hero-in" style={{ "--hero-delay": "0.35s" } as React.CSSProperties}>
-        <div ref={gallerySquircleRef} style={gallerySquircleStyle} className="w-full aspect-[9/16] sm:aspect-auto sm:h-[480px] lg:h-[648px]">
+        <div ref={gallerySquircleRef} style={gallerySquircleStyle} className="w-full h-[576px] sm:h-[480px] lg:h-[648px]">
           <div
             ref={galleryRef}
             className="w-full h-full overflow-hidden bg-surface relative"
