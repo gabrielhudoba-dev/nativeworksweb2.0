@@ -32,13 +32,13 @@ export function ServicesSection({ content, services }: Props) {
   }
 
   return (
-    <section id="services" className="pt-s9 pb-s9 sm:pb-s12 px-page max-w-page mx-auto">
+    <section id="services" className="pt-s9 pb-s3 sm:pb-s6 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
         ))}
       </Heading>
-      <Text variant="p2" className="mb-s6 sm:mb-s12 max-w-[800px]">
+      <Text variant="p2" className="mb-s3 sm:mb-s9 max-w-[800px]">
         {content.services_desc ?? "We work closely in to your product focusing on specific problem."}
       </Text>
 
@@ -50,6 +50,7 @@ export function ServicesSection({ content, services }: Props) {
         <Slider
           ref={sliderRef}
           cols={3}
+          gapToken="s3"
           containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
           onViewChange={onViewChange}
         >

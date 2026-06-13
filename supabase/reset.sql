@@ -241,7 +241,7 @@ insert into "1_home_services" (title, "desc", price, duration, sort_order) value
   ('Last Mile Sprint',       'A focused sprint to validate, refine, and bring your product to a usable, production-ready state.',                  '€10k',       '4 weeks', 3);
 
 insert into "1_home_stages" (title, "desc", sort_order) values
-  ('Early Product',   'Building from the ground up, with quality from day one',  1),
+  ('Early Product',   'Building from the ground up, with quality from day one. From the start, decisions are built on a solid system and quality design.',  1),
   ('Scaling Product', 'New features, growing complexity, need for structure',     2),
   ('Capacity Gaps',   'Internal team can''t keep up with speed or scope',         3),
   ('Market Pressure', 'Market moves faster than the product',                     4);

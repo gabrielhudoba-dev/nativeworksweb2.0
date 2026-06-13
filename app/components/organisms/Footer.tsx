@@ -13,7 +13,7 @@ export function Footer({ content }: Props) {
 
   return (
     <footer ref={ref} style={style} className="grain bg-brand/10 text-prim mx-s2 mb-s2">
-      <div className="px-s4 sm:px-s7 pt-s6 pb-s6">
+      <div className="px-s4 sm:px-s7 pt-s6 pb-s4 sm:pb-s7">
 
         {/* Two rows aligned across: logo · LinkedIn (top) — tagline · copyright (bottom) */}
         <div className="flex flex-col gap-s3">

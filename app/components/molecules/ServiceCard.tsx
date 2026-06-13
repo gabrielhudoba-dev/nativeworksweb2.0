@@ -27,7 +27,7 @@ type Props = {
 export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, features }: Props) {
   return (
     <div className="flex flex-col h-full cursor-pointer" onClick={onClick}>
-      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[360px] pt-s6 pb-s6 px-s2">
+      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[360px] pt-s3 pb-s3 px-s2">
         {!active && (
           <div
             aria-hidden="true"
@@ -38,7 +38,7 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
         <div className="px-[8px]">
           {/* !translate-y-[5px] overrides h4 variant's -translate-y-[10px] (Tailwind v4 uses CSS
               `translate` property; !important wins). Targets 24px/24px lh instead of h4's 28px/48px. */}
-          <Heading variant="h4" className="text-[24px] leading-[24px] !translate-y-[5px]">
+          <Heading variant="h4" className="text-[24px] leading-[24px] !translate-y-[3.375px]">
             {title.split(' ').slice(0, -1).join(' ')}<br />{title.split(' ').at(-1)}™
           </Heading>
         </div>
@@ -73,14 +73,14 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
           )}
         </div>
       </div>
-      <div className="flex-1 flex flex-col pl-s2 pr-s6 mt-s6 mb-s6">
-        <Text variant="p2" style={{ color: "rgba(18,19,25,0.5)" }} className="mb-s6">
+      <div className="flex-1 flex flex-col mt-s6">
+        <Text variant="p2" className="mb-s6">
           {desc}
         </Text>
         {features && features.length > 0 && (
-          <div className="flex flex-col">
+          <div className="flex flex-col pb-s3 shadow-[inset_0_1px_0_rgba(18,19,25,0.1),inset_0_-1px_0_rgba(18,19,25,0.1)]">
             {features.map((f, i) => (
-              <div key={i} className="shadow-[inset_0_1px_0_rgba(18,19,25,0.1)] py-s3">
+              <div key={i} className={i === 0 ? "py-s3" : "pb-s3"}>
                 <Text variant="p2">{f}</Text>
               </div>
             ))}

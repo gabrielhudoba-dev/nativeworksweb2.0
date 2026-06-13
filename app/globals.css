@@ -95,8 +95,8 @@
   --text-numb1--line-height: 72px;     /* 3×24 — lh 1.2 */
   --text-numb1--letter-spacing: -0.02em;
 
-  --text-h3: 32px;
-  --text-h3--line-height: 48px;        /* 2×24 — lh 1.5 */
+  --text-h3: 40px;
+  --text-h3--line-height: 48px;        /* 2×24 — lh 1.2 */
   --text-h3--letter-spacing: -0.02em;
 
   --text-h4: 28px;                     /* between h3 and h5 */

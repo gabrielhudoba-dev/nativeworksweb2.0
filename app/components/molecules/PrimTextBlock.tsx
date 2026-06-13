@@ -31,10 +31,10 @@ function emphasizeTrademarks(text: string): React.ReactNode[] {
 export function PrimTextBlock({ title, description, author, authors, showName = true, logos, image, split = false, className = "" }: Props) {
   const people = authors && authors.length > 0 ? authors : author ? [author] : [];
 
-  const heading = <Heading variant="h3" style={{ fontSize: "40px" }}>{title}</Heading>;
+  const heading = <Heading variant="h3">{title}</Heading>;
   const body = (
     <>
-      <Text variant="p2" className="pr-s2">{emphasizeTrademarks(description)}</Text>
+      <Text variant="p2" className="pr-s8 mt-s3">{emphasizeTrademarks(description)}</Text>
       {logos && logos.length > 0 && (
         <div className="flex items-center gap-s3 mt-s3">
           {logos.slice(0, 3).map((src, i) => (

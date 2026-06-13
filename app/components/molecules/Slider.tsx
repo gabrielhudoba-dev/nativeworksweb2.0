@@ -24,6 +24,8 @@ interface SliderProps {
   cols?: SliderCols;
   containerClassName?: string;
   slideClassName?: string;
+  /** Gap between slides. 's1'=8px (default), 's3'=24px. Also adjusts card widths. */
+  gapToken?: 's1' | 's3';
   /** Fires whenever the visible window changes (which cards are on screen). */
   onViewChange?: (view: SliderView) => void;
 }
@@ -36,16 +38,23 @@ interface SliderProps {
 
   Full literal strings so Tailwind can statically detect every class.
 */
-const COL_CLASSES: Record<SliderCols, string> = {
+const COL_CLASSES_S1: Record<SliderCols, string> = {
   2: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1))/2)]",
   3: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] lg:w-[calc((100%_-_2*var(--spacing-s1))/3)]",
   4: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] md:w-[calc((100%_-_2*var(--spacing-s1)_-_48px)/3)] lg:w-[calc((100%_-_3*var(--spacing-s1))/4)]",
 };
 
+const COL_CLASSES_S3: Record<SliderCols, string> = {
+  2: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3))/2)]",
+  3: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3)_-_48px)/2)] lg:w-[calc((100%_-_2*var(--spacing-s3))/3)]",
+  4: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3)_-_48px)/2)] md:w-[calc((100%_-_2*var(--spacing-s3)_-_48px)/3)] lg:w-[calc((100%_-_3*var(--spacing-s3))/4)]",
+};
+
 export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
-  { children, cols = 3, containerClassName = "", slideClassName = "", onViewChange },
+  { children, cols = 3, containerClassName = "", slideClassName = "", gapToken = "s1", onViewChange },
   ref,
 ) {
+  const COL_CLASSES = gapToken === "s3" ? COL_CLASSES_S3 : COL_CLASSES_S1;
   const scrollRef = useRef<HTMLDivElement>(null);
   const viewCbRef = useRef(onViewChange);
   useEffect(() => { viewCbRef.current = onViewChange; });
@@ -97,7 +106,7 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
     <div
       ref={scrollRef}
       style={{ touchAction: "pan-x" }}
-      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden gap-s1 ${containerClassName}`}
+      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden gap-${gapToken} ${containerClassName}`}
     >
       {Children.map(children, (child) => (
         <div className={`shrink-0 snap-start ${COL_CLASSES[cols]} ${slideClassName}`}>

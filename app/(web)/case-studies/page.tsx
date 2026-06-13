@@ -37,7 +37,7 @@ export default async function CaseStudiesPage() {
   return (
     <main className="bg-white">
       <section className="px-page pt-s6 sm:pt-[160px] lg:pt-[192px] pb-s6 max-w-page mx-auto">
-        <Heading variant="h3" as="h1" style={{ fontSize: "40px" }}>{content.hero_title ?? "Case Studies"}</Heading>
+        <Heading variant="h3" as="h1">{content.hero_title ?? "Case Studies"}</Heading>
       </section>
 
       <section className="px-page max-w-page mx-auto pb-s12 lg:pb-[288px]">
@@ -65,7 +65,7 @@ export default async function CaseStudiesPage() {
             const prevItem = i > 0 ? items[i - 1] : null;
             return (
               <article key={item.id} className={`flex flex-col${prevItem?.type === "text" ? " mt-s6 sm:mt-0" : ""}`}>
-                <Heading variant="h3" style={{ fontSize: "40px" }}>{renderTitle(item.title!)}</Heading>
+                <Heading variant="h3">{renderTitle(item.title!)}</Heading>
                 <Text variant="p2">{item.description}</Text>
                 {item.authors[0] && (
                   <Refer name={item.authors[0].name} role={item.authors[0].role} avatar={item.authors[0].avatar} className="mt-s3" />

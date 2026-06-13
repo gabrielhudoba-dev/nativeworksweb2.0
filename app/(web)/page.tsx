@@ -34,7 +34,7 @@ export default async function Home() {
 
       <StatsSection content={content} stats={stats} />
 
-      <section className="pt-s6 sm:pt-s9 pb-s6 sm:pb-s9">
+      <section>
         <LogoMarquee />
       </section>
 
