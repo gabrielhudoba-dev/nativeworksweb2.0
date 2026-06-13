@@ -34,12 +34,12 @@ export function CustomCursor() {
       className="pointer-events-none fixed left-0 top-0 z-[9999]"
       style={{ translate: "-200px -200px", mixBlendMode: "difference" }}
     >
-      {/* center layer: static -50% offset so cursor tip is at pointer hotspot */}
-      <div style={{ transform: "translate(-50%, -50%)" }}>
-        {/* rot layer: only rotation transitions, position never lags */}
+      {/* center layer: shift left by 50% so the tip (top-center of SVG) lands on the hotspot */}
+      <div style={{ transform: "translate(-50%, 0)" }}>
+        {/* rot layer: rotate around tip (top-center), not the element center */}
         <div
           ref={rotRef}
-          style={{ transition: "rotate 0.18s cubic-bezier(0.4,0,0.2,1)" }}
+          style={{ transition: "rotate 0.18s cubic-bezier(0.4,0,0.2,1)", transformOrigin: "50% 0" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/cursor.svg" alt="" width={13} height={30} />
