@@ -39,7 +39,7 @@ interface SliderProps {
   Full literal strings so Tailwind can statically detect every class.
 */
 const COL_CLASSES_S1: Record<SliderCols, string> = {
-  1: "w-[calc(100%_+_var(--gutter))]",
+  1: "w-full",
   2: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1))/2)]",
   3: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] lg:w-[calc((100%_-_2*var(--spacing-s1))/3)]",
   4: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] md:w-[calc((100%_-_2*var(--spacing-s1)_-_48px)/3)] lg:w-[calc((100%_-_3*var(--spacing-s1))/4)]",
@@ -48,7 +48,7 @@ const COL_CLASSES_S1: Record<SliderCols, string> = {
 const COL_CLASSES_S3: Record<SliderCols, string> = {
   1: "w-[calc(100%_+_var(--gutter))]",
   2: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3))/2)]",
-  3: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3)_-_48px)/2)] lg:w-[calc((100%_-_2*var(--spacing-s3))/3)]",
+  3: "w-[calc(100%_-_48px)] sm:w-[316px] lg:w-[calc((100%_-_2*var(--spacing-s3))/3)]",
   4: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3)_-_48px)/2)] md:w-[calc((100%_-_2*var(--spacing-s3)_-_48px)/3)] lg:w-[calc((100%_-_3*var(--spacing-s3))/4)]",
 };
 
@@ -60,6 +60,48 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
   const scrollRef = useRef<HTMLDivElement>(null);
   const viewCbRef = useRef(onViewChange);
   useEffect(() => { viewCbRef.current = onViewChange; });
+
+  const dragRef = useRef({ active: false, committed: false, startX: 0, startY: 0, startScroll: 0 });
+
+  const stopDrag = useCallback(() => {
+    if (!dragRef.current.active) return;
+    const wasCommitted = dragRef.current.committed;
+    dragRef.current = { active: false, committed: false, startX: 0, startY: 0, startScroll: 0 };
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+    scroll.style.scrollSnapType = "";
+    if (!wasCommitted) return;
+    const slides = Array.from(scroll.children).slice(0, -1) as HTMLElement[];
+    const center = scroll.scrollLeft + scroll.clientWidth / 2;
+    let nearest = 0, minDist = Infinity;
+    slides.forEach((s, i) => {
+      const dist = Math.abs(s.offsetLeft + s.offsetWidth / 2 - center);
+      if (dist < minDist) { minDist = dist; nearest = i; }
+    });
+    scroll.scrollTo({ left: slides[nearest]?.offsetLeft ?? 0, behavior: "smooth" });
+  }, []);
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+    dragRef.current = { active: true, committed: false, startX: e.clientX, startY: e.clientY, startScroll: scroll.scrollLeft };
+    scroll.style.scrollSnapType = "none";
+  }, []);
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!dragRef.current.active) return;
+    const dx = dragRef.current.startX - e.clientX;
+    const dy = dragRef.current.startY - e.clientY;
+    if (!dragRef.current.committed) {
+      if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+      if (Math.abs(dy) > Math.abs(dx)) { stopDrag(); return; }
+      dragRef.current.committed = true;
+    }
+    e.preventDefault();
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+    scroll.scrollLeft = dragRef.current.startScroll + dx;
+  }, [stopDrag]);
 
   const count = Children.count(children);
 
@@ -108,7 +150,11 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
     <div
       ref={scrollRef}
       style={{ touchAction: "pan-x" }}
-      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden max-sm:gap-s3 gap-${gapToken} ${containerClassName}`}
+      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none max-sm:gap-s3 gap-${gapToken} ${containerClassName}`}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={stopDrag}
+      onMouseLeave={stopDrag}
     >
       {Children.map(children, (child) => (
         <div className={`shrink-0 snap-start ${COL_CLASSES[cols]} ${slideClassName}`}>

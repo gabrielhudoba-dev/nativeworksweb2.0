@@ -44,7 +44,7 @@ export function InterveningSection({ content, stages }: Props) {
             desc={lead.desc}
             dark
             bgImage="/images/disp3.png"
-            className={`h-full min-h-[480px] md:col-start-2 md:row-start-1 max-sm:-mt-s6 ${leadSpan}`}
+            className={`h-full min-h-[480px] md:col-start-2 md:row-start-1 ${leadSpan}`}
           />
           {rest[1] && (
             <StageCard
@@ -52,7 +52,7 @@ export function InterveningSection({ content, stages }: Props) {
               eyebrow={stageLabel(3)}
               title={rest[1].title}
               desc={rest[1].desc}
-              className="h-full min-h-[240px] md:col-span-2"
+              className="h-full min-h-[240px]"
             />
           )}
         </div>

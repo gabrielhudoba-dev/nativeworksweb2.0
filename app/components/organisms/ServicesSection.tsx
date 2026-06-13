@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Badge, Heading, Icon, Text } from "@/app/components/atoms";
 import { ServiceCard } from "@/app/components/molecules/ServiceCard";
 import { Slider } from "@/app/components/molecules/Slider";
+import type { SliderHandle } from "@/app/components/molecules/Slider";
 import { useSliderSection } from "@/app/hooks/useSliderSection";
 import type { SiteContent, Service } from "@/lib/content";
 
@@ -21,6 +22,18 @@ type Props = { content: SiteContent; services: Service[] };
 export function ServicesSection({ content, services }: Props) {
   const [activeCard, setActiveCard] = useState(0);
   const { sliderRef, containerRef, onViewChange } = useSliderSection("services-slider", services.length);
+  const mobileSliderRef = useRef<SliderHandle>(null);
+  const desktopSliderRef = useRef<SliderHandle>(null);
+
+  // Proxy sliderRef to whichever slider is currently visible
+  useEffect(() => {
+    sliderRef.current = {
+      scrollToIndex: (i) => {
+        if (window.innerWidth < 640) mobileSliderRef.current?.scrollToIndex(i);
+        else desktopSliderRef.current?.scrollToIndex(i);
+      },
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleViewChange = useCallback((view: Parameters<typeof onViewChange>[0]) => {
     setActiveCard(view.firstVisible);
@@ -60,32 +73,35 @@ export function ServicesSection({ content, services }: Props) {
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
         ))}
       </Heading>
-      <Text variant="p2" className="mb-s3 sm:mb-s9 max-w-[800px]">
+      <Text variant="p2" className="mb-s9 max-w-[800px]">
         {content.services_desc ?? "We work closely in to your product focusing on specific problem."}
       </Text>
 
-      {/* Mobile: full-bleed cols=1 slider */}
-      <div ref={containerRef} className="sm:hidden">
-        <Slider
-          ref={sliderRef}
-          cols={1}
-          containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
-          onViewChange={handleViewChange}
-        >
-          {cards}
-        </Slider>
-      </div>
+      <div ref={containerRef}>
+        {/* Mobile: full-bleed cols=1 slider */}
+        <div className="sm:hidden">
+          <Slider
+            ref={mobileSliderRef}
+            cols={1}
+            containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
+            onViewChange={handleViewChange}
+          >
+            {cards}
+          </Slider>
+        </div>
 
-      {/* Desktop: 3-col slider */}
-      <div className="hidden sm:block">
-        <Slider
-          cols={3}
-          gapToken="s3"
-          containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
-          onViewChange={onViewChange}
-        >
-          {cards}
-        </Slider>
+        {/* Tablet/Desktop: 3-col slider with indicator */}
+        <div className="hidden sm:block">
+          <Slider
+            ref={desktopSliderRef}
+            cols={3}
+            gapToken="s3"
+            containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
+            onViewChange={handleViewChange}
+          >
+            {cards}
+          </Slider>
+        </div>
       </div>
     </section>
   );

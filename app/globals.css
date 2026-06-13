@@ -210,6 +210,7 @@ html {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 body {
@@ -356,7 +357,7 @@ button, [role="button"], a {
     --text-numb1: 36px;
     --text-numb1--line-height: 48px;
     --text-h3: 24px;
-    --text-h3--line-height: 32px;
+    --text-h3--line-height: 24px;        /* 1×24 — on grid */
     --text-h4: 22px;
     --text-h4--line-height: 24px;
   }

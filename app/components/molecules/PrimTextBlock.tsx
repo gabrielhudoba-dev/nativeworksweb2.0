@@ -34,7 +34,7 @@ export function PrimTextBlock({ title, description, author, authors, showName = 
   const heading = <Heading variant="h3">{title}</Heading>;
   const body = (
     <>
-      <Text variant="p2" className="mt-s3 max-sm:pr-s2 sm:pr-s8">{emphasizeTrademarks(description)}</Text>
+      <Text variant="p2" className="mt-s3 max-sm:pr-s2">{emphasizeTrademarks(description)}</Text>
       {logos && logos.length > 0 && (
         <div className="flex items-center gap-s3 mt-s3">
           {logos.slice(0, 3).map((src, i) => (

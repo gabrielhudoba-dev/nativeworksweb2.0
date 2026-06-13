@@ -13,7 +13,7 @@ const variantClass: Record<HeadingVariant, string> = {
   h1:    "font-display font-medium text-h1 text-prim translate-y-[10.125px] max-sm:translate-y-[6.75px] lg:translate-y-[13.5px]",
   h2:    "font-display font-medium text-h2 text-prim translate-y-[6.75px] max-sm:translate-y-[11.0625px] lg:translate-y-[10.125px]",
   page:  "font-display font-medium text-hpage text-prim translate-y-[9.625px] max-sm:translate-y-[13.9375px] lg:translate-y-[15.875px]",
-  h3:    "font-display font-medium text-h3 text-prim translate-y-[9.625px] max-sm:-translate-y-[0.625px]",
+  h3:    "font-display font-medium text-h3 text-prim translate-y-[9.625px] max-sm:translate-y-[3.375px]",
   h4:    "font-display font-medium text-h4 text-prim -translate-y-[10px] max-sm:translate-y-[4px]",
   numb1: "font-display font-normal text-numb1 text-prim translate-y-[11.0625px] sm:translate-y-[6.75px] lg:translate-y-[14.4375px]",
 };

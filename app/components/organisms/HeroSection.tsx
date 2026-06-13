@@ -29,6 +29,16 @@ export function HeroSection({ content }: Props) {
 
   const onPrev = useCallback(() => setSlide((s) => (s - 1 + SLIDES) % SLIDES), []);
   const onNext = useCallback(() => setSlide((s) => (s + 1) % SLIDES), []);
+
+  const dragStartX = useRef<number | null>(null);
+  const onGalleryMouseDown = useCallback((e: React.MouseEvent) => { dragStartX.current = e.clientX; }, []);
+  const onGalleryMouseUp = useCallback((e: React.MouseEvent) => {
+    if (dragStartX.current === null) return;
+    const delta = dragStartX.current - e.clientX;
+    dragStartX.current = null;
+    if (Math.abs(delta) < 30) return;
+    if (delta > 0) onNext(); else onPrev();
+  }, [onNext, onPrev]);
   const onDotClick = useCallback((i: number) => setSlide(i), []);
 
   useRegisterSliderNav({
@@ -96,11 +106,13 @@ export function HeroSection({ content }: Props) {
         <div ref={gallerySquircleRef} style={gallerySquircleStyle} className="w-full h-[576px] sm:h-[480px] lg:h-[648px]">
           <div
             ref={galleryRef}
-            className="w-full h-full overflow-hidden bg-surface relative"
+            className="w-full h-full overflow-hidden bg-surface relative cursor-grab active:cursor-grabbing select-none"
             onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
+            onMouseLeave={() => { setPaused(false); dragStartX.current = null; }}
             onFocus={() => setPaused(true)}
             onBlur={() => setPaused(false)}
+            onMouseDown={onGalleryMouseDown}
+            onMouseUp={onGalleryMouseUp}
             aria-roledescription="carousel"
             aria-label="Ukážky projektov"
           >
