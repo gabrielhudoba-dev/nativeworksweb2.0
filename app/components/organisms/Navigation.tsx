@@ -12,5 +12,5 @@ export function Navigation({ content }: Props) {
     { label: content.nav_process ?? "Process", href: "/#stages" },
   ];
 
-  return <NavPrimPill items={items} />;
+  return <NavPrimPill items={items} email={content.footer_email ?? content.nav_email ?? "hello@nativeworks.eu"} />;
 }

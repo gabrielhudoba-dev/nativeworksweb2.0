@@ -15,29 +15,45 @@ export function Footer({ content }: Props) {
     <footer ref={ref} style={style} className="grain bg-brand/10 text-prim mx-s2 mb-s2">
       <div className="px-s4 sm:px-s7 pt-s6 pb-s4 sm:pb-s7">
 
-        {/* Two rows aligned across: logo · LinkedIn (top) — tagline · copyright (bottom) */}
         <div className="flex flex-col gap-s3">
+          {/* Row 1: Logo + LinkedIn */}
           <div className="flex items-center justify-between gap-s4">
             <Link href="/" aria-label="Native Works">
               <Logo size="md" className="h-s6 w-auto" />
             </Link>
             <SocialLink platform="linkedin" href="https://linkedin.com" />
           </div>
-          <div className="flex items-center justify-between gap-s4">
-            <Text variant="p3">
+
+          {/* Row 2: Tagline (desktop: tagline | email + copyright inline) */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-s4">
+            <Text variant="p3" className="max-sm:mt-s3">
               {content.footer_tagline ?? "New era of digital product design."}
             </Text>
-            <div className="flex items-center gap-s4">
+            {/* Desktop only: email + copyright in same row as tagline */}
+            <div className="hidden sm:flex items-center gap-s4">
               <a
                 href={`mailto:${content.footer_email ?? "hello@nativeworks.eu"}`}
                 className="transition-opacity hover:opacity-70"
               >
                 <Text variant="p3">{content.footer_email ?? "hello@nativeworks.eu"}</Text>
               </a>
-              <Text variant="p3" className="text-right">
+              <Text variant="p3" className="shrink-0">
                 © {new Date().getFullYear()}–3025
               </Text>
             </div>
+          </div>
+
+          {/* Mobile only: email + copyright — 1 line lower from tagline, copyright right-aligned */}
+          <div className="sm:hidden flex flex-col gap-s2 mt-s3">
+            <a
+              href={`mailto:${content.footer_email ?? "hello@nativeworks.eu"}`}
+              className="transition-opacity hover:opacity-70"
+            >
+              <Text variant="p3">{content.footer_email ?? "hello@nativeworks.eu"}</Text>
+            </a>
+            <Text variant="p3">
+              © {new Date().getFullYear()}–3025
+            </Text>
           </div>
         </div>
 

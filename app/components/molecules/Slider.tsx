@@ -16,7 +16,7 @@ export interface SliderHandle {
 export type SliderView = { firstVisible: number; visibleCount: number };
 
 /** Desktop column count. The responsive ramp down to mobile is fixed per preset. */
-export type SliderCols = 2 | 3 | 4;
+export type SliderCols = 1 | 2 | 3 | 4;
 
 interface SliderProps {
   children: React.ReactNode;
@@ -39,12 +39,14 @@ interface SliderProps {
   Full literal strings so Tailwind can statically detect every class.
 */
 const COL_CLASSES_S1: Record<SliderCols, string> = {
+  1: "w-[calc(100%_+_var(--gutter))]",
   2: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1))/2)]",
   3: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] lg:w-[calc((100%_-_2*var(--spacing-s1))/3)]",
   4: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s1)_-_48px)/2)] md:w-[calc((100%_-_2*var(--spacing-s1)_-_48px)/3)] lg:w-[calc((100%_-_3*var(--spacing-s1))/4)]",
 };
 
 const COL_CLASSES_S3: Record<SliderCols, string> = {
+  1: "w-[calc(100%_+_var(--gutter))]",
   2: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3))/2)]",
   3: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3)_-_48px)/2)] lg:w-[calc((100%_-_2*var(--spacing-s3))/3)]",
   4: "w-[calc(100%_-_48px)] sm:w-[calc((100%_-_1*var(--spacing-s3)_-_48px)/2)] md:w-[calc((100%_-_2*var(--spacing-s3)_-_48px)/3)] lg:w-[calc((100%_-_3*var(--spacing-s3))/4)]",
@@ -106,13 +108,16 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
     <div
       ref={scrollRef}
       style={{ touchAction: "pan-x" }}
-      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden gap-${gapToken} ${containerClassName}`}
+      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden max-sm:gap-s3 gap-${gapToken} ${containerClassName}`}
     >
       {Children.map(children, (child) => (
         <div className={`shrink-0 snap-start ${COL_CLASSES[cols]} ${slideClassName}`}>
           {child}
         </div>
       ))}
+      {/* Trailing spacer: the last card needs peek-width (48px) of extra scroll range
+          so it can reach its snap point when scrolled fully to the end. */}
+      <div className="shrink-0 w-[48px]" aria-hidden />
     </div>
   );
 });

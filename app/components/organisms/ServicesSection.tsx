@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Badge, Heading, Icon, Text } from "@/app/components/atoms";
 import { ServiceCard } from "@/app/components/molecules/ServiceCard";
 import { Slider } from "@/app/components/molecules/Slider";
@@ -22,6 +22,11 @@ export function ServicesSection({ content, services }: Props) {
   const [activeCard, setActiveCard] = useState(0);
   const { sliderRef, containerRef, onViewChange } = useSliderSection("services-slider", services.length);
 
+  const handleViewChange = useCallback((view: Parameters<typeof onViewChange>[0]) => {
+    setActiveCard(view.firstVisible);
+    onViewChange(view);
+  }, [onViewChange]);
+
   function parseFeatures(desc: string): { text: string; features: string[] } {
     const idx = desc.indexOf("\n\nFeatures:");
     if (idx < 0) return { text: desc, features: [] };
@@ -31,8 +36,25 @@ export function ServicesSection({ content, services }: Props) {
     };
   }
 
+  const cards = services.map((card, i) => {
+    const { text, features } = parseFeatures(card.desc);
+    return (
+      <ServiceCard
+        key={card.title}
+        title={card.title}
+        desc={text}
+        price={card.price}
+        duration={card.duration}
+        active={activeCard === i}
+        onClick={() => setActiveCard(i)}
+        onLetStart={(e) => handleLetStart(e, { name: card.title, detail: `${card.price} / ${card.duration}` })}
+        features={features}
+      />
+    );
+  });
+
   return (
-    <section id="services" className="pt-s9 pb-s3 sm:pb-s6 px-page max-w-page mx-auto">
+    <section id="services" className="max-sm:pt-s6 sm:pt-s9 pb-s6 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
@@ -42,34 +64,27 @@ export function ServicesSection({ content, services }: Props) {
         {content.services_desc ?? "We work closely in to your product focusing on specific problem."}
       </Text>
 
-      {/* py-s3 -my-s3 gives the active card's 2px ring room before the scroll container clips it.
-          -mx/px/scroll-px [gutter] lets the track fill the full max-w-page width (peek reaches the
-          container edge instead of being clipped at the page gutter) while the first card stays
-          aligned with the heading. */}
-      <div ref={containerRef}>
+      {/* Mobile: full-bleed cols=1 slider */}
+      <div ref={containerRef} className="sm:hidden">
         <Slider
           ref={sliderRef}
+          cols={1}
+          containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
+          onViewChange={handleViewChange}
+        >
+          {cards}
+        </Slider>
+      </div>
+
+      {/* Desktop: 3-col slider */}
+      <div className="hidden sm:block">
+        <Slider
           cols={3}
           gapToken="s3"
           containerClassName="py-s3 -my-s3 -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
           onViewChange={onViewChange}
         >
-          {services.map((card, i) => {
-            const { text, features } = parseFeatures(card.desc);
-            return (
-              <ServiceCard
-                key={card.title}
-                title={card.title}
-                desc={text}
-                price={card.price}
-                duration={card.duration}
-                active={activeCard === i}
-                onClick={() => setActiveCard(i)}
-                onLetStart={(e) => handleLetStart(e, { name: card.title, detail: `${card.price} / ${card.duration}` })}
-                features={features}
-              />
-            );
-          })}
+          {cards}
         </Slider>
       </div>
     </section>

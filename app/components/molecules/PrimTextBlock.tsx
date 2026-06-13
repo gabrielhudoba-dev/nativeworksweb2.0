@@ -34,7 +34,7 @@ export function PrimTextBlock({ title, description, author, authors, showName = 
   const heading = <Heading variant="h3">{title}</Heading>;
   const body = (
     <>
-      <Text variant="p2" className="pr-s8 mt-s3">{emphasizeTrademarks(description)}</Text>
+      <Text variant="p2" className="mt-s3 max-sm:pr-s2 sm:pr-s8">{emphasizeTrademarks(description)}</Text>
       {logos && logos.length > 0 && (
         <div className="flex items-center gap-s3 mt-s3">
           {logos.slice(0, 3).map((src, i) => (
@@ -55,7 +55,7 @@ export function PrimTextBlock({ title, description, author, authors, showName = 
 
   if (split) {
     return (
-      <article className={`grid grid-cols-1 sm:grid-cols-2 gap-x-s8 gap-y-s6 mt-s9 ${className}`}>
+      <article className={`grid grid-cols-1 sm:grid-cols-2 gap-x-s8 max-sm:gap-y-s3 sm:gap-y-s6 max-sm:mt-s3 sm:mt-s9 ${className}`}>
         {heading}
         <div className="flex flex-col">{body}</div>
       </article>
@@ -63,7 +63,7 @@ export function PrimTextBlock({ title, description, author, authors, showName = 
   }
 
   return (
-    <article className={`flex flex-col mt-s9 ${className}`}>
+    <article className={`flex flex-col max-sm:mt-s3 sm:mt-s9 ${className}`}>
       {heading}
       {body}
     </article>

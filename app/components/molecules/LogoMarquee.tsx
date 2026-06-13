@@ -21,7 +21,7 @@ const LOGO_SCALE = 1.1;
 export function LogoMarquee() {
   return (
     <div className="overflow-hidden">
-      <div className="flex animate-marquee" style={{ gap: "55px" }}>
+      <div className="flex animate-marquee gap-[24px] sm:gap-[55px]">
         {[...LOGOS, ...LOGOS].map((logo, i) => (
           <div
             key={i}

@@ -23,7 +23,7 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
     <div
       ref={ref}
       style={style}
-      className={`grain flex flex-col justify-start gap-0 pt-s3 pb-s6 pl-s3 pr-s10 lg:pr-s12 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
+      className={`grain flex flex-col justify-start gap-0 pt-s3 pb-s6 pl-s3 max-sm:pr-s3 sm:pr-s10 lg:pr-s12 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
     >
       {bgImage && (
         <div
