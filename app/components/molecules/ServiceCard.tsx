@@ -74,7 +74,7 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
         </div>
       </div>
       <div className="flex-1 flex flex-col mt-s3">
-        <Text variant="p2" className="mb-s6 pr-[12px]">
+        <Text variant="p2" className="mb-s6 pr-[12px] lg:pr-[24px]">
           {desc}
         </Text>
         {features && features.length > 0 && (
