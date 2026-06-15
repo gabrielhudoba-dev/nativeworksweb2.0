@@ -15,6 +15,8 @@ export function CustomCursor() {
     const rot = rotRef.current;
     if (!pos || !rot) return;
 
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
     const onMove = (e: MouseEvent) => {
       pos.style.translate = `${e.clientX}px ${e.clientY}px`;
       // Tilt only when actively controlling a slider; otherwise stay upright
