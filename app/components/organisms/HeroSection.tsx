@@ -16,7 +16,7 @@ const GALLERY_IMAGES = [
 ];
 
 const SLIDE_CLASS =
-  "!w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative";
+  "!w-[calc(100vw_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative";
 
 type Props = { content: SiteContent };
 
@@ -42,7 +42,7 @@ export function HeroSection({ content }: Props) {
   const refer = galleryAuthors[firstVisible] ?? galleryAuthors[0];
 
   return (
-    <section ref={containerRef as React.RefObject<HTMLElement>} style={{ paddingTop: "var(--hero-section-pt)" }}>
+    <section style={{ paddingTop: "var(--hero-section-pt)" }}>
       {/* text block — constrained to page width */}
       <div className="px-page max-w-page mx-auto max-sm:pb-s6 sm:pb-0">
         <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s15 lg:pt-s18 sm:mt-s3 lg:mt-s6 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
@@ -72,8 +72,9 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
-      {/* gallery — full viewport width, left gutter only; peek reaches screen right edge */}
+      {/* gallery — visibility tracked for slider indicator */}
       <div
+        ref={containerRef as React.RefObject<HTMLDivElement>}
         className="hero-in"
         style={{ "--hero-delay": "0.35s" } as React.CSSProperties}
       >
