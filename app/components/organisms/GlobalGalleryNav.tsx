@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { GalleryNav } from "@/app/components/molecules";
 import { useSliderNav } from "@/app/context/SliderNavContext";
 import { useNavOpen } from "./NavigationProvider";
@@ -8,16 +8,8 @@ import { useNavOpen } from "./NavigationProvider";
 export function GlobalGalleryNav() {
   const { nav } = useSliderNav();
   const navOpen = useNavOpen();
-  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const visible = nav !== null && !navOpen && scrolled;
+  const visible = nav !== null && !navOpen;
 
   // Global click → prev/next based on which screen half was clicked.
   // Skips interactive elements so links, buttons, and inputs still work normally.
@@ -38,7 +30,7 @@ export function GlobalGalleryNav() {
   }, []);
 
   return (
-    <div className="hidden sm:flex fixed left-0 right-0 z-40 justify-center pointer-events-none" style={{ top: "var(--gallery-nav-top, 82px)" }}>
+    <div className="flex fixed left-0 right-0 z-40 justify-center pointer-events-none" style={{ top: "var(--gallery-nav-top, 82px)" }}>
       <div
         className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-auto ${
           visible

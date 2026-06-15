@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GlassCard } from "@developer-hub/liquid-glass";
 import { Logo, IconButton } from "@/app/components/atoms";
-import { useSliderNav } from "@/app/context/SliderNavContext";
 
 export type NavItem = { label: string; href: string };
 
@@ -20,7 +19,6 @@ const linkCls =
 
 export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isStatic }: Props) {
   const [open, setOpen] = useState(false);
-  const { nav } = useSliderNav();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -62,27 +60,8 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
                 <Logo size="sm" priority />
               </Link>
 
-              {/* Mobile center: slider dots when a slider is active and menu closed */}
-              {!open && nav && (
-                <div className="sm:hidden absolute left-[calc(50%+20px)] -translate-x-1/2 flex items-center gap-[6px]">
-                  {Array.from({ length: nav.count }).map((_, i) => {
-                    const active = i >= nav.firstVisible && i < nav.firstVisible + nav.visibleCount;
-                    return (
-                      <button
-                        key={i}
-                        type="button"
-                        aria-label={`Slide ${i + 1}`}
-                        onClick={() => nav.onDotClick(i)}
-                        className={`h-[6px] rounded-pill shrink-0 transition-[width,background-color] duration-300 ease-system ${
-                          active ? "w-[24px] bg-prim" : "w-[6px] bg-prim/25"
-                        }`}
-                      />
-                    );
-                  })}
-                </div>
-              )}
 
-              {/* Desktop nav */}
+{/* Desktop nav */}
               <nav className="hidden sm:flex items-center gap-s4">
                 {items.map((it) => (
                   <a key={it.href} href={it.href} className={`${linkCls} text-[#090E3A] hover:opacity-70`}>

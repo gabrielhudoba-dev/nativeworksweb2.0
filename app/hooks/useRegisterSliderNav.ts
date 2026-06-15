@@ -47,10 +47,16 @@ export function useRegisterSliderNav({
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        const ratio = entry.intersectionRatio;
+        // Normalised visibility: what fraction of the *reachable* visible area is showing.
+        // For elements shorter than the viewport this equals intersectionRatio; for tall
+        // elements (e.g. hero) it equals viewport-coverage so the ratio can reach 1.0.
+        const viewportH = entry.rootBounds?.height ?? window.innerHeight;
+        const elementH = entry.boundingClientRect.height;
+        const maxVisible = Math.min(elementH, viewportH);
+        const ratio = maxVisible > 0 ? entry.intersectionRect.height / maxVisible : 0;
         ratioRef.current = ratio;
 
-        if (ratio < 0.5) {
+        if (ratio < 0.8) {
           setSection(id, null);
           return;
         }

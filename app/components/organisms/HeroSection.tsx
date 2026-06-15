@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { Heading, Text } from "@/app/components/atoms";
-import { Refer } from "@/app/components/molecules";
+import { Refer, Slider } from "@/app/components/molecules";
+import type { SliderView } from "@/app/components/molecules/Slider";
+import { useSliderSection } from "@/app/hooks/useSliderSection";
 import type { SiteContent } from "@/lib/content";
 
 const GALLERY_IMAGES = [
@@ -13,11 +15,23 @@ const GALLERY_IMAGES = [
   { src: "/images/sline02.png", alt: "Native Works – projekt 4" },
 ];
 
+const SLIDE_CLASS =
+  "!w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative";
+
 type Props = { content: SiteContent };
 
 export function HeroSection({ content }: Props) {
+  const { sliderRef, containerRef, onViewChange: registerViewChange } =
+    useSliderSection("hero-gallery", GALLERY_IMAGES.length, 1);
   const [firstVisible, setFirstVisible] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const onViewChange = useCallback(
+    (view: SliderView) => {
+      setFirstVisible(view.firstVisible);
+      registerViewChange(view);
+    },
+    [registerViewChange],
+  );
 
   const galleryAuthors = [
     { name: content.hero_refer_name ?? "Gabriel Hudoba", role: content.hero_refer_role ?? "Brand, Design", avatar: content.hero_refer_avatar ?? "/images/gabo.png" },
@@ -27,31 +41,8 @@ export function HeroSection({ content }: Props) {
   ];
   const refer = galleryAuthors[firstVisible] ?? galleryAuthors[0];
 
-  useEffect(() => {
-    const scroll = scrollRef.current;
-    if (!scroll) return;
-    const slides = Array.from(scroll.children) as HTMLElement[];
-    const visible = new Set<number>();
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          const idx = slides.indexOf(e.target as HTMLElement);
-          if (idx === -1) return;
-          if (e.isIntersecting) visible.add(idx);
-          else visible.delete(idx);
-        });
-        if (visible.size > 0) setFirstVisible(Math.min(...visible));
-      },
-      { root: scroll, threshold: 0.6 },
-    );
-
-    slides.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <section style={{ paddingTop: "var(--hero-section-pt)" }}>
+    <section ref={containerRef as React.RefObject<HTMLElement>} style={{ paddingTop: "var(--hero-section-pt)" }}>
       {/* text block — constrained to page width */}
       <div className="px-page max-w-page mx-auto max-sm:pb-s6 sm:pb-0">
         <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s15 lg:pt-s18 sm:mt-s3 lg:mt-s6 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
@@ -86,26 +77,26 @@ export function HeroSection({ content }: Props) {
         className="hero-in"
         style={{ "--hero-delay": "0.35s" } as React.CSSProperties}
       >
-        <div
-          ref={scrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden gap-s3 overscroll-x-contain px-[var(--gutter)] [scroll-padding-inline:var(--gutter)]"
-          style={{ touchAction: "pan-y pan-x" }}
+        <Slider
+          ref={sliderRef}
+          cols={1}
+          gapToken="s3"
+          onViewChange={onViewChange}
+          containerClassName="px-[var(--gutter)] [scroll-padding-inline:var(--gutter)]"
+          slideClassName={SLIDE_CLASS}
         >
           {GALLERY_IMAGES.map((img, i) => (
-            <div
+            <Image
               key={i}
-              className="shrink-0 snap-center rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))]"
-            >
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                className="object-cover"
-                priority={i === 0}
-              />
-            </div>
+              src={img.src}
+              alt={img.alt}
+              fill
+              className="object-cover"
+              priority={i === 0}
+              sizes="100vw"
+            />
           ))}
-        </div>
+        </Slider>
       </div>
 
       <div className="px-page max-w-page mx-auto sm:hidden pt-s3">

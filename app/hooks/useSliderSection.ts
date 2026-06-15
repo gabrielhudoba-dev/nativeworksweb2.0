@@ -13,12 +13,12 @@ import { useRegisterSliderNav } from "./useRegisterSliderNav";
  *     <Slider ref={sliderRef} cols={3} onViewChange={onViewChange}>…</Slider>
  *   </div>
  */
-export function useSliderSection(id: string, count: number) {
+export function useSliderSection(id: string, count: number, initialVisibleCount?: number) {
   const sliderRef = useRef<SliderHandle>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  // Assume all visible until the observer reports otherwise — keeps the nav
-  // hidden on first paint (no flash) when every card already fits.
-  const [view, setView] = useState<SliderView>({ firstVisible: 0, visibleCount: count });
+  // Default: assume all visible until the observer reports otherwise (no flash for sections
+  // where every card fits). Pass initialVisibleCount to pre-register a specific count.
+  const [view, setView] = useState<SliderView>({ firstVisible: 0, visibleCount: initialVisibleCount ?? count });
 
   const onViewChange = useCallback((v: SliderView) => setView(v), []);
 

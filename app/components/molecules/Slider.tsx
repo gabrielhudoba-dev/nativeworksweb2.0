@@ -109,7 +109,7 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
     const scroll = scrollRef.current;
     if (!scroll || count === 0) return;
 
-    const slides = Array.from(scroll.children) as HTMLElement[];
+    const slides = Array.from(scroll.children).slice(0, -1) as HTMLElement[];
     const visible = new Set<number>();
     let lastKey = "";
 
@@ -150,7 +150,7 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
     <div
       ref={scrollRef}
       style={{ touchAction: "pan-y pan-x" }}
-      className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none max-sm:gap-s3 gap-${gapToken} ${containerClassName}`}
+      className={`relative flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none max-sm:gap-s3 gap-${gapToken} ${containerClassName}`}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={stopDrag}
