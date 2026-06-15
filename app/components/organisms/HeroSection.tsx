@@ -15,8 +15,16 @@ const GALLERY_IMAGES = [
   { src: "/images/sline02.png", alt: "Native Works – projekt 4" },
 ];
 
+// Active card = layout content width (1440 − 2·gutter at the cap, responsive below).
 const SLIDE_CLASS =
   "!w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative";
+
+// Inset = distance from viewport edge to the layout content edge: the outer
+// margin ((100vw − page)/2) plus the gutter. Applied as real padding (so the
+// first card sits in the content area) and scroll-padding (so every snap lands
+// there). Must be a static literal — Tailwind only detects classes in raw text.
+const GALLERY_CONTAINER_CLASS =
+  "px-[calc((100vw_-_min(100vw,_1440px))_/_2_+_var(--gutter))] [scroll-padding-inline-start:calc((100vw_-_min(100vw,_1440px))_/_2_+_var(--gutter))]";
 
 type Props = { content: SiteContent };
 
@@ -72,10 +80,12 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
-      {/* gallery — capped at max-w-page, visibility tracked for slider indicator */}
+      {/* gallery — full-bleed scroll container; the card itself is layout-width,
+          so the active card lands in the content area and neighbours peek to the
+          viewport edges. No max-w-page (it would clip the peek) and no overflow-hidden. */}
       <div
         ref={containerRef as React.RefObject<HTMLDivElement>}
-        className="hero-in max-w-page mx-auto"
+        className="hero-in"
         style={{ "--hero-delay": "0.35s" } as React.CSSProperties}
       >
         <Slider
@@ -83,7 +93,7 @@ export function HeroSection({ content }: Props) {
           cols={1}
           gapToken="s3"
           onViewChange={onViewChange}
-          containerClassName="px-[var(--gutter)] [scroll-padding-inline:var(--gutter)]"
+          containerClassName={GALLERY_CONTAINER_CLASS}
           slideClassName={SLIDE_CLASS}
         >
           {GALLERY_IMAGES.map((img, i) => (
