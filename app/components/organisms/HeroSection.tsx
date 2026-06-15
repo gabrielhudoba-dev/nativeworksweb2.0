@@ -16,7 +16,7 @@ const GALLERY_IMAGES = [
 ];
 
 const SLIDE_CLASS =
-  "!w-[calc(100vw_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative";
+  "!w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative";
 
 type Props = { content: SiteContent };
 
@@ -72,10 +72,10 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
-      {/* gallery — visibility tracked for slider indicator */}
+      {/* gallery — capped at max-w-page, visibility tracked for slider indicator */}
       <div
         ref={containerRef as React.RefObject<HTMLDivElement>}
-        className="hero-in"
+        className="hero-in max-w-page mx-auto"
         style={{ "--hero-delay": "0.35s" } as React.CSSProperties}
       >
         <Slider

@@ -11,7 +11,6 @@ const LOGOS: { name: string; maxH: number; cellPx?: string }[] = [
   { name: "fingo",       maxH: 26 },
   { name: "dazzle",      maxH: 20 },
   { name: "kot",         maxH: 26 },
-  { name: "reapp",       maxH: 25 },
   { name: "swivel",      maxH: 22 },
 ];
 
