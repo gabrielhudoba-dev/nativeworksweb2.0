@@ -149,7 +149,7 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
   return (
     <div
       ref={scrollRef}
-      style={{ touchAction: "pan-x" }}
+      style={{ touchAction: "pan-y pan-x" }}
       className={`relative flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none max-sm:gap-s3 gap-${gapToken} ${containerClassName}`}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
