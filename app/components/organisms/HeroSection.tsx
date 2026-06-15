@@ -51,8 +51,8 @@ export function HeroSection({ content }: Props) {
   }, []);
 
   return (
-    <section style={{ paddingTop: "var(--hero-section-pt)" }}>
-      <div className="px-page max-w-page mx-auto max-sm:pb-s6 sm:pb-0">
+    <section className="px-page max-w-page mx-auto" style={{ paddingTop: "var(--hero-section-pt)" }}>
+      <div className="max-sm:pb-s6 sm:pb-0">
         <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s15 lg:pt-s18 sm:mt-s3 lg:mt-s6 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
           <Heading variant="h1" className="max-w-[8em]">
             {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
@@ -92,7 +92,7 @@ export function HeroSection({ content }: Props) {
           {GALLERY_IMAGES.map((img, i) => (
             <div
               key={i}
-              className="w-screen shrink-0 snap-start h-[576px] sm:h-[480px] lg:h-[648px] relative"
+              className="w-full shrink-0 snap-start h-[576px] sm:h-[480px] lg:h-[648px] relative"
             >
               <Image
                 src={img.src}
@@ -106,7 +106,7 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
-      <div className="px-page max-w-page mx-auto sm:hidden pt-s3">
+      <div className="sm:hidden pt-s3">
         <Refer name={refer.name} role={refer.role} avatar={refer.avatar} />
       </div>
     </section>
