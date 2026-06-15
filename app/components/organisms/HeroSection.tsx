@@ -88,13 +88,13 @@ export function HeroSection({ content }: Props) {
       >
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden gap-s3 overscroll-x-contain pl-[var(--gutter)]"
+          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden gap-s3 overscroll-x-contain px-[var(--gutter)] [scroll-padding-inline:var(--gutter)]"
           style={{ touchAction: "pan-y pan-x" }}
         >
           {GALLERY_IMAGES.map((img, i) => (
             <div
               key={i}
-              className="shrink-0 snap-start rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative w-[calc(100%_-_2_*_var(--gutter)_-_24px)]"
+              className="shrink-0 snap-center rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))]"
             >
               <Image
                 src={img.src}
