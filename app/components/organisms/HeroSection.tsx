@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Heading, Text } from "@/app/components/atoms";
-import { Refer, Slider } from "@/app/components/molecules";
-import type { SliderView } from "@/app/components/molecules/Slider";
+import { Refer } from "@/app/components/molecules";
 import type { SiteContent } from "@/lib/content";
 
 const GALLERY_IMAGES = [
@@ -18,6 +17,7 @@ type Props = { content: SiteContent };
 
 export function HeroSection({ content }: Props) {
   const [firstVisible, setFirstVisible] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const galleryAuthors = [
     { name: content.hero_refer_name ?? "Gabriel Hudoba", role: content.hero_refer_role ?? "Brand, Design", avatar: content.hero_refer_avatar ?? "/images/gabo.png" },
@@ -27,8 +27,27 @@ export function HeroSection({ content }: Props) {
   ];
   const refer = galleryAuthors[firstVisible] ?? galleryAuthors[0];
 
-  const onViewChange = useCallback(({ firstVisible }: SliderView) => {
-    setFirstVisible(firstVisible);
+  useEffect(() => {
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+    const slides = Array.from(scroll.children) as HTMLElement[];
+    const visible = new Set<number>();
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const idx = slides.indexOf(e.target as HTMLElement);
+          if (idx === -1) return;
+          if (e.isIntersecting) visible.add(idx);
+          else visible.delete(idx);
+        });
+        if (visible.size > 0) setFirstVisible(Math.min(...visible));
+      },
+      { root: scroll, threshold: 0.6 },
+    );
+
+    slides.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -65,15 +84,15 @@ export function HeroSection({ content }: Props) {
         className="hero-in"
         style={{ "--hero-delay": "0.35s" } as React.CSSProperties}
       >
-        <Slider
-          cols={2}
-          containerClassName="pl-[var(--gutter)]"
-          onViewChange={onViewChange}
+        <div
+          ref={scrollRef}
+          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden max-sm:gap-s3 sm:gap-s1 overscroll-x-contain"
+          style={{ touchAction: "pan-y pan-x" }}
         >
           {GALLERY_IMAGES.map((img, i) => (
             <div
               key={i}
-              className="h-[576px] sm:h-[480px] lg:h-[648px] relative rounded-[21px] overflow-hidden"
+              className="w-screen shrink-0 snap-start h-[576px] sm:h-[480px] lg:h-[648px] relative"
             >
               <Image
                 src={img.src}
@@ -84,7 +103,7 @@ export function HeroSection({ content }: Props) {
               />
             </div>
           ))}
-        </Slider>
+        </div>
       </div>
 
       <div className="px-page max-w-page mx-auto sm:hidden pt-s3">
