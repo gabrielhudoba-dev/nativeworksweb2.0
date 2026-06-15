@@ -51,8 +51,9 @@ export function HeroSection({ content }: Props) {
   }, []);
 
   return (
-    <section className="px-page max-w-page mx-auto" style={{ paddingTop: "var(--hero-section-pt)" }}>
-      <div className="max-sm:pb-s6 sm:pb-0">
+    <section style={{ paddingTop: "var(--hero-section-pt)" }}>
+      {/* text block — constrained to page width */}
+      <div className="px-page max-w-page mx-auto max-sm:pb-s6 sm:pb-0">
         <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s15 lg:pt-s18 sm:mt-s3 lg:mt-s6 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
           <Heading variant="h1" className="max-w-[8em]">
             {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
@@ -80,19 +81,22 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
+      {/* gallery — full viewport width, left gutter only; peek reaches screen right edge */}
       <div
         className="hero-in"
         style={{ "--hero-delay": "0.35s" } as React.CSSProperties}
       >
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden max-sm:gap-s3 sm:gap-s1 overscroll-x-contain"
+          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden max-sm:gap-s3 sm:gap-s1 overscroll-x-contain pl-[var(--gutter)]"
           style={{ touchAction: "pan-y pan-x" }}
         >
           {GALLERY_IMAGES.map((img, i) => (
             <div
               key={i}
-              className="w-full shrink-0 snap-start h-[576px] sm:h-[480px] lg:h-[648px] relative"
+              className="shrink-0 snap-start rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative
+                w-[calc(100%_-_2_*_var(--gutter)_-_24px)]
+                sm:w-[calc(100%_-_2_*_var(--gutter)_-_8px)]"
             >
               <Image
                 src={img.src}
@@ -106,7 +110,7 @@ export function HeroSection({ content }: Props) {
         </div>
       </div>
 
-      <div className="sm:hidden pt-s3">
+      <div className="px-page max-w-page mx-auto sm:hidden pt-s3">
         <Refer name={refer.name} role={refer.role} avatar={refer.avatar} />
       </div>
     </section>
