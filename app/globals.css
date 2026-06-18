@@ -251,9 +251,10 @@ button, [role="button"], a {
 }
 .editable:focus { background: color-mix(in srgb, var(--color-brand) 6%, transparent); border-radius: 4px; }
 
-/* Hide the default cursor — CustomCursor replaces it; only on pointer:fine (mouse) devices. */
+/* Hide the default cursor — CustomCursor replaces it; only on pointer:fine (mouse) devices.
+   Scoped to .custom-cursor so tools/login routes keep the native cursor. */
 @media (pointer: fine) {
-  *, *::before, *::after { cursor: none !important; }
+  .custom-cursor *, .custom-cursor *::before, .custom-cursor *::after { cursor: none !important; }
 }
 
 /* GlassCard's inner .glass wrapper is inline-flex (shrinks to content); force

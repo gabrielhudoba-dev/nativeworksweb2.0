@@ -24,7 +24,7 @@ export default async function RootLayout({
   const globalContent = await getGlobalContent();
 
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full antialiased custom-cursor">
       <body className="min-h-full flex flex-col font-body">
         <DispersionDefs />
         <NavigationProvider>
