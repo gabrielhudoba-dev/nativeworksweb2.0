@@ -24,10 +24,12 @@ export function EditableText({ value, mode, onChange, as = "p", className = "", 
   const ref = useRef<HTMLElement>(null);
 
   // Seed the DOM once on mount (and whenever we switch into edit mode).
+  // innerText is used so that \n in value seeds visible line-breaks, and so
+  // that reading back via innerText (in onInput) round-trips correctly.
   useEffect(() => {
     if (mode !== "edit") return;
     const el = ref.current;
-    if (el && el.textContent !== value) el.textContent = value;
+    if (el && el.innerText !== value) el.innerText = value ?? "";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
@@ -42,7 +44,7 @@ export function EditableText({ value, mode, onChange, as = "p", className = "", 
     "data-placeholder": placeholder,
     spellCheck: false,
     onInput: (e: React.FormEvent<HTMLElement>) =>
-      onChange?.(e.currentTarget.textContent ?? ""),
+      onChange?.((e.currentTarget.innerText ?? "").replace(/\n$/, "")),
     className: `editable outline-none focus:outline-none ${className}`.trim(),
   });
 }
