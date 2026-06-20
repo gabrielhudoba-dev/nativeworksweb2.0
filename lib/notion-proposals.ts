@@ -412,26 +412,16 @@ export type SavedBlockRef = { notionPageId: string; serviceIds: string[] };
 export async function saveBlocks(
   blocksDatabaseId: string,
   _proposalPageId: string,
-  blocks: Array<Omit<ProposalBlock, "services"> & { services?: ProposalService[] }>
+  blocks: Array<Omit<ProposalBlock, "services"> & { services?: ProposalService[] }>,
+  deletedNotionPageIds: string[] = []
 ): Promise<SavedBlockRef[]> {
-  // Blocks that already have a notionPageId are existing — no need to re-query Notion.
-  // Only fetch existing IDs when there are new blocks (no notionPageId) or we need to
-  // detect deleted blocks.
-  const incomingIds = new Set(blocks.filter((b) => b.notionPageId).map((b) => b.notionPageId));
-  const hasNewBlocks = blocks.some((b) => !b.notionPageId);
-  const allHaveIds = !hasNewBlocks;
-
-  // Only fetch existing blocks when needed (detecting deletions or new blocks on first save).
-  let existingIds: Set<string> = incomingIds;
-  if (!allHaveIds || blocks.length === 0) {
-    const existing = await getProposalBlocks(blocksDatabaseId, _proposalPageId);
-    existingIds = new Set(existing.map((b) => b.notionPageId));
-    // Archive removed blocks in parallel
-    const toArchive = existing.filter((old) => !incomingIds.has(old.notionPageId));
+  // Archive explicitly deleted blocks first (sent by the editor when a block is removed).
+  // This avoids the need to re-fetch all blocks on every save just to detect deletions.
+  if (deletedNotionPageIds.length > 0) {
     await Promise.all(
-      toArchive.map((old) =>
+      deletedNotionPageIds.map((id) =>
         withRetry(() =>
-          notionFetch(`/pages/${old.notionPageId}`, {
+          notionFetch(`/pages/${id}`, {
             method: "PATCH",
             body: JSON.stringify({ archived: true }),
           })
@@ -440,7 +430,8 @@ export async function saveBlocks(
     );
   }
 
-  // Upsert all blocks in parallel
+  // Upsert all current blocks. A block with a notionPageId already exists → PATCH.
+  // A block without one is new → POST.
   const refs = await Promise.all(
     blocks.map(async (b, i) => {
       const props: Record<string, unknown> = {
@@ -453,7 +444,6 @@ export async function saveBlocks(
         "Client Name": { rich_text: richText(b.clientName ?? "") },
         "Subtitle":    { rich_text: richText(b.subtitle ?? "") },
         "Items":       { rich_text: richText((b.items ?? []).join("\n")) },
-        // Pricing services stored as JSON; process/approach use this field for stages
         "Stages JSON": { rich_text: richText(
           b.blockType === "pricing"
             ? JSON.stringify(b.services ?? [])
@@ -461,28 +451,26 @@ export async function saveBlocks(
         ) },
       };
 
-      let blockId = b.notionPageId;
-      if (b.notionPageId && existingIds.has(b.notionPageId)) {
+      if (b.notionPageId) {
         await withRetry(() =>
           notionFetch(`/pages/${b.notionPageId}`, {
             method: "PATCH",
             body: JSON.stringify({ properties: props }),
           })
         );
-      } else {
-        const created = await withRetry(() =>
-          notionFetch("/pages", {
-            method: "POST",
-            body: JSON.stringify({
-              parent: { database_id: blocksDatabaseId },
-              properties: props,
-            }),
-          })
-        );
-        blockId = created.id as string;
+        return { notionPageId: b.notionPageId, serviceIds: [] } satisfies SavedBlockRef;
       }
 
-      return { notionPageId: blockId, serviceIds: [] } satisfies SavedBlockRef;
+      const created = await withRetry(() =>
+        notionFetch("/pages", {
+          method: "POST",
+          body: JSON.stringify({
+            parent: { database_id: blocksDatabaseId },
+            properties: props,
+          }),
+        })
+      );
+      return { notionPageId: created.id as string, serviceIds: [] } satisfies SavedBlockRef;
     })
   );
 

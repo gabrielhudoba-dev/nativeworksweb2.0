@@ -69,6 +69,8 @@ export function ProposalEditor({
 }: Props) {
   const [blocks, setBlocks] = useState<EditorBlock[]>(() => reorderForDisplay(initialBlocks));
   const [saveState, setSaveState] = useState<SaveState>("idle");
+  // Notion page IDs of blocks removed since last save — sent to the server so they get archived.
+  const deletedIdsRef = useRef<string[]>([]);
 
   const blocksRef = useRef(blocks);
   blocksRef.current = blocks;
@@ -104,7 +106,11 @@ export function ProposalEditor({
   }, [bump]);
 
   const removeBlock = useCallback((id: string) => {
-    setBlocks((prev) => prev.filter((b) => b.id !== id));
+    setBlocks((prev) => {
+      const block = prev.find((b) => b.id === id);
+      if (block?.notionPageId) deletedIdsRef.current.push(block.notionPageId);
+      return prev.filter((b) => b.id !== id);
+    });
     bump();
   }, [bump]);
 
@@ -155,12 +161,16 @@ export function ProposalEditor({
       do {
         pendingRef.current = false;
         const revAtSave = revRef.current;
+        const toDelete = deletedIdsRef.current.splice(0);
         const res = await saveProposalAction(
           proposalPageId,
           blocksDatabaseId,
-          toSaveInput(blocksRef.current)
+          toSaveInput(blocksRef.current),
+          toDelete
         );
         if (!res.ok) {
+          // Put the IDs back so the next save retries the deletion.
+          deletedIdsRef.current.unshift(...toDelete);
           setSaveState("error");
           return;
         }

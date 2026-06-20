@@ -232,7 +232,8 @@ export type SaveResult =
 export async function saveProposalAction(
   proposalPageId: string,
   blocksDatabaseId: string,
-  blocks: SaveBlockInput[]
+  blocks: SaveBlockInput[],
+  deletedBlockIds: string[] = []
 ): Promise<SaveResult> {
   await requireCreator();
   try {
@@ -259,7 +260,8 @@ export async function saveProposalAction(
           allocation: s.allocation ?? "",
           sortOrder: i,
         })),
-      }))
+      })),
+      deletedBlockIds
     );
 
     // Keep the Notion proposal Name in sync with the composed header title.
