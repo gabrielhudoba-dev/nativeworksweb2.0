@@ -108,17 +108,12 @@ export function ProposalApproachEdit({ approachBlock, pricingBlock, onChangeAppr
     onChangePricing({ services: services.filter((_, j) => j !== i) });
 
   const currency = services[0]?.price?.match(/[€$£]/)?.[0] ?? "€";
-  const vatRaw = pricingBlock.body?.trim() ?? "";
-  const vatRate = parseFloat(vatRaw);
-  const hasVat = !isNaN(vatRate) && vatRate > 0;
 
-  const subtotal = services.reduce((sum, s) => {
+  const total = services.reduce((sum, s) => {
     const n = parseFloat(s.price.replace(/[^0-9.]/g, ""));
     if (isNaN(n)) return sum;
     return sum + (s.isRetainer ? (parseMonths(s.duration) ?? 1) * n : n);
   }, 0);
-  const vatAmount = hasVat ? subtotal * vatRate / 100 : 0;
-  const grandTotal = subtotal + vatAmount;
 
   return (
     <section className="flex flex-col gap-s2">
@@ -325,7 +320,7 @@ export function ProposalApproachEdit({ approachBlock, pricingBlock, onChangeAppr
           <div className="flex justify-between pt-s2 mt-s1 border-t-2 border-prim">
             <span className="font-body font-medium text-l1 text-prim">Total</span>
             <span className="font-body font-medium text-l1 text-prim">
-              {currency}{grandTotal.toLocaleString("en-US")}
+              {currency}{total.toLocaleString("en-US")}
             </span>
           </div>
         </div>
