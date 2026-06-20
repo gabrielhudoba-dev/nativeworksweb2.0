@@ -78,7 +78,9 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
       const dist = Math.abs(s.offsetLeft + s.offsetWidth / 2 - center);
       if (dist < minDist) { minDist = dist; nearest = i; }
     });
-    scroll.scrollTo({ left: slides[nearest]?.offsetLeft ?? 0, behavior: "smooth" });
+    // scrollIntoView honours scroll-padding-inline-start (the snap rest); scrolling
+    // to offsetLeft would ignore it and overshoot the rest by the inset.
+    slides[nearest]?.scrollIntoView({ inline: "start", block: "nearest", behavior: "smooth" });
   }, []);
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
@@ -141,7 +143,9 @@ export const Slider = forwardRef<SliderHandle, SliderProps>(function Slider(
     const scroll = scrollRef.current;
     if (!scroll) return;
     const slide = scroll.children[i] as HTMLElement;
-    if (slide) scroll.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+    // scrollIntoView honours scroll-padding-inline-start (the snap rest); scrolling
+    // to offsetLeft would ignore it and overshoot the rest by the inset.
+    slide?.scrollIntoView({ inline: "start", block: "nearest", behavior: "smooth" });
   }, []);
 
   useImperativeHandle(ref, () => ({ scrollToIndex }), [scrollToIndex]);
