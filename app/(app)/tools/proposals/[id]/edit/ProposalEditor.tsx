@@ -106,11 +106,11 @@ export function ProposalEditor({
   }, [bump]);
 
   const removeBlock = useCallback((id: string) => {
-    setBlocks((prev) => {
-      const block = prev.find((b) => b.id === id);
-      if (block?.notionPageId) deletedIdsRef.current.push(block.notionPageId);
-      return prev.filter((b) => b.id !== id);
-    });
+    // Read from the ref (not state) so the side-effect runs exactly once,
+    // even in React 18 StrictMode where setBlocks updaters are called twice.
+    const block = blocksRef.current.find((b) => b.id === id);
+    if (block?.notionPageId) deletedIdsRef.current.push(block.notionPageId);
+    setBlocks((prev) => prev.filter((b) => b.id !== id));
     bump();
   }, [bump]);
 

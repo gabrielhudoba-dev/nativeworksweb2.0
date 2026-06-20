@@ -419,13 +419,16 @@ export async function saveBlocks(
   // This avoids the need to re-fetch all blocks on every save just to detect deletions.
   if (deletedNotionPageIds.length > 0) {
     await Promise.all(
-      deletedNotionPageIds.map((id) =>
+      // Deduplicate in case the same id was queued twice (e.g. retry after failed save).
+      [...new Set(deletedNotionPageIds)].map((id) =>
         withRetry(() =>
           notionFetch(`/pages/${id}`, {
             method: "PATCH",
             body: JSON.stringify({ archived: true }),
           })
-        )
+        ).catch(() => {
+          // Ignore errors (404 = already archived, which is the desired state).
+        })
       )
     );
   }
