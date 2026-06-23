@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import Link from "next/link";
-import { Navigation, NavigationProvider, PageLinksSection } from "@/app/components/organisms";
+import { Navigation, NavigationProvider } from "@/app/components/organisms";
 import { GlobalGalleryNav } from "@/app/components/organisms/GlobalGalleryNav";
 import { ConditionalFooter } from "@/app/components/ConditionalFooter";
 import { RhythmDev } from "@/app/components/RhythmDev";
@@ -33,8 +33,7 @@ export default async function RootLayout({
             <Navigation content={globalContent} />
             <GlobalGalleryNav />
             {children}
-            <PageLinksSection />
-            <ConditionalFooter content={globalContent} />
+<ConditionalFooter content={globalContent} />
             <RhythmDev />
           </SliderNavProvider>
         </NavigationProvider>

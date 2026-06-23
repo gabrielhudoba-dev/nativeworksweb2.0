@@ -57,14 +57,14 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
               style={{ textShadow: "none" }}
             >
               <Link href="/" aria-label="Native Works – späť na úvod" className="shrink-0" onClick={() => setOpen(false)}>
-                <Logo size="sm" priority />
+                <Logo size="sm" priority className="brightness-0" />
               </Link>
 
 
 {/* Desktop nav */}
               <nav className="hidden sm:flex items-center gap-s4">
                 {items.map((it) => (
-                  <a key={it.href} href={it.href} className={`${linkCls} text-[#090E3A] hover:opacity-70 -translate-y-px`}>
+                  <a key={it.href} href={it.href} className={`${linkCls} text-black hover:opacity-70 -translate-y-px`}>
                     {it.label}
                   </a>
                 ))}
