@@ -53,7 +53,7 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
             className="nav-pill-mobile w-full sm:w-auto"
           >
             <div
-              className="relative flex items-center gap-s2 sm:gap-s9 pl-s2 pr-s3 sm:pl-s3 sm:pr-s5 h-s8 bg-[#D9D9D9]/20 w-full justify-between sm:w-auto sm:justify-start"
+              className="relative flex items-center gap-s2 sm:gap-s4 pl-s2 pr-s3 sm:pl-s3 sm:pr-s5 h-s8 bg-[#D9D9D9]/20 w-full justify-between sm:w-auto sm:justify-start"
               style={{ textShadow: "none" }}
             >
               <Link href="/" aria-label="Native Works – späť na úvod" className="shrink-0" onClick={() => setOpen(false)}>
@@ -64,7 +64,7 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
 {/* Desktop nav */}
               <nav className="hidden sm:flex items-center gap-s4">
                 {items.map((it) => (
-                  <a key={it.href} href={it.href} className={`${linkCls} text-[#090E3A] hover:opacity-70`}>
+                  <a key={it.href} href={it.href} className={`${linkCls} text-[#090E3A] hover:opacity-70 -translate-y-px`}>
                     {it.label}
                   </a>
                 ))}
