@@ -85,13 +85,12 @@ export function HeroSection({ content }: Props) {
           <Text variant="p1" className="max-w-[320px] text-prim text-left">
             {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
           </Text>
-          {/* TODO: restore per-slide author once all slides have references
           <Refer
             name={refer.name}
             role={refer.role}
             avatar={refer.avatar}
             className="hidden sm:flex sm:pr-s1 sm:w-[192px]"
-          /> */}
+          />
         </div>
       </div>
 
