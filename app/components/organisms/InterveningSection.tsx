@@ -15,7 +15,7 @@ export function InterveningSection({ content, stages }: Props) {
   const eyebrow = content.intervening_eyebrow ?? "Stage";
   const stageLabel = (n: number) => `${eyebrow} ${String(n).padStart(2, "0")}`;
 
-  const leadSpan = rest.length >= 3 ? "md:row-span-3" : "md:row-span-2";
+  const leadSpan = "md:row-span-2";
 
   return (
     <section id="stages" className="-mt-s3">
@@ -27,32 +27,33 @@ export function InterveningSection({ content, stages }: Props) {
         </Heading>
 
         {/* DOM order 01→02→03 so mobile reads in stage order.
-            Desktop bento preserved via explicit md:col-start / md:row-start. */}
-        <div className="grid grid-cols-1 gap-s3 md:grid-cols-2">
+            Desktop bento: lead (01) spans full height on the left (60%),
+            rest[0] (02) and rest[1] (03) stack on the right (40%). */}
+        <div className="grid grid-cols-1 gap-s3 md:grid-cols-[3fr_2fr] md:grid-rows-2">
+          <StageCard
+            eyebrow={stageLabel(1)}
+            title={rest[0]?.title ?? lead.title}
+            desc={rest[0]?.desc ?? lead.desc}
+            dark
+            bgImage="/images/disp3.png"
+            className={`h-full min-h-[480px] md:min-h-0 md:col-start-1 md:row-start-1 ${leadSpan}`}
+          />
           {rest[0] && (
             <StageCard
               key={rest[0].id}
-              eyebrow={stageLabel(1)}
-              title={rest[0].title}
-              desc={rest[0].desc}
-              className="h-full min-h-[240px] md:col-start-1 md:row-start-1"
+              eyebrow={stageLabel(2)}
+              title={lead.title}
+              desc={lead.desc}
+              className="h-full min-h-[240px] md:col-start-2 md:row-start-1"
             />
           )}
-          <StageCard
-            eyebrow={stageLabel(2)}
-            title={lead.title}
-            desc={lead.desc}
-            dark
-            bgImage="/images/disp3.png"
-            className={`h-full min-h-[480px] md:col-start-2 md:row-start-1 ${leadSpan}`}
-          />
           {rest[1] && (
             <StageCard
               key={rest[1].id}
               eyebrow={stageLabel(3)}
               title={rest[1].title}
               desc={rest[1].desc}
-              className="h-full min-h-[240px]"
+              className="h-full min-h-[240px] md:col-start-2 md:row-start-2"
             />
           )}
         </div>

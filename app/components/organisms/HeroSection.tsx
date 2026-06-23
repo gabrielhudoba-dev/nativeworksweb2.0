@@ -13,7 +13,7 @@ const GALLERY_ITEMS = [
   { src: "/images/slider/slider01.png", alt: "Payrly – 1", type: "image" },
   { src: "/images/slider/slider02new.png", alt: "Payrly – 2", type: "image" },
   { src: "/images/slider/slider03.png", alt: "Payrly – 3", type: "image" },
-  { src: "/images/slider/slider04.mp4?v=2", alt: "Payrly – 4", type: "video" },
+  { src: "/images/slider/steward.png", alt: "Steward Oaks", type: "image" },
 ];
 
 // Active card = layout content width (1440 − 2·gutter at the cap, responsive below).
@@ -52,11 +52,13 @@ export function HeroSection({ content }: Props) {
     }
   }, [firstVisible]);
 
-  const galleryAuthors = GALLERY_ITEMS.map(() => ({
-    name: "Gabriel Hudoba",
-    role: "Payrly",
-    avatar: "/images/gabo.png",
-  }));
+  const galleryAuthors = [
+    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
+    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
+    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
+    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
+    { name: "Gabriel Hudoba", role: "Steward Oaks",  avatar: "/images/gabo.png" },
+  ];
   const refer = galleryAuthors[firstVisible] ?? galleryAuthors[0];
 
   return (
@@ -81,12 +83,13 @@ export function HeroSection({ content }: Props) {
           <Text variant="p1" className="max-w-[320px] text-prim text-left">
             {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
           </Text>
+          {/* TODO: restore per-slide author once all slides have references
           <Refer
             name={refer.name}
             role={refer.role}
             avatar={refer.avatar}
             className="hidden sm:flex sm:pr-s1 sm:w-[192px]"
-          />
+          /> */}
         </div>
       </div>
 
@@ -147,9 +150,10 @@ export function HeroSection({ content }: Props) {
         </Slider>
       </div>
 
+      {/* TODO: restore per-slide author once all slides have references
       <div className="px-page max-w-page mx-auto sm:hidden pt-s3">
         <Refer name={refer.name} role={refer.role} avatar={refer.avatar} />
-      </div>
+      </div> */}
     </section>
   );
 }
