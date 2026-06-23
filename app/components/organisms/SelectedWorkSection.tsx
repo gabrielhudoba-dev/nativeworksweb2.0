@@ -73,7 +73,7 @@ export function SelectedWorkSection({ content, items }: Props) {
       <div className="hidden sm:block px-page max-w-page mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-s3">
           {cases.map((item) => (
-            <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[456px]" />
+            <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[360px]" />
           ))}
         </div>
       </div>

@@ -73,11 +73,7 @@ export function ServicesSection({ content, services }: Props) {
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
         ))}
       </Heading>
-      <Text variant="p2" className="mb-s9 max-w-[800px]">
-        {content.services_desc ?? "We work closely in to your product focusing on specific problem."}
-      </Text>
-
-      <div ref={containerRef}>
+      <div ref={containerRef} className="mt-s9">
         {/* Mobile: full-bleed cols=1 slider */}
         <div className="sm:hidden">
           <Slider

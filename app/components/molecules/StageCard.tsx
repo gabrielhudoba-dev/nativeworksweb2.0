@@ -23,7 +23,7 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
     <div
       ref={ref}
       style={style}
-      className={`grain flex flex-col justify-start gap-0 p-s6 pb-s9 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
+      className={`grain flex flex-col justify-start gap-0 p-s6 pb-s3 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
     >
       {bgImage && (
         <div
@@ -45,7 +45,7 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
           />
         </div>
       )}
-      <div className="flex flex-col gap-0 mt-s3">
+      <div className="flex flex-col gap-0 mt-0">
         <Heading
           variant="h4"
           style={dark ? { color: "var(--color-white)" } : undefined}

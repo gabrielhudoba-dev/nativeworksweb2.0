@@ -27,7 +27,7 @@ type Props = {
 export function ServiceCard({ title, desc, price, duration, active, onClick, onLetStart, features }: Props) {
   return (
     <div className="flex flex-col h-full cursor-pointer" onClick={onClick}>
-      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[360px] pt-s3 pb-s3 px-s2">
+      <div className="grain bg-surface rounded-[12px] flex flex-col justify-between min-h-[312px] pt-s3 pb-s3 px-s2">
         {!active && (
           <div
             aria-hidden="true"
