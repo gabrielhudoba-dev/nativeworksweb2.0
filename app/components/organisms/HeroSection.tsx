@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Heading, Text } from "@/app/components/atoms";
 import { Refer, Slider } from "@/app/components/molecules";
@@ -8,11 +8,12 @@ import type { SliderView } from "@/app/components/molecules/Slider";
 import { useSliderSection } from "@/app/hooks/useSliderSection";
 import type { SiteContent } from "@/lib/content";
 
-const GALLERY_IMAGES = [
-  { src: "/images/sline01.png", alt: "Native Works – projekt 1" },
-  { src: "/images/sline02.png", alt: "Native Works – projekt 2" },
-  { src: "/images/sline01.png", alt: "Native Works – projekt 3" },
-  { src: "/images/sline02.png", alt: "Native Works – projekt 4" },
+const GALLERY_ITEMS = [
+  { src: "/images/slider/slider05.mp4?v=2", alt: "Payrly – 5", type: "video" },
+  { src: "/images/slider/slider01.png", alt: "Payrly – 1", type: "image" },
+  { src: "/images/slider/slider02new.png", alt: "Payrly – 2", type: "image" },
+  { src: "/images/slider/slider03.png", alt: "Payrly – 3", type: "image" },
+  { src: "/images/slider/slider04.mp4?v=2", alt: "Payrly – 4", type: "video" },
 ];
 
 // Active card = layout content width (1440 − 2·gutter at the cap, responsive below).
@@ -30,7 +31,7 @@ type Props = { content: SiteContent };
 
 export function HeroSection({ content }: Props) {
   const { sliderRef, containerRef, onViewChange: registerViewChange } =
-    useSliderSection("hero-gallery", GALLERY_IMAGES.length, 1);
+    useSliderSection("hero-gallery", GALLERY_ITEMS.length, 1);
   const [firstVisible, setFirstVisible] = useState(0);
 
   const onViewChange = useCallback(
@@ -41,12 +42,21 @@ export function HeroSection({ content }: Props) {
     [registerViewChange],
   );
 
-  const galleryAuthors = [
-    { name: content.hero_refer_name ?? "Gabriel Hudoba", role: content.hero_refer_role ?? "Brand, Design", avatar: content.hero_refer_avatar ?? "/images/gabo.png" },
-    { name: content.hero_refer2_name ?? "Milan Tibensky", role: content.hero_refer2_role ?? "Data, Growth", avatar: content.hero_refer2_avatar ?? "/images/milan.png" },
-    { name: content.hero_refer3_name ?? "Maria Susteka", role: content.hero_refer3_role ?? "Design", avatar: content.hero_refer3_avatar },
-    { name: content.hero_refer4_name ?? "Martin Mroc", role: content.hero_refer4_role ?? "Design", avatar: content.hero_refer4_avatar ?? "/images/martin.png" },
-  ];
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  useEffect(() => {
+    const video = videoRefs.current[firstVisible];
+    if (video) {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    }
+  }, [firstVisible]);
+
+  const galleryAuthors = GALLERY_ITEMS.map(() => ({
+    name: "Gabriel Hudoba",
+    role: "Payrly",
+    avatar: "/images/gabo.png",
+  }));
   const refer = galleryAuthors[firstVisible] ?? galleryAuthors[0];
 
   return (
@@ -96,16 +106,43 @@ export function HeroSection({ content }: Props) {
           containerClassName={GALLERY_CONTAINER_CLASS}
           slideClassName={SLIDE_CLASS}
         >
-          {GALLERY_IMAGES.map((img, i) => (
-            <Image
-              key={i}
-              src={img.src}
-              alt={img.alt}
-              fill
-              className="object-cover"
-              priority={i === 0}
-              sizes="100vw"
-            />
+          {GALLERY_ITEMS.map((item, i) => (
+            <div key={i} className="relative w-full h-full">
+              {item.type === "video" ? (
+                <video
+                  ref={(el) => { videoRefs.current[i] = el; }}
+                  src={item.src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover block"
+                />
+              ) : (
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  className="object-cover"
+                  priority={i === 0}
+                  sizes="100vw"
+                />
+              )}
+              {i === 2 && (
+                <img
+                  src="/images/slider/payrlylogoshort.svg"
+                  alt="Payrly"
+                  className="absolute inset-0 m-auto h-s10 w-auto z-10"
+                />
+              )}
+              {(i === 1 || i === 3) && (
+                <img
+                  src="/images/slider/payrlylogo.svg"
+                  alt="Payrly"
+                  className={`absolute bottom-s5 left-s5 h-s8 z-10 ${i === 3 ? "invert" : ""}`}
+                />
+              )}
+            </div>
           ))}
         </Slider>
       </div>
