@@ -78,20 +78,6 @@ export function HeroSection({ content }: Props) {
           </div>
         </div>
 
-        <div
-          className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between sm:pt-s18 pb-[24px] gap-s3 sm:gap-0"
-          style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
-        >
-          <Text variant="p1" className="max-w-[320px] text-prim text-left">
-            {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
-          </Text>
-          <Refer
-            name={refer.name}
-            role={refer.role}
-            avatar={refer.avatar}
-            className="hidden sm:flex sm:pr-s1 sm:w-[192px]"
-          />
-        </div>
       </div>
 
       {/* gallery — full-bleed scroll container; the card itself is layout-width,
@@ -151,8 +137,20 @@ export function HeroSection({ content }: Props) {
         </Slider>
       </div>
 
-      <div className="px-page max-w-page mx-auto sm:hidden pt-s3">
-        <Refer name={refer.name} role={refer.role} avatar={refer.avatar} />
+      <div className="px-page max-w-page mx-auto pt-s3 pb-[24px]">
+        <div className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between gap-s3 sm:gap-0"
+          style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
+        >
+          <Text variant="p1" className="max-w-[320px] text-prim text-left">
+            {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
+          </Text>
+          <Refer
+            name={refer.name}
+            role={refer.role}
+            avatar={refer.avatar}
+            className="sm:pr-s1 sm:w-[192px]"
+          />
+        </div>
       </div>
     </section>
   );
