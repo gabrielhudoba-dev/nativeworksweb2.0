@@ -13,6 +13,7 @@ const GALLERY_ITEMS = [
   { src: "/images/slider/slider01.png", alt: "Payrly – 1", type: "image" },
   { src: "/images/slider/slider02new.png", alt: "Payrly – 2", type: "image" },
   { src: "/images/slider/slider03.png", alt: "Payrly – 3", type: "image" },
+  { src: "/images/slider/slider04.mp4", alt: "Payrly – 4", type: "video" },
   { src: "/images/slider/steward.png", alt: "Steward Oaks", type: "image" },
 ];
 
@@ -53,6 +54,7 @@ export function HeroSection({ content }: Props) {
   }, [firstVisible]);
 
   const galleryAuthors = [
+    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
     { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
     { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
     { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
@@ -150,10 +152,9 @@ export function HeroSection({ content }: Props) {
         </Slider>
       </div>
 
-      {/* TODO: restore per-slide author once all slides have references
       <div className="px-page max-w-page mx-auto sm:hidden pt-s3">
         <Refer name={refer.name} role={refer.role} avatar={refer.avatar} />
-      </div> */}
+      </div>
     </section>
   );
 }
