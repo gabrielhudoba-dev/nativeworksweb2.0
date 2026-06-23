@@ -71,7 +71,7 @@ export function HeroSection({ content }: Props) {
           <Heading variant="h1" className="max-w-[7.5em]">
             {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
           </Heading>
-          <div className="max-w-[608px] pb-s6">
+          <div className="max-w-[608px] pb-s15 lg:pb-s18">
             <Text variant="p1" className="text-prim max-sm:text-p2">
               {content.hero_desc ?? "A curated group of product specialists working on your system. Inside your team. Solving product problems from early concepts to product friction. With a level of speed previously impossible. Delivered through to production-ready output."}
             </Text>
