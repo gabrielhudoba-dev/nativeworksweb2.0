@@ -67,7 +67,7 @@ export function ServicesSection({ content, services }: Props) {
   });
 
   return (
-    <section id="services" className="max-sm:pt-s6 sm:pt-s9 pb-s6 px-page max-w-page mx-auto">
+    <section id="services" className="max-sm:pt-s6 sm:pt-s9 lg:pt-s15 pb-s6 lg:pb-s15 px-page max-w-page mx-auto">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
