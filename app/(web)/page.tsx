@@ -34,9 +34,9 @@ export default async function Home() {
 
       <StatsSection content={content} stats={stats} />
 
-      <section className="max-sm:pt-s3 max-sm:pb-s3">
+      {/* <section className="max-sm:pt-s3 max-sm:pb-s3">
         <LogoMarquee />
-      </section>
+      </section> */}
 
       <InterveningSection content={content} stages={stages} />
       <ServicesSection content={content} services={services} />
