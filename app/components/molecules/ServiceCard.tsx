@@ -77,6 +77,7 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
         <Text variant="p2" className="mb-s6 pr-[12px] lg:pr-[24px]">
           {desc}
         </Text>
+        {/* TODO: restore features list
         {features && features.length > 0 && (
           <div className="flex flex-col pb-s3 shadow-[inset_0_1px_0_rgba(18,19,25,0.1),inset_0_-1px_0_rgba(18,19,25,0.1)]">
             {features.map((f, i) => (
@@ -85,7 +86,7 @@ export function ServiceCard({ title, desc, price, duration, active, onClick, onL
               </div>
             ))}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
