@@ -67,7 +67,7 @@ export function HeroSection({ content }: Props) {
     <section style={{ paddingTop: "var(--hero-section-pt)" }}>
       {/* text block — constrained to page width */}
       <div className="px-page max-w-page mx-auto max-sm:pb-s6 sm:pb-0">
-        <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s15 lg:pt-s18 sm:mt-s9 lg:mt-s12 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
+        <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s12 lg:pt-s15 sm:mt-s9 lg:mt-s12 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
           <Heading variant="h1" className="max-w-[7.5em]">
             {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
           </Heading>
