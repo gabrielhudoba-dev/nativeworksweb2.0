@@ -16,11 +16,20 @@ function renderTitle(title: string) {
 function CaseCard({ item, imgClass, textClassName = "!mt-s3", split = false }: { item: CaseStudyDbItem; imgClass: string; textClassName?: string; split?: boolean }) {
   return (
     <div className="flex flex-col">
-      <CaseStudyImage
-        src={item.image_src!}
-        alt={item.image_alt ?? item.title ?? ""}
-        className={`w-full ${imgClass}`}
-      />
+      <div className="relative">
+        <CaseStudyImage
+          src={item.image_src!}
+          alt={item.image_alt ?? item.title ?? ""}
+          className={`w-full ${imgClass}`}
+        />
+        {item.title === "Payrly" && (
+          <img
+            src="/images/slider/payrlylogoshort.svg"
+            alt="Payrly"
+            className="absolute inset-0 m-auto h-s10 w-auto z-10"
+          />
+        )}
+      </div>
       <PrimTextBlock
         title={renderTitle(item.title!)}
         description={item.description!}
@@ -60,17 +69,12 @@ export function SelectedWorkSection({ content, items }: Props) {
         </Slider>
       </div>
 
-      {/* Desktop: stacked layout */}
+      {/* Desktop: two-column grid */}
       <div className="hidden sm:block px-page max-w-page mx-auto">
-        <div className="flex flex-col gap-s12">
-          <CaseCard item={cases[0]} imgClass="!h-[432px] sm:!h-[600px]" split textClassName="!mt-s3" />
-          {cases.length > 1 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-s3">
-              {cases.slice(1).map((item) => (
-                <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[456px]" />
-              ))}
-            </div>
-          )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-s3">
+          {cases.map((item) => (
+            <CaseCard key={item.id} item={item} imgClass="!h-[360px] sm:!h-[456px]" />
+          ))}
         </div>
       </div>
     </section>
