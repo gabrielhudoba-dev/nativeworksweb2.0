@@ -13,7 +13,7 @@ const GALLERY_ITEMS = [
   { src: "/images/slider/slider01.png", alt: "Payrly – 1", type: "image" },
   { src: "/images/slider/slider02new.png", alt: "Payrly – 2", type: "image" },
   { src: "/images/slider/slider03.png", alt: "Payrly – 3", type: "image" },
-  { src: "/images/slider/slider04newnew.mp4", alt: "Payrly – 4", type: "video" },
+  { src: "/images/slider/slider04newnew.mp4?v=2", alt: "Payrly – 4", type: "video" },
   { src: "/images/slider/steward.png", alt: "Steward Oaks", type: "image" },
 ];
 
