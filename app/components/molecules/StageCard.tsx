@@ -50,7 +50,7 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
           variant="h4"
           style={dark ? { color: "var(--color-white)" } : undefined}
         >
-          {eyebrow && <>{eyebrow.replace(/^Stage\s*/i, "")} </>}{title}
+          {eyebrow && <>{eyebrow.replace(/^Stage\s*/i, "")}. </>}{title}.
         </Heading>
         <Text variant="p2" style={dark ? { color: "rgba(255,255,255,0.6)" } : undefined}>
           {desc}
