@@ -6,6 +6,7 @@ import { ServiceCard } from "@/app/components/molecules/ServiceCard";
 import { Slider } from "@/app/components/molecules/Slider";
 import type { SliderHandle } from "@/app/components/molecules/Slider";
 import { useSliderSection } from "@/app/hooks/useSliderSection";
+import { useSquircle } from "@/app/hooks/useSquircle";
 import type { SiteContent, Service } from "@/lib/content";
 
 function handleLetStart(e: React.MouseEvent, card: { name: string; detail: string }) {
@@ -24,6 +25,7 @@ export function ServicesSection({ content, services }: Props) {
   const { sliderRef, containerRef, onViewChange } = useSliderSection("services-slider", services.length);
   const mobileSliderRef = useRef<SliderHandle>(null);
   const desktopSliderRef = useRef<SliderHandle>(null);
+  const { ref: sectionRef, style: sectionStyle } = useSquircle(21, 0.6);
 
   // Proxy sliderRef to whichever slider is currently visible
   useEffect(() => {
@@ -67,7 +69,8 @@ export function ServicesSection({ content, services }: Props) {
   });
 
   return (
-    <section id="services" className="max-sm:pt-s6 sm:pt-s9 lg:pt-s15 pb-s6 lg:pb-s15 px-page max-w-page mx-auto">
+    <section ref={sectionRef} style={sectionStyle} id="services" className="grain bg-surface mx-s2 my-s2">
+      <div className="px-page max-w-page mx-auto max-sm:pt-s6 sm:pt-s9 lg:pt-s15 pb-s6 lg:pb-s15">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
@@ -98,6 +101,7 @@ export function ServicesSection({ content, services }: Props) {
             {cards}
           </Slider>
         </div>
+      </div>
       </div>
     </section>
   );
