@@ -7,8 +7,10 @@ type Props = { menuOpen: boolean };
 export function NavDots({ menuOpen }: Props) {
   const { nav } = useSliderNav();
 
-  return null;
-  if (!nav || menuOpen) return null;
+  // Dots temporarily disabled. Typed as boolean (not a `true` literal) so the
+  // code below stays reachable for type-checking and easy re-enabling.
+  const disabled: boolean = true;
+  if (disabled || !nav || menuOpen) return null;
   const { count, firstVisible, visibleCount, onDotClick, id } = nav;
   if (visibleCount >= count) return null;
 
