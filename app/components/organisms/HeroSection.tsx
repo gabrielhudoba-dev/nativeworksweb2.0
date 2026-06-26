@@ -6,20 +6,11 @@ import { Heading, Text } from "@/app/components/atoms";
 import { Refer, Slider } from "@/app/components/molecules";
 import type { SliderView } from "@/app/components/molecules/Slider";
 import { useSliderSection } from "@/app/hooks/useSliderSection";
-import type { SiteContent } from "@/lib/content";
-
-const GALLERY_ITEMS = [
-  { src: "/images/slider/slider05.mp4?v=2", alt: "Payrly – 5", type: "video" },
-  { src: "/images/slider/slider01.png", alt: "Payrly – 1", type: "image" },
-  { src: "/images/slider/slider02new.png", alt: "Payrly – 2", type: "image" },
-  { src: "/images/slider/slider03.png", alt: "Payrly – 3", type: "image" },
-  { src: "/images/slider/slider04newnew.mp4?v=3", alt: "Payrly – 4", type: "video" },
-  { src: "/images/slider/steward.png", alt: "Steward Oaks", type: "image" },
-];
+import type { SiteContent, HeroSliderItem } from "@/lib/content";
 
 // Active card = layout content width (1440 − 2·gutter at the cap, responsive below).
 const SLIDE_CLASS =
-  "!w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[576px] sm:h-[480px] lg:h-[648px] relative";
+  "!w-[calc(min(100vw,_1440px)_-_2_*_var(--gutter))] rounded-[21px] overflow-hidden h-[240px] sm:h-[480px] lg:h-[648px] relative hero-slide";
 
 // Inset = distance from viewport edge to the layout content edge: the outer
 // margin ((100vw − page)/2) plus the gutter. Applied as real padding (so the
@@ -28,11 +19,11 @@ const SLIDE_CLASS =
 const GALLERY_CONTAINER_CLASS =
   "px-[calc((100vw_-_min(100vw,_1440px))_/_2_+_var(--gutter))] [scroll-padding-inline-start:calc((100vw_-_min(100vw,_1440px))_/_2_+_var(--gutter))]";
 
-type Props = { content: SiteContent };
+type Props = { content: SiteContent; items: HeroSliderItem[] };
 
-export function HeroSection({ content }: Props) {
+export function HeroSection({ content, items }: Props) {
   const { sliderRef, containerRef, onViewChange: registerViewChange } =
-    useSliderSection("hero-gallery", GALLERY_ITEMS.length, 1);
+    useSliderSection("hero-gallery", items.length, 1);
   const [firstVisible, setFirstVisible] = useState(0);
 
   const onViewChange = useCallback(
@@ -53,15 +44,10 @@ export function HeroSection({ content }: Props) {
     }
   }, [firstVisible]);
 
-  const galleryAuthors = [
-    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
-    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
-    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
-    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
-    { name: "Gabriel Hudoba", role: "Payrly",        avatar: "/images/gabo.png" },
-    { name: "Gabriel Hudoba", role: "Steward Oaks",  avatar: "/images/gabo.png" },
-  ];
-  const refer = galleryAuthors[firstVisible] ?? galleryAuthors[0];
+  const current = items[firstVisible] ?? items[0];
+  const refer = current
+    ? { name: current.author_name ?? "", role: current.author_role ?? "", avatar: current.author_avatar ?? "" }
+    : null;
 
   return (
     <section style={{ paddingTop: "var(--hero-section-pt)" }}>
@@ -88,6 +74,7 @@ export function HeroSection({ content }: Props) {
         className="hero-in"
         style={{ "--hero-delay": "0.35s" } as React.CSSProperties}
       >
+        <div className="hero-gallery">
         <Slider
           ref={sliderRef}
           cols={1}
@@ -96,9 +83,10 @@ export function HeroSection({ content }: Props) {
           containerClassName={GALLERY_CONTAINER_CLASS}
           slideClassName={SLIDE_CLASS}
         >
-          {GALLERY_ITEMS.map((item, i) => (
-            <div key={i} className="relative w-full h-full">
+          {items.map((item, i) => (
+            <div key={item.id} className="relative w-full h-full">
               {item.type === "video" ? (
+                <div className="hero-video-container w-full h-full bg-black flex items-center justify-center">
                 <video
                   ref={(el) => { videoRefs.current[i] = el; }}
                   src={item.src}
@@ -108,48 +96,62 @@ export function HeroSection({ content }: Props) {
                   playsInline
                   className="w-full h-full object-cover block"
                 />
+                </div>
+              ) : item.mobile_src ? (
+                <picture>
+                  <source media="(max-width: 639px)" srcSet={item.mobile_src} />
+                  <img
+                    src={item.src}
+                    alt={item.alt ?? ""}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </picture>
               ) : (
                 <Image
                   src={item.src}
-                  alt={item.alt}
+                  alt={item.alt ?? ""}
                   fill
                   className="object-cover"
                   priority={i === 0}
                   sizes="100vw"
                 />
               )}
-              {i === 2 && (
+              {item.overlay === "logo_center" && (
                 <img
                   src="/images/slider/payrlylogoshort.svg"
                   alt="Payrly"
                   className="absolute inset-0 m-auto h-s10 w-auto z-10"
                 />
               )}
-              {(i === 1 || i === 3) && (
+              {(item.overlay === "logo_bottom" || item.overlay === "logo_bottom_invert") && (
                 <img
                   src="/images/slider/payrlylogo.svg"
                   alt="Payrly"
-                  className={`absolute bottom-s5 left-s5 h-s8 z-10 ${i === 3 ? "invert" : ""}`}
+                  className={`absolute bottom-s5 left-s5 h-s8 z-10 hidden sm:block${item.overlay === "logo_bottom_invert" ? " invert" : ""}`}
                 />
               )}
             </div>
           ))}
         </Slider>
+        </div>
       </div>
 
       <div className="px-page max-w-page mx-auto pt-s3 pb-[24px]">
         <div className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between gap-s3 sm:gap-0"
           style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
         >
-          <Text variant="p1" className="max-w-[320px] text-prim text-left">
+          <Text variant="p1" className="max-sm:order-2 max-w-[320px] text-prim text-left">
             {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
           </Text>
-          <Refer
-            name={refer.name}
-            role={refer.role}
-            avatar={refer.avatar}
-            className="sm:pr-s1 sm:w-[192px]"
-          />
+          {refer && (
+            <Refer
+              name={refer.name}
+              role={refer.role}
+              avatar={refer.avatar}
+              className="max-sm:order-1 sm:pr-s1 sm:w-[192px]"
+            />
+          )}
         </div>
       </div>
     </section>

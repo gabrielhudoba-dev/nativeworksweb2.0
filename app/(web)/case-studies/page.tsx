@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Heading, ImageBlock, Text } from "@/app/components/atoms";
 import { LogoMarquee, Refer, StatColumn } from "@/app/components/molecules";
 import { CaseStudyCard } from "@/app/components/organisms";
@@ -5,6 +6,23 @@ import { getContent, getCaseStudiesItems } from "@/lib/content";
 import { DOT_BG } from "@/app/styles/patterns";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Case Studies",
+  description:
+    "33% retention up for Kontentino. 67% fewer support tickets for Clarify. 28% activation lift for Payrly. Real product decisions, measured outcomes.",
+  openGraph: {
+    title: "Case Studies — Native Works",
+    description:
+      "33% retention up for Kontentino. 67% fewer support tickets for Clarify. 28% activation lift for Payrly. Real product decisions, measured outcomes.",
+    url: "https://nativeworks.eu/case-studies",
+  },
+  twitter: {
+    title: "Case Studies — Native Works",
+    description:
+      "33% retention up for Kontentino. 67% fewer support tickets for Clarify. 28% activation lift for Payrly. Real product decisions, measured outcomes.",
+  },
+};
 
 function StatsStrip({ stats }: { stats: Array<{ value: string; label: string }> }) {
   const rows: Array<typeof stats> = [];

@@ -12,8 +12,37 @@ import { DispersionDefs } from "@/app/components/atoms";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Native Works",
-  description: "New era of digital product design.",
+  metadataBase: new URL("https://nativeworks.eu"),
+  title: {
+    default: "Native Works",
+    template: "%s — Native Works",
+  },
+  description:
+    "A curated group of product specialists working on your mobile app or web system. Inside your team. Solving product problems from early concepts to production-ready output.",
+  keywords: ["product design", "product strategy", "UX design", "product studio", "mobile app design", "web product", "human-led AI"],
+  authors: [{ name: "Native Works", url: "https://nativeworks.eu" }],
+  creator: "Native Works",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://nativeworks.eu",
+    siteName: "Native Works",
+    title: "Native Works — Better product decisions. Made by humans.",
+    description:
+      "A curated group of product specialists working on your mobile app or web system. Inside your team. Solving product problems from early concepts to production-ready output.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Native Works — Better product decisions. Made by humans.",
+    description:
+      "A curated group of product specialists working on your mobile app or web system. Inside your team. Solving product problems from early concepts to production-ready output.",
+    creator: "@nativeworks",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 };
 
 export default async function RootLayout({

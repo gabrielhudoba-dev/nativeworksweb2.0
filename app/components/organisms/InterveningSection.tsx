@@ -34,7 +34,7 @@ export function InterveningSection({ content, stages }: Props) {
             desc={rest[0]?.desc ?? lead.desc}
             dark
             bgImage="/images/disp3.png"
-            className="h-full min-h-[384px] lg:min-h-0 lg:col-start-1 lg:row-start-1 lg:row-span-2"
+            className="h-full min-h-[504px] lg:min-h-0 lg:col-start-1 lg:row-start-1 lg:row-span-2"
           />
           {rest[0] && (
             <StageCard

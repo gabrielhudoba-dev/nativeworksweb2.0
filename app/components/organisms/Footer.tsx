@@ -21,13 +21,13 @@ export function Footer({ content }: Props) {
             <Link href="/" aria-label="Native Works">
               <Logo size="md" className="h-s6 w-auto" />
             </Link>
-            <SocialLink platform="linkedin" href="https://linkedin.com" />
+            <SocialLink platform="linkedin" href="https://linkedin.com/company/nativeworkseu" />
           </div>
 
           {/* Row 2: Tagline (desktop: tagline | email + copyright inline) */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-s4">
-            <Text variant="p3" className="max-sm:mt-s3">
-              {content.footer_tagline ?? "New era of digital product design."}
+            <Text variant="p3" className="max-sm:mt-s3 whitespace-pre-line">
+              {content.footer_tagline ?? "Better product decisions.\nMade by humans."}
             </Text>
             {/* Desktop only: email + copyright in same row as tagline */}
             <div className="hidden sm:flex items-center gap-s4">
@@ -43,7 +43,7 @@ export function Footer({ content }: Props) {
             </div>
           </div>
 
-          {/* Mobile only: email + copyright — 1 line lower from tagline, copyright right-aligned */}
+          {/* Mobile only: email + copyright — copyright on its own line below email */}
           <div className="sm:hidden flex flex-col gap-s2 mt-s3">
             <a
               href={`mailto:${content.footer_email ?? "hello@nativeworks.eu"}`}

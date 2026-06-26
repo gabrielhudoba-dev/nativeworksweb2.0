@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GlassCard } from "@developer-hub/liquid-glass";
 import { Logo, IconButton } from "@/app/components/atoms";
+import { NavDots } from "./NavDots";
 
 export type NavItem = { label: string; href: string };
 
@@ -52,32 +53,41 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
             displacementScale={80}
             className="nav-pill-mobile w-full sm:w-auto"
           >
+            {/* Mobile: 3-col grid [logo | dots | hamburger] */}
             <div
-              className="relative flex items-center gap-s2 sm:gap-s4 pl-s2 pr-s3 sm:pl-s3 sm:pr-s5 h-s8 bg-[#D9D9D9]/20 w-full justify-between sm:w-auto sm:justify-start"
+              className="grid grid-cols-[auto_1fr_auto] sm:hidden items-center pl-s2 pr-s3 h-s8 bg-[#D9D9D9]/20 w-full"
               style={{ textShadow: "none" }}
             >
               <Link href="/" aria-label="Native Works – späť na úvod" className="shrink-0" onClick={() => setOpen(false)}>
                 <Logo size="sm" priority className="brightness-0" />
               </Link>
-
-
-{/* Desktop nav */}
-              <nav className="hidden sm:flex items-center gap-s4">
-                {items.map((it) => (
-                  <a key={it.href} href={it.href} className={`${linkCls} text-black hover:opacity-70 -translate-y-px`}>
-                    {it.label}
-                  </a>
-                ))}
-              </nav>
-
-              {/* Mobile hamburger */}
-              <div className="sm:hidden">
+              <div className="flex justify-center items-center">
+                <NavDots menuOpen={open} />
+              </div>
+              <div className="flex justify-end">
                 <IconButton
                   icon={open ? "close" : "menu"}
                   label={open ? "Zavrieť menu" : "Otvoriť menu"}
                   onClick={() => setOpen((v) => !v)}
                 />
               </div>
+            </div>
+
+            {/* Desktop: flex row [logo | nav links] */}
+            <div
+              className="hidden sm:flex items-center gap-s4 pl-s3 pr-s5 h-s8 bg-[#D9D9D9]/20"
+              style={{ textShadow: "none" }}
+            >
+              <Link href="/" aria-label="Native Works – späť na úvod" className="shrink-0" onClick={() => setOpen(false)}>
+                <Logo size="sm" priority className="brightness-0" />
+              </Link>
+              <nav className="flex items-center gap-s4">
+                {items.map((it) => (
+                  <a key={it.href} href={it.href} className={`${linkCls} text-black hover:opacity-70 -translate-y-px`}>
+                    {it.label}
+                  </a>
+                ))}
+              </nav>
             </div>
           </GlassCard>
         </div>
@@ -87,7 +97,7 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
       {!isStatic && (
         <div
           className={[
-            "sm:hidden fixed inset-0 z-40 bg-white overflow-y-auto",
+            "sm:hidden fixed inset-0 z-40 bg-white overflow-y-auto flex flex-col",
             "transition-[opacity,transform] duration-300 ease-system",
             open
               ? "opacity-100 translate-y-0 pointer-events-auto"
@@ -103,12 +113,12 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
 
           <nav aria-label="Site navigation">
             <ul className="flex flex-col">
-              {items.map(({ label, href }) => {
-                const active = pathname === href;
+              {[{ label: "Home", href: "/" }, ...items].map(({ label, href }) => {
+                const active = pathname === href || (href !== "/" && pathname.startsWith(href));
                 return (
                   <li key={href} className="relative group">
                     <div className={[
-                      "absolute top-[-8px] bottom-[-8px] inset-x-s2 rounded-lg bg-brand/10 transition-opacity duration-150",
+                      "absolute top-[-8px] bottom-[-8px] inset-x-s1 rounded-lg bg-brand/10 transition-opacity duration-150",
                       active ? "opacity-100" : "opacity-0 group-hover:opacity-100",
                     ].join(" ")} />
                     <Link
@@ -127,8 +137,8 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
             </ul>
           </nav>
 
-          <div className="px-page mt-s6 pb-s9 flex flex-col gap-s2">
-            <a href={`mailto:${email}`} className="font-display font-medium text-h5 tracking-[-0.02em] text-prim inline-block translate-y-[4px] transition-opacity hover:opacity-70" tabIndex={open ? 0 : -1}>
+          <div className="mt-auto px-page pb-s6 pt-s4">
+            <a href={`mailto:${email}`} className="font-body font-medium text-[14px] leading-[20px] text-prim/60 transition-opacity hover:opacity-100" tabIndex={open ? 0 : -1}>
               {email}
             </a>
           </div>

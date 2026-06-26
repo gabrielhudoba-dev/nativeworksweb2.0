@@ -19,6 +19,7 @@ function CaseCard({ item, imgClass, textClassName = "!mt-s3", split = false }: {
       <div className="relative">
         <CaseStudyImage
           src={item.image_src!}
+          mobileSrc={item.mobile_image_src ?? undefined}
           alt={item.image_alt ?? item.title ?? ""}
           className={`w-full ${imgClass}`}
         />
@@ -60,7 +61,7 @@ export function SelectedWorkSection({ content, items }: Props) {
         <Slider
           ref={sliderRef}
           cols={1}
-          containerClassName="-mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)]"
+          containerClassName="-mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)] pb-s1"
           onViewChange={onViewChange}
         >
           {cases.map((item) => (

@@ -1,7 +1,25 @@
+import type { Metadata } from "next";
 import { Heading, ImageBlock, Text } from "@/app/components/atoms";
 import { MemberCard } from "@/app/components/organisms";
 import { getContent, getMembers, getCollectiveCompanies } from "@/lib/content";
 import { CompanyLogo } from "./CompanyLogo";
+
+export const metadata: Metadata = {
+  title: "Collective",
+  description:
+    "Meet the Native Works collective — designers, technologists, brand experts, and product managers working inside your team. From early concepts to product friction, solved.",
+  openGraph: {
+    title: "Collective — Native Works",
+    description:
+      "Meet the Native Works collective — designers, technologists, brand experts, and product managers working inside your team. From early concepts to product friction, solved.",
+    url: "https://nativeworks.eu/collective",
+  },
+  twitter: {
+    title: "Collective — Native Works",
+    description:
+      "Meet the Native Works collective — designers, technologists, brand experts, and product managers working inside your team. From early concepts to product friction, solved.",
+  },
+};
 
 export const revalidate = 60;
 

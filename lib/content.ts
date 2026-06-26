@@ -56,6 +56,19 @@ export type CapabilitySection = {
   items: string[];
 };
 
+export type HeroSliderItem = {
+  id: number;
+  sort_order: number;
+  type: "image" | "video";
+  src: string;
+  mobile_src: string | null;
+  alt: string | null;
+  overlay: "logo_center" | "logo_bottom" | "logo_bottom_invert" | null;
+  author_name: string | null;
+  author_role: string | null;
+  author_avatar: string | null;
+};
+
 export type CaseStudyItemStat = {
   value: string;
   label: string;
@@ -71,6 +84,7 @@ export type CaseStudyDbItem = {
   title: string | null;
   description: string | null;
   image_src: string | null;
+  mobile_image_src: string | null;
   image_alt: string | null;
   author_name: string | null;
   author_role: string | null;
@@ -197,6 +211,19 @@ export async function getCapabilitiesSections(): Promise<CapabilitySection[]> {
     ...s,
     items: (items ?? []).filter((i) => i.section_id === s.id).map((i) => i.text),
   }));
+}
+
+export async function getHeroSliderItems(): Promise<HeroSliderItem[]> {
+  const { data, error } = await supabase
+    .from("1_home_slider_items")
+    .select("*")
+    .order("sort_order");
+
+  if (error) {
+    console.error("Supabase hero slider error:", error.message);
+    return [];
+  }
+  return data ?? [];
 }
 
 export async function getCaseStudiesItems(): Promise<CaseStudyDbItem[]> {

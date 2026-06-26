@@ -1,7 +1,25 @@
+import type { Metadata } from "next";
 import { Heading } from "@/app/components/atoms";
 import { getContent, getCapabilitiesSections } from "@/lib/content";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Capabilities",
+  description:
+    "Product strategy, research, UX design, design systems, human-led AI delivery, technical architecture, and AI product behavior — the full stack of what Native Works brings inside your team.",
+  openGraph: {
+    title: "Capabilities — Native Works",
+    description:
+      "Product strategy, research, UX design, design systems, human-led AI delivery, technical architecture, and AI product behavior — the full stack of what Native Works brings inside your team.",
+    url: "https://nativeworks.eu/capabilities",
+  },
+  twitter: {
+    title: "Capabilities — Native Works",
+    description:
+      "Product strategy, research, UX design, design systems, human-led AI delivery, technical architecture, and AI product behavior — the full stack of what Native Works brings inside your team.",
+  },
+};
 
 export default async function CapabilitiesPage() {
   const [content, sections] = await Promise.all([

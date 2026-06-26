@@ -211,6 +211,10 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
+  /* Always reserve the scrollbar gutter so locking scroll on nav-open
+     (body overflow:hidden) doesn't widen the viewport and shift the
+     fixed nav pill / content sideways. No-op with overlay scrollbars. */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -295,6 +299,18 @@ button, [role="button"], a {
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-in { animation: none; opacity: 1; transform: none; }
+}
+
+/* Hero slider — mobile overrides. Must be in @layer utilities. */
+@layer utilities {
+  @media (max-width: 639px) {
+    /* Slide = content width (centred, gutter each side). With the 16px slider
+       gap that leaves exactly 8px of the next slide peeking past the edge. */
+    .hero-gallery .hero-slide {
+      width: calc(100vw - 2 * var(--gutter)) !important;
+      height: calc((100vw - 2 * var(--gutter)) * 4 / 3) !important;
+    }
+  }
 }
 
 /* ──────────────────────────────────────────────────────────────────────────

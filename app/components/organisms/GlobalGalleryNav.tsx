@@ -30,7 +30,7 @@ export function GlobalGalleryNav() {
   }, []);
 
   return (
-    <div className="flex fixed left-0 right-0 z-40 justify-center pointer-events-none" style={{ top: "var(--gallery-nav-top, 82px)" }}>
+    <div className="hidden fixed left-0 right-0 z-40 justify-center pointer-events-none" style={{ top: "var(--gallery-nav-top, 82px)" }}>
       <div
         className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-auto ${
           visible

@@ -16,14 +16,14 @@ type Props = {
   bgImage?: string;
 };
 
-export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[384px]", bgImage }: Props) {
+export function StageCard({ title, desc, dark = false, className = "h-[384px]", bgImage }: Props) {
   const { ref, style } = useSquircle(21, 0.6);
 
   return (
     <div
       ref={ref}
       style={style}
-      className={`grain flex flex-col justify-start gap-0 p-s6 pb-s6 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
+      className={`grain flex flex-col justify-start gap-0 px-s3 py-s4 sm:p-s6 pb-s4 sm:pb-s6 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
     >
       {bgImage && (
         <div
@@ -50,7 +50,7 @@ export function StageCard({ eyebrow, title, desc, dark = false, className = "h-[
           variant="h4"
           style={dark ? { color: "var(--color-white)" } : undefined}
         >
-          {eyebrow && <>{eyebrow.replace(/^Stage\s*/i, "")}. </>}{title}.
+          {title}.
         </Heading>
         <Text variant="p2" style={dark ? { color: "rgba(255,255,255,0.6)" } : undefined}>
           {desc}
