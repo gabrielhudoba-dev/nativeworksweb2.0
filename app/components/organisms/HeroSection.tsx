@@ -25,6 +25,7 @@ export function HeroSection({ content, items }: Props) {
   const { sliderRef, containerRef, onViewChange: registerViewChange } =
     useSliderSection("hero-gallery", items.length, 1);
   const [firstVisible, setFirstVisible] = useState(0);
+  const [descExpanded, setDescExpanded] = useState(false);
 
   const onViewChange = useCallback(
     (view: SliderView) => {
@@ -52,18 +53,43 @@ export function HeroSection({ content, items }: Props) {
   return (
     <section style={{ paddingTop: "var(--hero-section-pt)" }}>
       {/* text block — constrained to page width */}
-      <div className="px-page max-w-page mx-auto max-sm:pb-s6 sm:pb-0">
-        <div className="hero-in pt-0 max-sm:pt-s12 sm:pt-s12 lg:pt-s15 sm:mt-s9 lg:mt-s12 flex flex-col items-start sm:items-center gap-s6 text-left sm:text-center">
-          <Heading variant="h1" className="max-w-[7.5em]">
+      <div className="px-page max-w-page mx-auto sm:pb-0">
+        <div className="hero-in pt-0 sm:pt-s12 lg:pt-s15 sm:mt-s9 lg:mt-s12 flex flex-col items-start sm:items-center gap-s6 max-sm:gap-s3 text-left sm:text-center">
+          <Heading variant="h2" className="max-w-[7.5em]">
             {(content.hero_title ?? "Better digital products through human decisions.").replace(/\n/g, " ")}
           </Heading>
-          <div className="max-w-[608px] pb-s18 lg:pb-[168px]">
-            <Text variant="p1" className="text-prim max-sm:text-p2">
+          <div className="max-w-[608px] max-sm:pb-s6 sm:pb-s18 lg:pb-[168px]">
+            {/* tablet/desktop: full description */}
+            <Text variant="p1" className="hidden sm:block text-prim">
               {content.hero_desc ?? "A curated group of product specialists working on your system. Inside your team. Solving product problems from early concepts to product friction. With a level of speed previously impossible. Delivered through to production-ready output."}
             </Text>
+            {/* mobile: collapsible — intro visible, rest behind read more */}
+            <div className="sm:hidden text-left">
+              <Text variant="p1" className="text-prim max-sm:text-p2">
+                {descExpanded
+                  ? (content.hero_desc ?? "")
+                  : (content.hero_desc_short ?? content.hero_desc ?? "")}
+              </Text>
+              <button
+                type="button"
+                onClick={() => setDescExpanded((v) => !v)}
+                className="mt-s2 text-brand text-p2 underline underline-offset-4"
+              >
+                {descExpanded
+                  ? (content.hero_read_less ?? "Read less")
+                  : (content.hero_read_more ?? "Read more")}
+              </button>
+            </div>
           </div>
         </div>
 
+      </div>
+
+      {/* mobile: tagline sits above the gallery (on sm+ it lives below, next to the refer) */}
+      <div className="sm:hidden px-page max-w-page mx-auto pb-s3">
+        <Text variant="p1" className="max-w-[320px] text-prim text-p2 text-left">
+          {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
+        </Text>
       </div>
 
       {/* gallery — full-bleed scroll container; the card itself is layout-width,
@@ -128,7 +154,7 @@ export function HeroSection({ content, items }: Props) {
                 <img
                   src="/images/slider/payrlylogo.svg"
                   alt="Payrly"
-                  className={`absolute bottom-s5 left-s5 h-s8 z-10 hidden sm:block${item.overlay === "logo_bottom_invert" ? " invert" : ""}`}
+                  className={`absolute bottom-s5 left-s5 h-s8 z-10${item.overlay === "logo_bottom_invert" ? " hidden sm:block invert" : ""}`}
                 />
               )}
             </div>
@@ -138,10 +164,10 @@ export function HeroSection({ content, items }: Props) {
       </div>
 
       <div className="px-page max-w-page mx-auto pt-s3 pb-[24px]">
-        <div className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between gap-s3 sm:gap-0"
+        <div className="hero-in flex flex-col sm:flex-row items-start sm:items-end justify-between gap-s6 sm:gap-0"
           style={{ "--hero-delay": "0.2s" } as React.CSSProperties}
         >
-          <Text variant="p1" className="max-sm:order-2 max-w-[320px] text-prim text-left">
+          <Text variant="p1" className="max-sm:hidden max-sm:order-2 max-w-[320px] text-prim text-left">
             {content.hero_tagline ?? "Product creation is changing. Shorter cycles. Faster Outcome."}
           </Text>
           {refer && (

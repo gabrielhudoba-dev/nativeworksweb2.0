@@ -114,7 +114,8 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
           <nav aria-label="Site navigation">
             <ul className="flex flex-col">
               {[{ label: "Home", href: "/" }, ...items].map(({ label, href }) => {
-                const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+                const path = pathname || "/";
+                const active = path === href || (href !== "/" && path.startsWith(href));
                 return (
                   <li key={href} className="relative group">
                     <div className={[
@@ -138,7 +139,7 @@ export function NavPrimPill({ items, email = "hello@nativeworks.eu", static: isS
           </nav>
 
           <div className="mt-auto px-page pb-s6 pt-s4">
-            <a href={`mailto:${email}`} className="font-body font-medium text-[14px] leading-[20px] text-prim/60 transition-opacity hover:opacity-100" tabIndex={open ? 0 : -1}>
+            <a href={`mailto:${email}`} className="font-body font-medium text-[16px] leading-[22px] text-prim transition-opacity hover:opacity-100" tabIndex={open ? 0 : -1}>
               {email}
             </a>
           </div>

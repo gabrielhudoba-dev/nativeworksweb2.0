@@ -23,7 +23,7 @@ export function StageCard({ title, desc, dark = false, className = "h-[384px]", 
     <div
       ref={ref}
       style={style}
-      className={`grain flex flex-col justify-start gap-0 px-s3 py-s4 sm:p-s6 pb-s4 sm:pb-s6 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
+      className={`grain flex flex-col justify-start gap-0 px-s3 py-s4 max-sm:pt-s7 sm:p-s6 pb-s4 max-sm:pb-s7 sm:pb-s6 w-full ${dark ? "bg-black" : "bg-surface"} ${className}`}
     >
       {bgImage && (
         <div
@@ -45,7 +45,7 @@ export function StageCard({ title, desc, dark = false, className = "h-[384px]", 
           />
         </div>
       )}
-      <div className="flex flex-col gap-0 mt-0">
+      <div className="flex flex-col gap-0 max-sm:gap-s3 mt-0">
         <Heading
           variant="h4"
           style={dark ? { color: "var(--color-white)" } : undefined}

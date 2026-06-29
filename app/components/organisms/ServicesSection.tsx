@@ -25,7 +25,16 @@ export function ServicesSection({ content, services }: Props) {
   const { sliderRef, containerRef, onViewChange } = useSliderSection("services-slider", services.length);
   const mobileSliderRef = useRef<SliderHandle>(null);
   const desktopSliderRef = useRef<SliderHandle>(null);
-  const { ref: sectionRef, style: sectionStyle } = useSquircle(21, 0.6);
+  // Full-bleed on mobile → square corners (no radius); rounded squircle on sm+.
+  const [radius, setRadius] = useState(21);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const apply = () => setRadius(mq.matches ? 0 : 21);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+  const { ref: sectionRef, style: sectionStyle } = useSquircle(radius, 0.6);
 
   // Proxy sliderRef to whichever slider is currently visible
   useEffect(() => {
@@ -69,14 +78,14 @@ export function ServicesSection({ content, services }: Props) {
   });
 
   return (
-    <section ref={sectionRef} style={sectionStyle} id="services" className="grain bg-surface mx-s2 my-s2">
+    <section ref={sectionRef} style={sectionStyle} id="services" className="grain bg-surface mx-s2 max-sm:mx-0 my-s2">
       <div className="px-page max-w-page mx-auto max-sm:pt-s6 sm:pt-s9 lg:pt-s15 pb-s6 lg:pb-s15">
       <Heading variant="h2" className="mb-s3">
         {(content.services_title ?? "Inside the team.\nInside the product.").split("\n").map((line, i, arr) => (
           <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
         ))}
       </Heading>
-      <div ref={containerRef} className="mt-s9">
+      <div ref={containerRef} className="mt-s9 max-sm:mt-0">
         {/* Mobile: full-bleed cols=1 slider */}
         <div className="sm:hidden">
           <Slider

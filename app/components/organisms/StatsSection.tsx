@@ -22,7 +22,7 @@ export function StatsSection({ content, stats }: Props) {
   return (
     <section style={DOT_BG}>
       <div className="max-sm:pt-s6 sm:pt-s9 lg:pt-s18 pb-s9 sm:pb-s12 lg:pb-s15">
-        <div className="px-page max-w-page mx-auto mb-s9 mt-s3">
+        <div className="px-page max-w-page mx-auto mb-s9 max-sm:mb-s3 mt-s3">
           <Heading variant="h2" className="max-w-[672px]">
             {(content.stats_title ?? "Better products.\nDelivered faster.").split("\n").map((line, i, arr) => (
               <span key={i}>{line}{i < arr.length - 1 && <br />}</span>

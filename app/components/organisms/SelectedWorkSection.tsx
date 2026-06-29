@@ -53,7 +53,7 @@ export function SelectedWorkSection({ content, items }: Props) {
   return (
     <section id="work" className="max-sm:pt-s3 sm:pt-s9 lg:pt-s15 pb-s18 sm:pb-[192px]">
       <div className="px-page max-w-page mx-auto">
-        <Heading variant="h2" className="mb-s6">{content.work_title ?? "Selected work."}</Heading>
+        <Heading variant="h2" className="mb-s6 max-sm:mb-s3">{content.work_title ?? "Selected work."}</Heading>
       </div>
 
       {/* Mobile: swipeable slider */}
