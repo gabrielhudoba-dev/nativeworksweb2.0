@@ -20,7 +20,7 @@ export function Refer({ name, role, avatar, showName = true, className }: Props)
       )}
       <div className="flex flex-col gap-0">
         {showName && <Text variant="l2" as="span">{name}</Text>}
-        <Text variant="l2" as="span" className={showName ? "font-normal" : ""}>{role}</Text>
+        <Text variant="l2" as="span" className={`whitespace-nowrap${showName ? " font-normal" : ""}`}>{role}</Text>
       </div>
     </div>
   );

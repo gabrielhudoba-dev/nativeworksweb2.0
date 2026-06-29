@@ -175,7 +175,7 @@ export function HeroSection({ content, items }: Props) {
               name={refer.name}
               role={refer.role}
               avatar={refer.avatar}
-              className="max-sm:order-1 sm:pr-s1 sm:w-[192px]"
+              className="max-sm:order-1 sm:pr-s1 sm:w-auto sm:ml-auto"
             />
           )}
         </div>
